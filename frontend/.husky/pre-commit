@@ -1,10 +1,10 @@
 cd frontend
 
 echo "Running ESLint"
-eslint $(git diff --cached --name-only --diff-filter=ACMR | grep '\.js$\|\.ts$\|\.tsx$' | sed 's|^frontend/||') --fix
+eslint $(git diff --cached --name-only --diff-filter=ACMR | grep '^frontend/.*\.\(js\|ts\|tsx\)$' | sed 's|^frontend/||') --fix
 
 echo "Running Prettier"
-prettier $(git diff --cached --name-only --diff-filter=ACMR | sed 's|^frontend/||' | sed 's| |\\ |g') --write --ignore-unknown
+prettier $(git diff --cached --name-only --diff-filter=ACMR | grep '^frontend/' | sed 's|^frontend/||' | sed 's| |\\ |g') --write --ignore-unknown
 
 git update-index --again
 echo "Pre-commit hook finished"

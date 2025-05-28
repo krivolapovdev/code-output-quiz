@@ -1,2 +1,2 @@
-group = "ru.code-output-quiz"
-version = "0.0.1-SNAPSHOT"
+group = "io.github.nellshark"
+version = "1.0.0"

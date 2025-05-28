@@ -1,4 +1,4 @@
-package ru.codeoutputquiz.aiservice.controller;
+package io.github.nellshark.codeoutputquiz.controller;
 
 import java.time.Duration;
 import java.util.List;

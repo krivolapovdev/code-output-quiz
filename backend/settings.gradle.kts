@@ -1,5 +1,3 @@
 rootProject.name = "backend"
-includeBuild("api-gateway")
-includeBuild("eureka-server")
-includeBuild("ai-service")
-includeBuild("config-server")
+
+include("api-gateway", "eureka-server", "ai-service", "config-server")

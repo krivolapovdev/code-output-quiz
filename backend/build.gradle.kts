@@ -1,3 +1,5 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
+
 plugins {
     id("java")
     id("org.springframework.boot") version "3.5.0"
@@ -23,8 +25,6 @@ subprojects {
         }
     }
 
-    extra["springCloudVersion"] = "2025.0.0-RC1"
-
     tasks.withType<Test> {
         useJUnitPlatform()
     }
@@ -34,5 +34,11 @@ subprojects {
         annotationProcessor("org.projectlombok:lombok:1.18.38")
         testCompileOnly("org.projectlombok:lombok:1.18.38")
         testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
+    }
+
+    extensions.configure<DependencyManagementExtension> {
+        imports {
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.0.0-RC1")
+        }
     }
 }

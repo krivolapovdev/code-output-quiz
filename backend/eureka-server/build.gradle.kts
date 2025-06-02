@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "ru.code-output-quiz"
-version = "1.0"
+version = "1.0.0"
 
 java {
     toolchain {

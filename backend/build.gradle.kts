@@ -31,6 +31,7 @@ subprojects {
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-actuator")
+        implementation("io.micrometer:micrometer-registry-prometheus:1.15.0")
         compileOnly("org.projectlombok:lombok:1.18.38")
         annotationProcessor("org.projectlombok:lombok:1.18.38")
         testCompileOnly("org.projectlombok:lombok:1.18.38")

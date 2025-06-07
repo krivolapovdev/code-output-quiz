@@ -1,3 +1,3 @@
 rootProject.name = "backend"
 
-include("api-gateway", "eureka-server", "ai-service", "config-server")
+include("config-server", "eureka-server", "ai-service", "api-gateway")

@@ -3,3 +3,11 @@ server:
 springdoc:
   swagger-ui:
     path: /swagger
+spring:
+  ai:
+    openai:
+      api-key: ${DEEPSEEK_API_KEY}
+      chat:
+        options:
+          model: deepseek-reasoner
+      base-url: https://api.deepseek.com

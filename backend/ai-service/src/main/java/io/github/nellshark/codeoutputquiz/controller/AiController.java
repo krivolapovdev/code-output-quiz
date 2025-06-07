@@ -1,28 +1,23 @@
 package io.github.nellshark.codeoutputquiz.controller;
 
-import java.time.Duration;
-import java.util.List;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.GetMapping;
+import io.github.nellshark.codeoutputquiz.request.QuizRequest;
+import io.github.nellshark.codeoutputquiz.response.QuizResponse;
+import io.github.nellshark.codeoutputquiz.service.AiService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/api/v1/ai")
+@RequiredArgsConstructor
 public class AiController {
-  @Value("${eureka.instance.instance-id}")
-  private String id;
+  private final AiService aiService;
 
-  @GetMapping
-  public Mono<String> hello() {
-    return Mono.just(id);
-  }
-
-  @GetMapping("/test")
-  public Flux<String> test() {
-    return Flux.fromIterable(List.of("Product A", "Product B", "Product C"))
-        .delayElements(Duration.ofSeconds(1));
+  @PostMapping("/chat")
+  public Flux<QuizResponse> generateNextQuiz(@RequestBody QuizRequest quizRequest) {
+    return aiService.generateNextQuiz(quizRequest);
   }
 }

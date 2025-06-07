@@ -9,5 +9,5 @@ spring:
       api-key: ${DEEPSEEK_API_KEY}
       chat:
         options:
-          model: deepseek-reasoner
+          model: deepseek-chat
       base-url: https://api.deepseek.com

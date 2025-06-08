@@ -2,6 +2,9 @@ services:
   prometheus:
     image: prom/prometheus:v3.4.1
     container_name: prometheus
+    profiles:
+      - prod
+      - dev
     restart: unless-stopped
     ports:
       - "9090:9090"
@@ -11,6 +14,9 @@ services:
   grafana:
     image: grafana/grafana:12.0.1
     container_name: grafana
+    profiles:
+      - prod
+      - dev
     restart: unless-stopped
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
@@ -20,4 +26,3 @@ services:
       - "3000:3000"
     volumes:
       - ../grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-

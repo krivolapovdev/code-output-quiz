@@ -6,25 +6,16 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ProgrammingLanguage {
-  JAVA("Java"),
   PYTHON("Python"),
+  JAVA("Java"),
+  C("C"),
+  CPP("C++"),
   GO("Go"),
-  RUBY("Ruby"),
   CSHARP("C#"),
-  KOTLIN("Kotlin"),
-  SCALA("Scala"),
   JAVASCRIPT("JavaScript"),
   RUST("Rust"),
   SWIFT("Swift"),
-  TYPESCRIPT("TypeScript"),
-  PHP("PHP"),
-  DART("Dart"),
-  HASKELL("Haskell"),
-  PERL("Perl"),
-  LUA("Lua"),
-  ELIXIR("Elixir"),
-  C("C"),
-  CPP("C++");
+  PHP("PHP");
 
   private final String displayName;
 }

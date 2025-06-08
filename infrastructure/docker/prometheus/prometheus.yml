@@ -17,7 +17,7 @@ scrape_configs:
     static_configs:
       - targets: [ 'host.docker.internal:8765' ]
 
-  - job_name: 'ai-service'
-    metrics_path: '/ai-service/actuator/prometheus'
+  - job_name: 'quiz-service'
+    metrics_path: '/quiz-service/actuator/prometheus'
     static_configs:
       - targets: [ 'host.docker.internal:8765' ]

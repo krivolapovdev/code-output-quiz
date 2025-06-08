@@ -8,7 +8,7 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: ai-service
-          uri: lb://ai-service
+        - id: quiz-service
+          uri: lb://quiz-service
           predicates:
-            - Path=/api/v*/ai/**
+            - Path=/api/v*/quizzes/**

@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AiService {
+public class QuizService {
   private final ChatClient chatClient;
 
   public Flux<String> generateNextQuiz(QuizRequest quizRequest) {

@@ -6,8 +6,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class AiServiceApplication {
+public class QuizServiceApplication {
   public static void main(String[] args) {
-    SpringApplication.run(AiServiceApplication.class, args);
+    SpringApplication.run(QuizServiceApplication.class, args);
   }
 }

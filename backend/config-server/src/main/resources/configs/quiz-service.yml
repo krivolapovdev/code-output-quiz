@@ -11,3 +11,9 @@ spring:
         options:
           model: deepseek-chat
       base-url: https://api.deepseek.com
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka/}
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}

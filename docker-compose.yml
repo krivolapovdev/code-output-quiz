@@ -24,6 +24,8 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     ports:
       - "3000:3000"
+    depends_on:
+      - prometheus
     volumes:
       - ./infrastructure/docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
 
@@ -49,10 +51,62 @@ services:
       context: .
       dockerfile: infrastructure/docker/eureka-server/Dockerfile
     restart: unless-stopped
+    environment:
+      - CONFIG_SERVER=http://config-server:8888
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     profiles:
       - prod
-      - temp
     ports:
       - "8761:8761"
     depends_on:
-      - config-server
+      config-server:
+        condition: service_healthy
+
+  quiz-service:
+    container_name: quiz-service
+    build:
+      context: .
+      dockerfile: infrastructure/docker/quiz-service/Dockerfile
+    restart: unless-stopped
+    environment:
+      - CONFIG_SERVER=http://config-server:8888
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - prod
+    ports:
+      - "8080:8080"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: .
+      dockerfile: infrastructure/docker/api-gateway/Dockerfile
+    restart: unless-stopped
+    environment:
+      - CONFIG_SERVER=http://config-server:8888
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - prod
+    ports:
+      - "8765:8765"
+    depends_on:
+      quiz-service:
+        condition: service_healthy

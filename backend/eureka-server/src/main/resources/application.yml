@@ -2,7 +2,7 @@ spring:
   application:
     name: eureka-server
   config:
-    import: optional:configserver:http://localhost:8888
+    import: configserver:${CONFIG_SERVER:http://localhost:8888}
   cloud:
     config:
       fail-fast: true

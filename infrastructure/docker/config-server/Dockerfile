@@ -7,11 +7,11 @@ COPY backend/build.gradle.kts backend/settings.gradle.kts backend/gradle ./
 
 COPY backend/config-server/build.gradle.kts ./config-server/build.gradle.kts
 
-RUN gradle --no-daemon --project-dir config-server dependencies
+RUN gradle --no-daemon :config-server:dependencies
 
 COPY backend/config-server/src ./config-server/src
 
-RUN gradle --no-daemon --project-dir config-server bootJar
+RUN gradle --no-daemon :config-server:bootJar
 
 # Run stage
 FROM eclipse-temurin:21-jre

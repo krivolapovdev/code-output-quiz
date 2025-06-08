@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 public class QuizController {
   private final QuizService quizService;
 
-  @GetMapping("/supported-languages")
+  @GetMapping("/supported-programming-languages")
   public Mono<List<String>> getSupportedProgrammingLanguages() {
     return quizService.getSupportedProgrammingLanguages();
   }

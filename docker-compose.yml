@@ -33,7 +33,26 @@ services:
       context: .
       dockerfile: infrastructure/docker/config-server/Dockerfile
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     profiles:
       - prod
     ports:
       - "8888:8888"
+
+  eureka-server:
+    container_name: eureka-server
+    build:
+      context: .
+      dockerfile: infrastructure/docker/eureka-server/Dockerfile
+    restart: unless-stopped
+    profiles:
+      - prod
+      - temp
+    ports:
+      - "8761:8761"
+    depends_on:
+      - config-server

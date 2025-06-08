@@ -9,7 +9,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ../prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./infrastructure/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
     image: grafana/grafana:12.0.1
@@ -25,4 +25,15 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ../grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./infrastructure/docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+
+  config-server:
+    container_name: config-server
+    build:
+      context: .
+      dockerfile: infrastructure/docker/config-server/Dockerfile
+    restart: unless-stopped
+    profiles:
+      - prod
+    ports:
+      - "8888:8888"

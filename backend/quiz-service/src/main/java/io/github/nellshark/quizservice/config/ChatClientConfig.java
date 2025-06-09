@@ -1,4 +1,4 @@
-package io.github.nellshark.codeoutputquiz.config;
+package io.github.nellshark.quizservice.config;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.openai.OpenAiChatModel;

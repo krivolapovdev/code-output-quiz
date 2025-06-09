@@ -1,8 +1,8 @@
-package io.github.nellshark.codeoutputquiz.controller;
+package io.github.nellshark.quizservice.controller;
 
-import io.github.nellshark.codeoutputquiz.enums.DifficultyLevel;
-import io.github.nellshark.codeoutputquiz.request.QuizRequest;
-import io.github.nellshark.codeoutputquiz.service.QuizService;
+import io.github.nellshark.quizservice.enums.DifficultyLevel;
+import io.github.nellshark.quizservice.request.QuizRequest;
+import io.github.nellshark.quizservice.service.QuizService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

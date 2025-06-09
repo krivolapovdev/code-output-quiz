@@ -1,8 +1,8 @@
-package io.github.nellshark.codeoutputquiz.service;
+package io.github.nellshark.quizservice.service;
 
-import io.github.nellshark.codeoutputquiz.enums.DifficultyLevel;
-import io.github.nellshark.codeoutputquiz.enums.ProgrammingLanguage;
-import io.github.nellshark.codeoutputquiz.request.QuizRequest;
+import io.github.nellshark.quizservice.enums.DifficultyLevel;
+import io.github.nellshark.quizservice.enums.ProgrammingLanguage;
+import io.github.nellshark.quizservice.request.QuizRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

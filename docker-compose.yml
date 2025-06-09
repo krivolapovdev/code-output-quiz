@@ -1,10 +1,11 @@
+x-common-variables: &common-variables
+  CONFIG_SERVER: http://config-server:8888
+  EUREKA_SERVER: http://eureka-server:8761/eureka/
+
 services:
   prometheus:
     image: prom/prometheus:v3.4.1
     container_name: prometheus
-    profiles:
-      - prod
-      - dev
     restart: unless-stopped
     ports:
       - "9090:9090"
@@ -14,9 +15,6 @@ services:
   grafana:
     image: grafana/grafana:12.0.1
     container_name: grafana
-    profiles:
-      - prod
-      - dev
     restart: unless-stopped
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
@@ -40,8 +38,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    profiles:
-      - prod
     ports:
       - "8888:8888"
 
@@ -52,15 +48,12 @@ services:
       dockerfile: infrastructure/docker/eureka-server/Dockerfile
     restart: unless-stopped
     environment:
-      - CONFIG_SERVER=http://config-server:8888
-      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+      <<: *common-variables
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 5
-    profiles:
-      - prod
     ports:
       - "8761:8761"
     depends_on:
@@ -74,15 +67,12 @@ services:
       dockerfile: infrastructure/docker/quiz-service/Dockerfile
     restart: unless-stopped
     environment:
-      - CONFIG_SERVER=http://config-server:8888
-      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+      <<: *common-variables
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 5
-    profiles:
-      - prod
     ports:
       - "8080:8080"
     depends_on:
@@ -96,15 +86,12 @@ services:
       dockerfile: infrastructure/docker/api-gateway/Dockerfile
     restart: unless-stopped
     environment:
-      - CONFIG_SERVER=http://config-server:8888
-      - EUREKA_SERVER=http://eureka-server:8761/eureka/
+      <<: *common-variables
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 5
-    profiles:
-      - prod
     ports:
       - "8765:8765"
     depends_on:

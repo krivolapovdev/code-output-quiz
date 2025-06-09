@@ -1,4 +1,4 @@
-package io.github.nellshark.codeoutputquiz;
+package io.github.nellshark.apigateway;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -28,6 +28,11 @@ export default tseslint.config(
       'prettier/prettier': 'warn',
       'simple-import-sort/imports': 'warn',
       'simple-import-sort/exports': 'warn'
+    },
+    settings: {
+      react: {
+        version: 'detect'
+      }
     }
   }
 );

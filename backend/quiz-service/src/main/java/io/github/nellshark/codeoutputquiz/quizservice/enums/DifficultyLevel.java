@@ -1,4 +1,4 @@
-package io.github.nellshark.quizservice.enums;
+package io.github.nellshark.codeoutputquiz.quizservice.enums;
 
 public enum DifficultyLevel {
   BEGINNER,

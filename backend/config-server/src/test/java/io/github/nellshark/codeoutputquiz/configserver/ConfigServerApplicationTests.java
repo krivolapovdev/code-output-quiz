@@ -1,10 +1,10 @@
-package io.github.nellshark.quizservice;
+package io.github.nellshark.codeoutputquiz.configserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class QuizServiceApplicationTests {
+class ConfigServerApplicationTests {
 
   @Test
   void contextLoads() {}

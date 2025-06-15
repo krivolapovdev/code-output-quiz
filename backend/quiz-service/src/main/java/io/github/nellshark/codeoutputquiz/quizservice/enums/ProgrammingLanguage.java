@@ -1,4 +1,4 @@
-package io.github.nellshark.quizservice.enums;
+package io.github.nellshark.codeoutputquiz.quizservice.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

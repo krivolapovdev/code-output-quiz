@@ -2,12 +2,16 @@ import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 
 plugins {
     id("java")
-    id("org.springframework.boot") version "3.5.0"
-    id("io.spring.dependency-management") version "1.1.7"
+    id("org.springframework.boot") version "3.5.0" apply false
+    id("io.spring.dependency-management") version "1.1.7" apply false
 }
 
+val micrometerVersion by extra("1.15.0")
+val lombokVersion by extra("1.18.38")
+val springCloudVersion by extra("2025.0.0-RC1")
+
 subprojects {
-    group = "io.github.nellshark"
+    group = "io.github.nellshark.codeoutputquiz"
     version = "1.0.0"
 
     repositories {
@@ -25,22 +29,22 @@ subprojects {
         }
     }
 
-    tasks.withType<Test> {
+    tasks.withType<Test>().configureEach {
         useJUnitPlatform()
     }
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-actuator")
-        implementation("io.micrometer:micrometer-registry-prometheus:1.15.0")
-        compileOnly("org.projectlombok:lombok:1.18.38")
-        annotationProcessor("org.projectlombok:lombok:1.18.38")
-        testCompileOnly("org.projectlombok:lombok:1.18.38")
-        testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
+        implementation("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
+        compileOnly("org.projectlombok:lombok:$lombokVersion")
+        annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+        testCompileOnly("org.projectlombok:lombok:$lombokVersion")
+        testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
     }
 
     extensions.configure<DependencyManagementExtension> {
         imports {
-            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2025.0.0-RC1")
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
         }
     }
 }

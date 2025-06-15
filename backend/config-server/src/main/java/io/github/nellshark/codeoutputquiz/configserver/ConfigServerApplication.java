@@ -1,4 +1,4 @@
-package io.github.nellshark.configserver;
+package io.github.nellshark.codeoutputquiz.configserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

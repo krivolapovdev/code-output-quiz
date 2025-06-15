@@ -11,7 +11,7 @@ val lombokVersion by extra("1.18.38")
 val springCloudVersion by extra("2025.0.0-RC1")
 
 subprojects {
-    group = "io.github.nellshark.codeoutputquiz"
+    group = "io.github.krivolapovdev.codeoutputquiz"
     version = "1.0.0"
 
     repositories {

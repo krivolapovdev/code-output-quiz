@@ -1,19 +1,19 @@
-import { Tabs } from 'antd';
+import { Tabs } from "antd";
 
 const items = [
   {
-    key: 'beginner',
-    label: 'Beginner',
-    style: { padding: '0' },
+    key: "beginner",
+    label: "Beginner",
+    style: { padding: "0" }
   },
   {
-    key: 'intermediate',
-    label: 'Intermediate',
+    key: "intermediate",
+    label: "Intermediate"
   },
   {
-    key: 'advanced',
-    label: 'Advanced',
-  },
+    key: "advanced",
+    label: "Advanced"
+  }
 ];
 
 export const CustomTabs = () => {

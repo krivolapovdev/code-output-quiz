@@ -1,1 +1,1 @@
-export { AnswerChoices } from './ui';
+export { AnswerChoices } from "./ui";

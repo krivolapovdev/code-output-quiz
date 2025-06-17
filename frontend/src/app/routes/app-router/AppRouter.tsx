@@ -1,20 +1,25 @@
 import {
   createBrowserRouter,
   Navigate,
-  RouterProvider,
-} from 'react-router-dom';
+  RouterProvider
+} from "react-router-dom";
 
-import { HomePage } from '@/pages/home';
+import { HomePage } from "@/pages/home";
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <HomePage />,
+    path: "/",
+    element: <HomePage />
   },
   {
-    path: '*',
-    element: <Navigate to="/" replace />,
-  },
+    path: "*",
+    element: (
+      <Navigate
+        to="/"
+        replace
+      />
+    )
+  }
 ]);
 
 export const AppRouter = () => {

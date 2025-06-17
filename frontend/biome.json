@@ -22,7 +22,12 @@
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single"
+      "quoteStyle": "double",
+      "jsxQuoteStyle": "double",
+      "trailingCommas": "none",
+      "semicolons": "always",
+      "arrowParentheses": "asNeeded",
+      "attributePosition": "multiline"
     }
   },
   "assist": {

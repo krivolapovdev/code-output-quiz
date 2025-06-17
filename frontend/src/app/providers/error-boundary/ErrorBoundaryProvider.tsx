@@ -1,13 +1,13 @@
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary } from "react-error-boundary";
 
-import { ErrorFallback } from '@/shared/ui/error-fallback';
+import { ErrorFallback } from "@/shared/ui/error-fallback";
 
 type ErrorBoundaryProviderProps = {
   children: React.ReactNode;
 };
 
 export const ErrorBoundaryProvider = ({
-  children,
+  children
 }: ErrorBoundaryProviderProps) => {
   return (
     <ErrorBoundary fallbackRender={ErrorFallback}>{children}</ErrorBoundary>

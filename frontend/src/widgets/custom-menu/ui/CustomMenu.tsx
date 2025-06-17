@@ -1,4 +1,4 @@
-import { Menu } from 'antd';
+import { Menu } from "antd";
 
 import {
   DIFFICULTY_KEY,
@@ -6,8 +6,8 @@ import {
   LANGUAGE_KEY,
   menuItems,
   PROGRAMMING_KEY,
-  USER_KEY,
-} from '../config';
+  USER_KEY
+} from "../config";
 
 export const CustomMenu = () => {
   return (
@@ -18,7 +18,7 @@ export const CustomMenu = () => {
         PROGRAMMING_KEY,
         LANGUAGE_KEY,
         DIFFICULTY_KEY,
-        USER_KEY,
+        USER_KEY
       ]}
       mode="inline"
       items={menuItems}

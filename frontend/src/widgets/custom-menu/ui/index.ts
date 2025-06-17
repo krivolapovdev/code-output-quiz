@@ -1,1 +1,1 @@
-export * from './CustomMenu';
+export * from "./CustomMenu";

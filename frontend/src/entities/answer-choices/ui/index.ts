@@ -1,1 +1,1 @@
-export * from './AnswerChoices';
+export * from "./AnswerChoices";

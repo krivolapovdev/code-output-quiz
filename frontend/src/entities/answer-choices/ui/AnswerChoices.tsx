@@ -4,10 +4,10 @@ type AnswerChoicesProps = {
 };
 
 const labelColors = [
-  'text-green-600',
-  'text-blue-600',
-  'text-yellow-600',
-  'text-purple-600',
+  "text-green-600",
+  "text-blue-600",
+  "text-yellow-600",
+  "text-purple-600"
 ];
 
 export const AnswerChoices = ({ options, onSelect }: AnswerChoicesProps) => {
@@ -23,8 +23,8 @@ export const AnswerChoices = ({ options, onSelect }: AnswerChoicesProps) => {
           <span
             className={`font-semibold ${labelColors[index % labelColors.length]}`}
           >
-            {String.fromCharCode('A'.charCodeAt(0) + index)})
-          </span>{' '}
+            {String.fromCharCode("A".charCodeAt(0) + index)})
+          </span>{" "}
           <span>{option}</span>
         </button>
       ))}

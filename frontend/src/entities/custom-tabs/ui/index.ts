@@ -1,1 +1,1 @@
-export * from './CustomTabs';
+export * from "./CustomTabs";

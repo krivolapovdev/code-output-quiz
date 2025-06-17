@@ -2,7 +2,7 @@ import { CodeOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { createElement } from 'react';
 
-import { GO_KEY, JAVA_KEY, PROGRAMMING_KEY, SETTINGS_KEY, SOLVED_KEY, TYPESCRIPT_KEY, USER_KEY } from './';
+import { GO_KEY, JAVA_KEY, PROGRAMMING_KEY, SETTINGS_KEY, SOLVED_KEY, TYPESCRIPT_KEY, USER_KEY } from './menu-keys';
 
 export const menuItems: Required<MenuProps>['items'][number][] = [
   {

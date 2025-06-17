@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "cd .. && husky frontend/.husky",
-    "steiger:watch": "npx steiger ./src --watch"
+    "steiger": "npx steiger ./src"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",

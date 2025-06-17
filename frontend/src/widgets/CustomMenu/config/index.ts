@@ -1,1 +1,0 @@
-export { menuItems } from './menuItems';

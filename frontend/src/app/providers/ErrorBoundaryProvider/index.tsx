@@ -1,5 +1,9 @@
-import { ErrorBoundary } from 'shared/ui/ErrorBoundary';
+import { ErrorBoundary } from 'react-error-boundary';
 
-export const ErrorBoundaryProvider = ({ children }: { children: React.ReactNode }) => {
-  return <ErrorBoundary>{children}</ErrorBoundary>;
+type ErrorBoundaryProviderProps = {
+  children: React.ReactNode;
+};
+
+export const ErrorBoundaryProvider = ({ children }: ErrorBoundaryProviderProps) => {
+  return <ErrorBoundary fallback={<div>Something went wrong...</div>}>{children}</ErrorBoundary>;
 };

@@ -1,0 +1,1 @@
+export { CustomTabs } from './ui';

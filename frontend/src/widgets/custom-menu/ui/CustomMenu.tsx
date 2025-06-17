@@ -1,7 +1,6 @@
 import { Menu } from 'antd';
 
-import { menuItems } from '../config';
-import { DIFFICULTY_KEY, JAVA_KEY, LANGUAGE_KEY, PROGRAMMING_KEY, USER_KEY } from '../consts';
+import { DIFFICULTY_KEY, JAVA_KEY, LANGUAGE_KEY, menuItems, PROGRAMMING_KEY, USER_KEY } from '../config';
 
 export const CustomMenu = () => {
   return (

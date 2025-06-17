@@ -1,6 +1,6 @@
 cd frontend || exit 1
 
 echo "Running Biome"
-npx biome check --write ./src --files-ignore-unknown=true
+npx @biomejs/biome check --write ./src --files-ignore-unknown=true
 
 git update-index --again

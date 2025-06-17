@@ -4,16 +4,16 @@ const items = [
   {
     key: 'beginner',
     label: 'Beginner',
-    style: { padding: '0' }
+    style: { padding: '0' },
   },
   {
     key: 'intermediate',
-    label: 'Intermediate'
+    label: 'Intermediate',
   },
   {
     key: 'advanced',
-    label: 'Advanced'
-  }
+    label: 'Advanced',
+  },
 ];
 
 export const CustomTabs = () => {
@@ -22,8 +22,13 @@ export const CustomTabs = () => {
   };
 
   return (
-    <div className='flex justify-end'>
-      <Tabs type='card' onChange={onChange} items={items} tabBarStyle={{ margin: 0, borderRadius: 0 }} />
+    <div className="flex justify-end">
+      <Tabs
+        type="card"
+        onChange={onChange}
+        items={items}
+        tabBarStyle={{ margin: 0, borderRadius: 0 }}
+      />
     </div>
   );
 };

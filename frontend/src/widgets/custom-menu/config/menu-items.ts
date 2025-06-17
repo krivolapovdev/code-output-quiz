@@ -2,7 +2,15 @@ import { CodeOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { createElement } from 'react';
 
-import { GO_KEY, JAVA_KEY, PROGRAMMING_KEY, SETTINGS_KEY, SOLVED_KEY, TYPESCRIPT_KEY, USER_KEY } from './menu-keys';
+import {
+  GO_KEY,
+  JAVA_KEY,
+  PROGRAMMING_KEY,
+  SETTINGS_KEY,
+  SOLVED_KEY,
+  TYPESCRIPT_KEY,
+  USER_KEY,
+} from './menu-keys';
 
 export const menuItems: Required<MenuProps>['items'][number][] = [
   {
@@ -12,11 +20,11 @@ export const menuItems: Required<MenuProps>['items'][number][] = [
     children: [
       { key: JAVA_KEY, label: 'Java' },
       { key: TYPESCRIPT_KEY, label: 'Typescript' },
-      { key: GO_KEY, label: 'Go' }
-    ]
+      { key: GO_KEY, label: 'Go' },
+    ],
   },
   {
-    type: 'divider'
+    type: 'divider',
   },
   {
     key: USER_KEY,
@@ -24,7 +32,7 @@ export const menuItems: Required<MenuProps>['items'][number][] = [
     icon: createElement(UserOutlined),
     children: [
       { key: SOLVED_KEY, label: 'Solved' },
-      { key: SETTINGS_KEY, label: 'Settings' }
-    ]
-  }
+      { key: SETTINGS_KEY, label: 'Settings' },
+    ],
+  },
 ];

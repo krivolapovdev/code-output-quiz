@@ -3,7 +3,7 @@ import { CustomMenu } from '@/widgets/custom-menu';
 
 export const HomePage = () => {
   return (
-    <div className='flex'>
+    <div className="flex">
       <CustomMenu />
       <CodeOutputQuiz />
     </div>

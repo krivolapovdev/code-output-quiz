@@ -6,6 +6,10 @@ type ErrorBoundaryProviderProps = {
   children: React.ReactNode;
 };
 
-export const ErrorBoundaryProvider = ({ children }: ErrorBoundaryProviderProps) => {
-  return <ErrorBoundary fallbackRender={ErrorFallback}>{children}</ErrorBoundary>;
+export const ErrorBoundaryProvider = ({
+  children,
+}: ErrorBoundaryProviderProps) => {
+  return (
+    <ErrorBoundary fallbackRender={ErrorFallback}>{children}</ErrorBoundary>
+  );
 };

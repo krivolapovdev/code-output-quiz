@@ -10,10 +10,13 @@ console.log(x == y);
 
 export const CodeOutputQuiz = () => {
   return (
-    <div className='m-8 flex w-full flex-col rounded-lg border-1 border-[#e6f4ff]'>
+    <div className="m-8 flex w-full flex-col rounded-lg border-1 border-[#e6f4ff]">
       <CustomTabs />
       <CustomCodeBlock text={text} language={'javascript'} />
-      <AnswerChoices options={['true', 'false', 'undefined', 'TypeError']} onSelect={e => console.log(e)} />
+      <AnswerChoices
+        options={['true', 'false', 'undefined', 'TypeError']}
+        onSelect={(e) => console.log(e)}
+      />
     </div>
   );
 };

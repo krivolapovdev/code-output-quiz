@@ -7,7 +7,7 @@ type CustomCodeBlockProps = {
 
 export const CustomCodeBlocks = ({ text, language }: CustomCodeBlockProps) => {
   return (
-    <div className='h-full'>
+    <div className="h-full">
       <CodeBlock
         customStyle={{ height: '100%' }}
         text={text}

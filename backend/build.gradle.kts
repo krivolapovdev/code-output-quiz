@@ -9,6 +9,7 @@ plugins {
 val micrometerVersion by extra("1.15.0")
 val lombokVersion by extra("1.18.38")
 val springCloudVersion by extra("2025.0.0-RC1")
+val lokiLogbackVersion by extra("2.0.0")
 
 subprojects {
     group = "io.github.krivolapovdev.codeoutputquiz"
@@ -36,6 +37,7 @@ subprojects {
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-actuator")
         implementation("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
+        implementation("com.github.loki4j:loki-logback-appender:${lokiLogbackVersion}")
         compileOnly("org.projectlombok:lombok:$lombokVersion")
         annotationProcessor("org.projectlombok:lombok:$lombokVersion")
         testCompileOnly("org.projectlombok:lombok:$lombokVersion")

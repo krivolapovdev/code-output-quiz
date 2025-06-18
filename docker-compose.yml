@@ -12,6 +12,16 @@ services:
     volumes:
       - ./infrastructure/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
+  loki:
+    image: grafana/loki:3.5.1
+    container_name: loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yml
+    volumes:
+      - ./infrastructure/docker/loki/local-config.yml:/etc/loki/local-config.yml
+
   grafana:
     image: grafana/grafana:12.0.1
     container_name: grafana
@@ -24,6 +34,7 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+      - loki
     volumes:
       - ./infrastructure/docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./infrastructure/docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
@@ -42,6 +53,8 @@ services:
       retries: 5
     ports:
       - "8888:8888"
+    depends_on:
+      - grafana
 
   eureka-server:
     container_name: eureka-server

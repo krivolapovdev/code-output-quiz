@@ -26,6 +26,8 @@ services:
       - prometheus
     volumes:
       - ./infrastructure/docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./infrastructure/docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./infrastructure/docker/grafana/dashboards:/etc/grafana/dashboards
 
   config-server:
     container_name: config-server

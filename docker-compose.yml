@@ -68,7 +68,7 @@ services:
     restart: unless-stopped
     environment:
       <<: *common-variables
-      DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
       interval: 10s

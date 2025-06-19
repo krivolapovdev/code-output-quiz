@@ -1,27 +1,23 @@
 import { Menu } from "antd";
-
-import {
-  DIFFICULTY_KEY,
-  JAVA_KEY,
-  LANGUAGE_KEY,
-  menuItems,
-  PROGRAMMING_KEY,
-  USER_KEY
-} from "../config";
+import { useSupportedProgrammingLanguages } from "@/entities/quizzes";
+import { getMenuItems, PROGRAMMING_KEY, USER_KEY } from "../config";
 
 export const CustomMenu = () => {
+  const { languages, loading } = useSupportedProgrammingLanguages();
+
+  const items = getMenuItems(languages);
+
+  if (loading) {
+    return <div>Loading menu...</div>;
+  }
+
   return (
     <Menu
       style={{ width: 256 }}
-      defaultSelectedKeys={[JAVA_KEY]}
-      defaultOpenKeys={[
-        PROGRAMMING_KEY,
-        LANGUAGE_KEY,
-        DIFFICULTY_KEY,
-        USER_KEY
-      ]}
+      defaultSelectedKeys={[languages[0]?.toLowerCase() ?? ""]}
+      defaultOpenKeys={[PROGRAMMING_KEY, USER_KEY]}
       mode="inline"
-      items={menuItems}
+      items={items}
       className="min-h-[100vh] overflow-y-auto"
     />
   );

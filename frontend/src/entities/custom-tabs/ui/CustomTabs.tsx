@@ -1,25 +1,22 @@
 import { Tabs } from "antd";
-
-const items = [
-  {
-    key: "beginner",
-    label: "Beginner",
-    style: { padding: "0" }
-  },
-  {
-    key: "intermediate",
-    label: "Intermediate"
-  },
-  {
-    key: "advanced",
-    label: "Advanced"
-  }
-];
+import { useSupportedDifficultyLevels } from "@/entities/quizzes";
 
 export const CustomTabs = () => {
+  const { levels, loading } = useSupportedDifficultyLevels();
+
   const onChange = (key: string) => {
     console.log(key);
   };
+
+  if (loading) {
+    return <div>Loading tabs...</div>;
+  }
+
+  const items = levels.map(lvl => ({
+    key: lvl,
+    label: lvl.charAt(0).toUpperCase() + lvl.slice(1).toLowerCase(),
+    style: { padding: "0" }
+  }));
 
   return (
     <div className="flex justify-end">

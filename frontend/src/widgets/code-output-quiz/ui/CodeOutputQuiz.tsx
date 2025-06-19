@@ -13,7 +13,7 @@ export const CodeOutputQuiz = () => {
     <div className="m-8 flex w-full flex-col rounded-lg border-1 border-[#e6f4ff]">
       <CustomTabs />
       <CodeBlock
-        text={text}
+        code={text}
         language="javascript"
       />
       <AnswerChoices

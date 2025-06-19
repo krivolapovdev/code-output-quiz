@@ -6,11 +6,11 @@ import "prismjs/themes/prism-tomorrow.css";
 import "prismjs/components/index";
 
 type CodeBlockProps = {
-  text: string;
+  code: string;
   language: string;
 };
 
-export const CodeBlock = ({ text, language }: CodeBlockProps) => {
+export const CodeBlock = ({ code, language }: CodeBlockProps) => {
   const codeRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export const CodeBlock = ({ text, language }: CodeBlockProps) => {
         ref={codeRef}
         className={`language-${language}`}
       >
-        {text}
+        {code}
       </code>
     </pre>
   );

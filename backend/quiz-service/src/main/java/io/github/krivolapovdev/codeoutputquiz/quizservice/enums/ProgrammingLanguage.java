@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ProgrammingLanguage {
-  PYTHON("Python"),
   JAVA("Java"),
+  PYTHON("Python"),
   C("C"),
   CPP("C++"),
   GO("Go"),

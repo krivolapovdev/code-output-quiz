@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "biome": "biome format ./src --write",
+    "biome": "biome check ./src --write",
     "preview": "vite preview",
     "prepare": "lefthook install",
     "steiger": "npx steiger ./src"
@@ -16,8 +16,8 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",
     "antd": "^5.26.1",
+    "prismjs": "^1.30.0",
     "react": "^19.1.0",
-    "react-code-blocks": "^0.1.6",
     "react-dom": "^19.1.0",
     "react-error-boundary": "^6.0.0",
     "react-router-dom": "^7.6.2",
@@ -26,6 +26,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.0.0",
     "@feature-sliced/steiger-plugin": "^0.5.6",
+    "@types/prismjs": "^1.26.5",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",

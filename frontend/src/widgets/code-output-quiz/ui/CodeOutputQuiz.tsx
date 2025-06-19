@@ -1,6 +1,6 @@
 import { AnswerChoices } from "@/entities/answer-choices";
-import { CustomCodeBlock } from "@/entities/custom-code-blocks";
 import { CustomTabs } from "@/entities/custom-tabs";
+import { CodeBlock } from "@/shared/ui/code-block";
 
 const text = `let x = 5;
 let y = "5";
@@ -12,9 +12,9 @@ export const CodeOutputQuiz = () => {
   return (
     <div className="m-8 flex w-full flex-col rounded-lg border-1 border-[#e6f4ff]">
       <CustomTabs />
-      <CustomCodeBlock
+      <CodeBlock
         text={text}
-        language={"javascript"}
+        language="javascript"
       />
       <AnswerChoices
         options={["true", "false", "undefined", "TypeError"]}

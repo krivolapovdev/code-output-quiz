@@ -2,6 +2,9 @@
   "name": "frontend",
   "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.16.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

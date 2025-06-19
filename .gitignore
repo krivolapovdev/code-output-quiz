@@ -41,6 +41,7 @@ node_modules
 dist
 dist-ssr
 *.local
+frontend/.husky/_/
 
 .vscode/*
 !.vscode/extensions.json
@@ -52,3 +53,5 @@ dist-ssr
 *.sw?
 
 **/.env
+
+

@@ -1,2 +1,7 @@
 logging:
   config: classpath:logback-spring-dev.xml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

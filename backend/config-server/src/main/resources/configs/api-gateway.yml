@@ -12,6 +12,13 @@ spring:
           uri: lb://quiz-service
           predicates:
             - Path=/api/v*/quizzes/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
 eureka:
   client:
     serviceUrl:

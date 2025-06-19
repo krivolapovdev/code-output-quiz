@@ -13,7 +13,7 @@ export const CustomMenu = () => {
   return (
     <Menu
       style={{ width: 256 }}
-      defaultSelectedKeys={JAVA_KEY}
+      defaultSelectedKeys={[JAVA_KEY]}
       defaultOpenKeys={[
         PROGRAMMING_KEY,
         LANGUAGE_KEY,

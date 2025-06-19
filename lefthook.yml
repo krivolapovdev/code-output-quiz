@@ -3,7 +3,9 @@ pre-commit:
   stage_fixed: true
   jobs:
     - name: biome
-      run: cd frontend && npm run biome
+      root: frontend
+      run: npm run biome
 
     - name: spotless
-      run: ./backend/gradlew -p backend spotlessApply
+      root: backend
+      run: ./gradlew spotlessApply

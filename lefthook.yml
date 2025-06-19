@@ -1,5 +1,6 @@
 pre-commit:
   parallel: true
+  stage_fixed: true
   jobs:
     - name: biome
       run: cd frontend && npm run biome

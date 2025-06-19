@@ -6,7 +6,7 @@ import {AppRouter} from "@/app/routes/app-router/AppRouter";
 export const App = () => {
   return (
     <ErrorBoundaryProvider>
-      <AppRouter/>
+      <AppRouter />
     </ErrorBoundaryProvider>
   );
 };

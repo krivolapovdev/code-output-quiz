@@ -1,0 +1,8 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: biome
+      run: cd frontend && npm run biome
+
+    - name: spotless
+      run: ./backend/gradlew -p backend spotlessApply

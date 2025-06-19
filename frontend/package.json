@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "biome": "biome check ./src",
+    "biome": "biome format ./src --write",
     "preview": "vite preview",
-    "prepare": "cd .. && husky frontend/.husky",
+    "prepare": "lefthook install",
     "steiger": "npx steiger ./src"
   },
   "dependencies": {
@@ -26,7 +26,7 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
-    "husky": "^9.1.7",
+    "lefthook": "^1.11.14",
     "steiger": "^0.5.7",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",

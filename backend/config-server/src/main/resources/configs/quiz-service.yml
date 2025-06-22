@@ -11,6 +11,15 @@ spring:
         options:
           model: deepseek-chat
       base-url: https://api.deepseek.com
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/quiz_db
+    username: postgres
+    password: root
+  flyway:
+    url: jdbc:postgresql://localhost:5432/quiz_db
+    locations: classpath:db/migration
+    user: postgres
+    password: root
 eureka:
   client:
     serviceUrl:

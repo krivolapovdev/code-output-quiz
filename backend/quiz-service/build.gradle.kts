@@ -1,14 +1,24 @@
 val openAiVersion = "1.0.0-M6"
 val springdocVersion = "2.8.8"
 val caffeineVersion = "3.2.0"
+val postgresR2dbcVersion = "1.0.7.RELEASE"
+val postgresVersion = "42.7.7"
+val flywayVersion = "11.9.1"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.ai:spring-ai-openai-spring-boot-starter:$openAiVersion")
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:$springdocVersion")
     implementation("com.github.ben-manes.caffeine:caffeine:$caffeineVersion")
+
+    runtimeOnly("org.postgresql:r2dbc-postgresql:$postgresR2dbcVersion")
+    runtimeOnly("org.postgresql:postgresql:$postgresVersion")
+    runtimeOnly("org.flywaydb:flyway-core:$flywayVersion")
+    runtimeOnly("org.flywaydb:flyway-database-postgresql:$flywayVersion")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

@@ -19,9 +19,3 @@ spring:
             allowedMethods: "*"
             allowedHeaders: "*"
             allowCredentials: true
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka/}
-  instance:
-    instance-id: ${spring.application.name}:${random.uuid}

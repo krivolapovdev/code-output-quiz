@@ -2,6 +2,8 @@ spring:
   cloud:
     config:
       override-system-properties: false
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
 management:
   endpoints:
     web:
@@ -10,4 +12,7 @@ management:
   endpoint:
     health:
       show-details: always
-
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

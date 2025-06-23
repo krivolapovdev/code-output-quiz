@@ -1,20 +1,10 @@
 server:
   port: 8888
 spring:
-  profiles:
-    include: native
   application:
     name: config-server
-  cloud:
-    config:
-      server:
-        native:
-          search-locations: classpath:/configs
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info, prometheus
-  endpoint:
-    health:
-      show-details: always
+  profiles:
+    default: prod
+    group:
+      dev:
+        - native

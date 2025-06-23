@@ -1,17 +1,11 @@
 spring:
+  profiles:
+    default: prod
   cloud:
     config:
       override-system-properties: false
   instance:
     instance-id: ${spring.application.name}:${random.uuid}
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info, prometheus
-  endpoint:
-    health:
-      show-details: always
 eureka:
   client:
     serviceUrl:

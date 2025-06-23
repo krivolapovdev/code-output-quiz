@@ -4,8 +4,6 @@ spring:
       server:
         native:
           search-locations: file:backend/config-server/src/main/resources/configs
-logging:
-  config: classpath:logback-spring-dev.xml
 management:
   endpoints:
     web:
@@ -14,3 +12,8 @@ management:
   endpoint:
     health:
       show-details: always
+  tracing:
+    sampling:
+      probability: 1
+logging:
+  config: classpath:logback-spring-dev.xml

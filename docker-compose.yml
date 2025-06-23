@@ -40,6 +40,13 @@ services:
       - ./infrastructure/docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./infrastructure/docker/grafana/dashboards:/etc/grafana/dashboards
 
+  zipkin:
+    image: openzipkin/zipkin:3.5.1
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+    restart: unless-stopped
+
   config-server:
     container_name: config-server
     build:
@@ -55,6 +62,7 @@ services:
       - "8888:8888"
     depends_on:
       - grafana
+      - zipkin
 
   eureka-server:
     container_name: eureka-server

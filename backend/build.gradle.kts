@@ -8,10 +8,12 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7" apply false
 }
 
-val micrometerVersion by extra("1.15.0")
+val micrometerRegistryPrometheusVersion by extra("1.15.0")
 val lombokVersion by extra("1.18.38")
 val springCloudVersion by extra("2025.0.0-RC1")
-val lokiLogbackVersion by extra("2.0.0")
+val lokiLogbackAppenderVersion by extra("2.0.0")
+val zipkinReporterBraveVersion by extra("3.5.1")
+val micrometerTracingBridgeBraveVersion by extra("1.5.1")
 
 subprojects {
     group = "io.github.krivolapovdev.codeoutputquiz"
@@ -39,8 +41,11 @@ subprojects {
 
     dependencies {
         implementation("org.springframework.boot:spring-boot-starter-actuator")
-        implementation("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
-        implementation("com.github.loki4j:loki-logback-appender:${lokiLogbackVersion}")
+        implementation("io.micrometer:micrometer-registry-prometheus:$micrometerRegistryPrometheusVersion")
+        implementation("com.github.loki4j:loki-logback-appender:$lokiLogbackAppenderVersion")
+        implementation("io.zipkin.reporter2:zipkin-reporter-brave:$zipkinReporterBraveVersion")
+        implementation("io.micrometer:micrometer-tracing-bridge-brave:$micrometerTracingBridgeBraveVersion")
+
         compileOnly("org.projectlombok:lombok:$lombokVersion")
         annotationProcessor("org.projectlombok:lombok:$lombokVersion")
         testCompileOnly("org.projectlombok:lombok:$lombokVersion")

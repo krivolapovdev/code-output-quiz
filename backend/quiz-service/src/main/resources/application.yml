@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    default: prod
   application:
     name: quiz-service
   config:

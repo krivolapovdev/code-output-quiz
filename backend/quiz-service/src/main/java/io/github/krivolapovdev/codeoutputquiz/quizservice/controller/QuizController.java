@@ -4,11 +4,14 @@ import io.github.krivolapovdev.codeoutputquiz.quizservice.entity.Quiz;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.response.QuizResponse;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.service.QuizService;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +27,21 @@ public class QuizController {
   private final QuizService quizService;
 
   @GetMapping
-  public Mono<Quiz> getRandomQuiz(
+  public Mono<QuizResponse> getRandomQuiz(
       @RequestParam ProgrammingLanguage programmingLanguage,
       @RequestParam DifficultyLevel difficultyLevel) {
     QuizRequest request = new QuizRequest(programmingLanguage, difficultyLevel);
     return quizService.getRandomQuiz(request);
+  }
+
+  @GetMapping("/{id}")
+  public Mono<Quiz> getQuizById(@PathVariable UUID id) {
+    return quizService.getQuizById(id);
+  }
+
+  @PostMapping(value = "/next", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+  public Flux<String> generateNextQuiz(@RequestBody QuizRequest quizRequest) {
+    return quizService.generateNextQuiz(quizRequest);
   }
 
   @GetMapping("/supported-programming-languages")
@@ -39,10 +52,5 @@ public class QuizController {
   @GetMapping("/supported-difficulty-levels")
   public Mono<List<DifficultyLevel>> getSupportedDifficultyLevels() {
     return quizService.getSupportedDifficultyLevels();
-  }
-
-  @PostMapping(value = "/next", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public Flux<String> generateNextQuiz(@RequestBody QuizRequest quizRequest) {
-    return quizService.generateNextQuiz(quizRequest);
   }
 }

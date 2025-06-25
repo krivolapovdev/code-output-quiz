@@ -9,7 +9,8 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface QuizRepository extends ReactiveCrudRepository<Quiz, UUID> {
-  @Query("""
+  @Query(
+      """
       SELECT
         *
       FROM

@@ -4,9 +4,12 @@ import io.github.krivolapovdev.codeoutputquiz.quizservice.config.cache.CacheName
 import io.github.krivolapovdev.codeoutputquiz.quizservice.entity.Quiz;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.exception.QuizNotFoundException;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.repository.QuizRepository;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.response.QuizResponse;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -23,9 +26,22 @@ public class QuizService {
   private final QuizRepository quizRepository;
 
   @Cacheable(value = CacheNames.QUIZ_CACHE, key = "#quizRequest")
-  public Mono<Quiz> getRandomQuiz(QuizRequest quizRequest) {
+  public Mono<QuizResponse> getRandomQuiz(QuizRequest quizRequest) {
     log.info("Get random quiz {}", quizRequest);
-    return quizRepository.findRandomQuiz();
+    return quizRepository
+        .findRandomQuiz()
+        .map(
+            quiz ->
+                new QuizResponse(
+                    quiz.getId(), quiz.getCode(), quiz.getCorrectAnswer(), quiz.getExplanation()));
+  }
+
+  @Cacheable(value = CacheNames.QUIZ_CACHE, key = "#id")
+  public Mono<Quiz> getQuizById(UUID id) {
+    log.info("Get quiz by id {}", id);
+    return quizRepository
+        .findById(id)
+        .switchIfEmpty(Mono.error(new QuizNotFoundException("Quiz not found with id: " + id)));
   }
 
   public Flux<String> generateNextQuiz(QuizRequest quizRequest) {

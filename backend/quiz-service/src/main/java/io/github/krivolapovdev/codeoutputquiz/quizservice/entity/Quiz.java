@@ -1,5 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.entity;
 
+import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.AnswerChoice;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -14,16 +15,24 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @Data
 public class Quiz {
-  @Id private UUID id;
+  @Id
+  @Column("id")
+  private UUID id;
+
+  @Column("code")
+  private String code;
+
+  @Column("answer")
+  private AnswerChoice correctAnswer;
+
+  @Column("explanation")
+  private String explanation;
 
   @Column("programming_language_id")
   private Long programmingLanguageId;
 
   @Column("difficulty_level_id")
   private Long difficultyLevelId;
-
-  @Column("answer")
-  private String answer;
 
   @CreatedDate
   @Column("created_at")

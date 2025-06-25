@@ -55,13 +55,16 @@ CREATE TABLE IF NOT EXISTS difficulty_levels
     level TEXT UNIQUE NOT NULL
 );
 
+CREATE TYPE answer_choice AS ENUM ('A', 'B', 'C', 'D');
+
 CREATE TABLE IF NOT EXISTS quizzes
 (
     id                      UUID        DEFAULT uuidv7() PRIMARY KEY,
-    code                    TEXT   NOT NULL UNIQUE,
-    programming_language_id BIGINT NOT NULL REFERENCES programming_languages (id),
-    difficulty_level_id     BIGINT NOT NULL REFERENCES difficulty_levels (id),
-    answer                  TEXT   NOT NULL,
+    code                    TEXT          NOT NULL UNIQUE,
+    correct_answer          answer_choice NOT NULL,
+    explanation             TEXT          NOT NULL,
+    programming_language_id BIGINT        NOT NULL REFERENCES programming_languages (id),
+    difficulty_level_id     BIGINT        NOT NULL REFERENCES difficulty_levels (id),
     created_at              TIMESTAMPTZ DEFAULT now(),
     updated_at              TIMESTAMPTZ DEFAULT now()
 );
@@ -89,6 +92,7 @@ VALUES ('BEGINNER'),
        ('INTERMEDIATE'),
        ('ADVANCED');
 
-INSERT INTO quizzes (code, programming_language_id, difficulty_level_id, answer)
-VALUES ('quiz_java_main', 1, 1, 'public static void main(String[] args)'),
-       ('quiz_python_def', 2, 2, 'def main(): pass');
+INSERT INTO quizzes (code, correct_answer, explanation, programming_language_id,
+                     difficulty_level_id)
+VALUES ('quiz_java_main', 'A', 'sample', 1, 1),
+       ('quiz_python_def', 'B', 'temp', 2, 2);

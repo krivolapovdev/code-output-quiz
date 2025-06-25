@@ -1,6 +1,5 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.controller;
 
-import io.github.krivolapovdev.codeoutputquiz.quizservice.entity.Quiz;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
@@ -35,7 +34,7 @@ public class QuizController {
   }
 
   @GetMapping("/{id}")
-  public Mono<Quiz> getQuizById(@PathVariable UUID id) {
+  public Mono<QuizResponse> getQuizById(@PathVariable UUID id) {
     return quizService.getQuizById(id);
   }
 

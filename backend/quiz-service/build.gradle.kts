@@ -14,6 +14,7 @@ val postgresR2dbcVersion = "1.0.7.RELEASE"
 val postgresVersion = "42.7.7"
 val flywayVersion = "11.9.1"
 val jacksonVersion = "2.19.1"
+val mapstructVersion = "1.6.3"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -26,6 +27,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:$springdocVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("org.flywaydb:flyway-core:$flywayVersion")
+    implementation("org.mapstruct:mapstruct:$mapstructVersion")
 
     runtimeOnly("org.postgresql:r2dbc-postgresql:$postgresR2dbcVersion")
     runtimeOnly("org.postgresql:postgresql:$postgresVersion")
@@ -34,6 +36,8 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
 }
 
 flyway {

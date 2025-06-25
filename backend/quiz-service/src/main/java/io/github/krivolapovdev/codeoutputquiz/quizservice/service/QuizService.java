@@ -1,12 +1,16 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.service;
 
+import io.github.krivolapovdev.codeoutputquiz.quizservice.config.cache.CacheNames;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.entity.Quiz;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.repository.QuizRepository;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,12 +20,17 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class QuizService {
   private final ChatClient chatClient;
+  private final QuizRepository quizRepository;
+
+  @Cacheable(value = CacheNames.QUIZ_CACHE, key = "#quizRequest")
+  public Mono<Quiz> getRandomQuiz(QuizRequest quizRequest) {
+    log.info("Get random quiz {}", quizRequest);
+    return quizRepository.findRandomQuiz();
+  }
 
   public Flux<String> generateNextQuiz(QuizRequest quizRequest) {
-    log.info("Generating next quiz for {}", quizRequest);
-
+    log.info("Generating next quiz {}", quizRequest);
     String prompt = buildQuizPrompt(quizRequest);
-
     return chatClient.prompt().user(prompt).stream().content();
   }
 

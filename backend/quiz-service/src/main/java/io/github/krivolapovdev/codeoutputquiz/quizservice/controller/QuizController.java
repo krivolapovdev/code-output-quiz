@@ -1,6 +1,8 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.controller;
 
+import io.github.krivolapovdev.codeoutputquiz.quizservice.entity.Quiz;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.service.QuizService;
 import java.util.List;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,6 +22,14 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class QuizController {
   private final QuizService quizService;
+
+  @GetMapping
+  public Mono<Quiz> getRandomQuiz(
+      @RequestParam ProgrammingLanguage programmingLanguage,
+      @RequestParam DifficultyLevel difficultyLevel) {
+    QuizRequest request = new QuizRequest(programmingLanguage, difficultyLevel);
+    return quizService.getRandomQuiz(request);
+  }
 
   @GetMapping("/supported-programming-languages")
   public Mono<List<String>> getSupportedProgrammingLanguages() {

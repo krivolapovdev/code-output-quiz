@@ -20,3 +20,7 @@ spring:
     locations: classpath:db/migration
     user: postgres
     password: root
+  data:
+    redis:
+      host: localhost
+      port: 6379

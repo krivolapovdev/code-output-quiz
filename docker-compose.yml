@@ -104,6 +104,21 @@ services:
       retries: 5
     restart: unless-stopped
 
+  redis:
+    container_name: redis
+    image: redis:8.0.2-alpine3.21
+    ports:
+      - "6379:6379"
+    command: [ "redis-server", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru" ]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   quiz-service:
     container_name: quiz-service
     build:
@@ -119,6 +134,8 @@ services:
       SPRING_FLYWAY_URL: jdbc:postgresql://db-quiz:5432/quiz_db
       SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
       SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
       interval: 10s
@@ -130,6 +147,8 @@ services:
       eureka-server:
         condition: service_healthy
       db-quiz:
+        condition: service_healthy
+      redis:
         condition: service_healthy
 
   api-gateway:
@@ -153,3 +172,4 @@ services:
 
 volumes:
   db-quiz-data:
+  redis-data:

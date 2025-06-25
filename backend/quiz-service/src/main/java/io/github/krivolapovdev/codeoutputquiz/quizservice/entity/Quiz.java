@@ -22,7 +22,7 @@ public class Quiz {
   @Column("code")
   private String code;
 
-  @Column("answer")
+  @Column("correct_answer")
   private AnswerChoice correctAnswer;
 
   @Column("explanation")

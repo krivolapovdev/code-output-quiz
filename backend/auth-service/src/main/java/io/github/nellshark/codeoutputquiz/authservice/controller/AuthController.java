@@ -1,9 +1,9 @@
 package io.github.nellshark.codeoutputquiz.authservice.controller;
 
-import io.github.nellshark.codeoutputquiz.authservice.entity.User;
 import io.github.nellshark.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.nellshark.codeoutputquiz.authservice.request.RegistrationRequest;
 import io.github.nellshark.codeoutputquiz.authservice.response.AuthResponse;
+import io.github.nellshark.codeoutputquiz.authservice.response.RegistrationResponse;
 import io.github.nellshark.codeoutputquiz.authservice.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +20,12 @@ public class AuthController {
   private final AuthService authService;
 
   @PostMapping("/register")
-  public Mono<User> register(@RequestBody RegistrationRequest registrationRequest) {
+  public Mono<RegistrationResponse> register(@RequestBody RegistrationRequest registrationRequest) {
     return authService.register(registrationRequest);
   }
 
   @PostMapping("/login")
-  public Mono<ResponseEntity<AuthResponse>> login(@RequestBody Mono<AuthRequest> authRequest) {
+  public Mono<ResponseEntity<AuthResponse>> login(@RequestBody AuthRequest authRequest) {
     return authService.login(authRequest);
   }
 }

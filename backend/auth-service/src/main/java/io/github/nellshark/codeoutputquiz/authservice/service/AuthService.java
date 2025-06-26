@@ -7,6 +7,7 @@ import io.github.nellshark.codeoutputquiz.authservice.repository.UserRepository;
 import io.github.nellshark.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.nellshark.codeoutputquiz.authservice.request.RegistrationRequest;
 import io.github.nellshark.codeoutputquiz.authservice.response.AuthResponse;
+import io.github.nellshark.codeoutputquiz.authservice.response.RegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +28,7 @@ public class AuthService {
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
-  public Mono<User> register(RegistrationRequest registrationRequest) {
+  public Mono<RegistrationResponse> register(RegistrationRequest registrationRequest) {
     log.info("Registering user: {}", registrationRequest.email());
 
     User user =
@@ -38,18 +39,17 @@ public class AuthService {
         .findByEmail(registrationRequest.email())
         .flatMap(u -> Mono.error(new EmailAlreadyTakenException("Email already exists")))
         .switchIfEmpty(Mono.defer(() -> userRepository.save(user)))
-        .cast(User.class);
+        .cast(User.class)
+        .map(savedUser -> new RegistrationResponse(savedUser.getId(), savedUser.getEmail()));
   }
 
-  public Mono<ResponseEntity<AuthResponse>> login(Mono<AuthRequest> authRequest) {
-    return authRequest
-        .doOnNext(req -> log.info("Logging in user: {}", req.email()))
-        .flatMap(
-            login ->
-                authenticationManager
-                    .authenticate(
-                        new UsernamePasswordAuthenticationToken(login.email(), login.password()))
-                    .map(tokenProvider::createToken))
+  public Mono<ResponseEntity<AuthResponse>> login(AuthRequest authRequest) {
+    log.info("Logging in user: {}", authRequest.email());
+
+    return authenticationManager
+        .authenticate(
+            new UsernamePasswordAuthenticationToken(authRequest.email(), authRequest.password()))
+        .map(tokenProvider::createToken)
         .map(
             jwt -> {
               HttpHeaders httpHeaders = new HttpHeaders();

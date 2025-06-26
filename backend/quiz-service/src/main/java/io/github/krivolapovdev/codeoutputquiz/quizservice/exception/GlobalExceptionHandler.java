@@ -10,9 +10,11 @@ import reactor.core.publisher.Mono;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+  private static final String LOG_OCCURRED_MESSAGE = "{} Occurred: {}";
+
   @ExceptionHandler(QuizNotFoundException.class)
   public Mono<ResponseEntity<String>> handleQuizNotFoundException(QuizNotFoundException ex) {
-    log.warn("Quiz not found: {}", ex.getMessage());
+    log.warn(LOG_OCCURRED_MESSAGE, ex.getClass().getSimpleName(), ex.getMessage());
     return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage()));
   }
 }

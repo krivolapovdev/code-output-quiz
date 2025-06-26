@@ -38,9 +38,9 @@ public class JwtTokenProvider {
   }
 
   public String createToken(Authentication authentication) {
-    String username = authentication.getName();
+    String email = authentication.getName();
     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-    var claimsBuilder = Jwts.claims().subject(username);
+    var claimsBuilder = Jwts.claims().subject(email);
     if (!authorities.isEmpty()) {
       claimsBuilder.add(
           AUTHORITIES_KEY,

@@ -3,6 +3,7 @@ package io.github.nellshark.codeoutputquiz.authservice.config.jwt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
@@ -18,7 +19,8 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
   private final JwtTokenProvider tokenProvider;
 
   @Override
-  public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+  public @NonNull Mono<Void> filter(
+      @NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
     String token = resolveToken(exchange.getRequest());
     if (StringUtils.hasText(token) && this.tokenProvider.validateToken(token)) {
       return Mono.fromCallable(() -> this.tokenProvider.getAuthentication(token))

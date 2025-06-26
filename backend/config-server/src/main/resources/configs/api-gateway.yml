@@ -12,6 +12,10 @@ spring:
           uri: lb://quiz-service
           predicates:
             - Path=/api/v*/quizzes/**
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/v*/auth/**
       globalcors:
         corsConfigurations:
           '[/**]':

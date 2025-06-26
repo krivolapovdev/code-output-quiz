@@ -1,0 +1,10 @@
+spring:
+  profiles:
+    default: prod
+  application:
+    name: auth-service
+  config:
+    import: configserver:${CONFIG_SERVER:http://localhost:8888}
+  cloud:
+    config:
+      fail-fast: true

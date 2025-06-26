@@ -1,11 +1,12 @@
 pre-commit:
   parallel: true
-  stage_fixed: true
   jobs:
     - name: biome
       root: frontend
+      stage_fixed: true
       run: npm run biome
 
     - name: spotless
       root: backend
+      stage_fixed: true
       run: ./gradlew spotlessApply

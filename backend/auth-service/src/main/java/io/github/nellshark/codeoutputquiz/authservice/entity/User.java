@@ -9,8 +9,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("users")
 @Data
 public class User {
-  @Id
-  private UUID id;
+  @Id private UUID id;
 
   @Column("email")
   private String email;

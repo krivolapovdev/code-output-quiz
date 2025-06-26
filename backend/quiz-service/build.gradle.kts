@@ -44,7 +44,5 @@ flyway {
     url = "jdbc:postgresql://localhost:5432/quiz_db"
     user = "postgres"
     password = "root"
-
-    val profile = System.getenv("SPRING_PROFILES_ACTIVE") ?: "prod"
-    cleanDisabled = profile != "dev"
+    cleanDisabled = false
 }

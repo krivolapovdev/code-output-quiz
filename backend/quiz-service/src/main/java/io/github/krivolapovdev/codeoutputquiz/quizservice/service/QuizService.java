@@ -2,8 +2,8 @@ package io.github.krivolapovdev.codeoutputquiz.quizservice.service;
 
 import io.github.krivolapovdev.codeoutputquiz.quizservice.config.cache.CacheNames;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.exception.QuizNotFoundException;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.mapper.QuizMapper;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.repository.QuizRepository;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.mapper.QuizViewMapper;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.repository.QuizViewRepository;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.response.QuizResponse;
 import java.util.UUID;
@@ -18,24 +18,24 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Slf4j
 public class QuizService {
-  private final QuizRepository quizRepository;
+  private final QuizViewRepository quizViewRepository;
   private final QuizAiService quizAiService;
-  private final QuizMapper quizMapper;
+  private final QuizViewMapper quizViewMapper;
 
   public Mono<QuizResponse> getRandomQuiz(QuizRequest quizRequest) {
     log.info("Get random quiz {}", quizRequest);
-    return quizRepository
-        .findRandomQuiz()
+    return quizViewRepository
+        .findRandomQuizView()
         .doOnNext(quiz -> log.info("Fetched quiz from DB: {}", quiz))
-        .map(quizMapper::toResponse);
+        .map(quizViewMapper::toResponse);
   }
 
   @Cacheable(value = CacheNames.QUIZ_CACHE, key = "#id")
   public Mono<QuizResponse> getQuizById(UUID id) {
     log.info("Get quiz by id {}", id);
-    return quizRepository
+    return quizViewRepository
         .findById(id)
-        .map(quizMapper::toResponse)
+        .map(quizViewMapper::toResponse)
         .switchIfEmpty(Mono.error(new QuizNotFoundException("Quiz not found with id: " + id)));
   }
 

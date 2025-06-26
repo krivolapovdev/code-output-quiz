@@ -75,16 +75,29 @@ CREATE TRIGGER update_quizzes_updated_at
     FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
 
+CREATE OR REPLACE VIEW quizzes_view AS
+SELECT q.id,
+       q.code,
+       q.correct_answer,
+       q.explanation,
+       dl.level AS difficulty_level,
+       pl.name  AS programming_language,
+       q.created_at,
+       q.updated_at
+FROM quizzes AS q
+         JOIN difficulty_levels AS dl ON q.difficulty_level_id = dl.id
+         JOIN programming_languages AS pl ON q.programming_language_id = pl.id;
+
 INSERT INTO programming_languages (name)
-VALUES ('Java'),
-       ('Python'),
+VALUES ('JAVA'),
+       ('PYTHON'),
        ('C'),
-       ('C++'),
-       ('Go'),
-       ('C#'),
-       ('JavaScript'),
-       ('Rust'),
-       ('Swift'),
+       ('CPP'),
+       ('GO'),
+       ('CSHARP'),
+       ('JAVASCRIPT'),
+       ('RUST'),
+       ('SWIFT'),
        ('PHP');
 
 INSERT INTO difficulty_levels (level)

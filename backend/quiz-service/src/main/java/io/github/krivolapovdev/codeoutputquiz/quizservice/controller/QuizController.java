@@ -5,7 +5,6 @@ import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLangu
 import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.response.QuizResponse;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.service.QuizService;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -39,17 +38,7 @@ public class QuizController {
   }
 
   @PostMapping(value = "/next", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public Flux<String> generateNextQuiz(@RequestBody QuizRequest quizRequest) {
-    return quizService.generateNextQuiz(quizRequest);
-  }
-
-  @GetMapping("/supported-programming-languages")
-  public Mono<List<String>> getSupportedProgrammingLanguages() {
-    return quizService.getSupportedProgrammingLanguages();
-  }
-
-  @GetMapping("/supported-difficulty-levels")
-  public Mono<List<DifficultyLevel>> getSupportedDifficultyLevels() {
-    return quizService.getSupportedDifficultyLevels();
+  public Flux<String> generateQuiz(@RequestBody QuizRequest quizRequest) {
+    return quizService.generateQuiz(quizRequest);
   }
 }

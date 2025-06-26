@@ -151,6 +151,56 @@ services:
       redis:
         condition: service_healthy
 
+  db-auth:
+    container_name: db-auth
+    image: postgres:17.5-alpine3.22
+    ports:
+      - "5432:5432"
+    environment:
+      - TZ=Asia/Almaty
+      - PGTZ=Asia/Almaty
+      - POSTGRES_DB=auth_db
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-root}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8 --auth-host=scram-sha-256 --auth-local=scram-sha-256
+    volumes:
+      - db-auth-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  auth-service:
+    container_name: auth-service
+    build:
+      context: .
+      dockerfile: infrastructure/docker/auth-service/Dockerfile
+    restart: unless-stopped
+    environment:
+      <<: *common-variables
+      SPRING_R2DBC_URL: r2dbc:postgresql://db-auth:5432/auth_db
+      SPRING_R2DBC_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_R2DBC_PASSWORD: ${POSTGRES_PASSWORD:-root}
+      SPRING_FLYWAY_URL: jdbc:postgresql://db-auth:5432/auth_db
+      SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
+      SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "8080:8080"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      db-auth:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
   api-gateway:
     container_name: api-gateway
     build:
@@ -172,4 +222,5 @@ services:
 
 volumes:
   db-quiz-data:
+  db-auth-data:
   redis-data:

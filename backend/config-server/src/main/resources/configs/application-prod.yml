@@ -5,3 +5,8 @@ management:
         include: health, info, prometheus, refresh
 logging:
   config: classpath:logback-spring-prod.xml
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

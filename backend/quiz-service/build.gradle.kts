@@ -26,16 +26,12 @@ dependencies {
     implementation("org.springframework.ai:spring-ai-openai-spring-boot-starter:$openAiVersion")
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:$springdocVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-    implementation("org.flywaydb:flyway-core:$flywayVersion")
     implementation("org.mapstruct:mapstruct:$mapstructVersion")
 
-    runtimeOnly("org.postgresql:r2dbc-postgresql:$postgresR2dbcVersion")
     runtimeOnly("org.postgresql:postgresql:$postgresVersion")
+    runtimeOnly("org.postgresql:r2dbc-postgresql:$postgresR2dbcVersion")
+    runtimeOnly("org.flywaydb:flyway-core:$flywayVersion")
     runtimeOnly("org.flywaydb:flyway-database-postgresql:$flywayVersion")
-
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.projectreactor:reactor-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
 }

@@ -48,8 +48,12 @@ subprojects {
 
         compileOnly("org.projectlombok:lombok:$lombokVersion")
         annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+
         testCompileOnly("org.projectlombok:lombok:$lombokVersion")
         testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("io.projectreactor:reactor-test")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
 
     extensions.configure<DependencyManagementExtension> {

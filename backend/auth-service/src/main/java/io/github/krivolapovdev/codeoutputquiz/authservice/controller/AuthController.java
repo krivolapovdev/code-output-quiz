@@ -3,6 +3,7 @@ package io.github.krivolapovdev.codeoutputquiz.authservice.controller;
 import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.authservice.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +19,12 @@ public class AuthController {
   private final AuthService authService;
 
   @PostMapping("/register")
-  public Mono<ResponseEntity<AuthResponse>> register(@RequestBody AuthRequest registrationRequest) {
-    return authService.register(registrationRequest);
+  public Mono<ResponseEntity<AuthResponse>> register(@Valid @RequestBody AuthRequest authRequest) {
+    return authService.register(authRequest);
   }
 
   @PostMapping("/login")
-  public Mono<ResponseEntity<AuthResponse>> login(@RequestBody AuthRequest authRequest) {
+  public Mono<ResponseEntity<AuthResponse>> login(@Valid @RequestBody AuthRequest authRequest) {
     return authService.login(authRequest);
   }
 }

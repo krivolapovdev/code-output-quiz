@@ -1,45 +1,31 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt;
 
+import io.github.krivolapovdev.codeoutputquiz.authservice.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 @RequiredArgsConstructor
 public class JwtTokenAuthenticationFilter implements WebFilter {
-  public static final String HEADER_PREFIX = "Bearer ";
-
   private final JwtTokenProvider tokenProvider;
 
   @Override
   public @NonNull Mono<Void> filter(
       @NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
-    String token = resolveToken(exchange.getRequest());
-    if (StringUtils.hasText(token) && this.tokenProvider.validateToken(token)) {
-      return Mono.fromCallable(() -> this.tokenProvider.getAuthentication(token))
-          .subscribeOn(Schedulers.boundedElastic())
-          .flatMap(
-              authentication ->
-                  chain
-                      .filter(exchange)
-                      .contextWrite(
-                          ReactiveSecurityContextHolder.withAuthentication(authentication)));
-    }
-    return chain.filter(exchange);
-  }
-
-  private String resolveToken(ServerHttpRequest request) {
-    String bearerToken = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-    if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(HEADER_PREFIX)) {
-      return bearerToken.substring(7);
-    }
-    return null;
+    return JwtUtils.extractToken(
+            exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
+        .filter(tokenProvider::validateToken)
+        .map(tokenProvider::getAuthentication)
+        .map(
+            authentication ->
+                chain
+                    .filter(exchange)
+                    .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication)))
+        .orElseGet(() -> chain.filter(exchange));
   }
 }

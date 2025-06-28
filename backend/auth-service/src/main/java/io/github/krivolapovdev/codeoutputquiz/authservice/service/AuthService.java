@@ -6,6 +6,7 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.exception.EmailAlready
 import io.github.krivolapovdev.codeoutputquiz.authservice.repository.UserRepository;
 import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
+import io.github.krivolapovdev.codeoutputquiz.authservice.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -15,14 +16,14 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
-
-  private final JwtTokenProvider tokenProvider;
+  private final JwtTokenProvider jwtTokenProvider;
   private final ReactiveAuthenticationManager authenticationManager;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
@@ -45,6 +46,16 @@ public class AuthService {
     return authenticateAndBuildResponse(request.email(), request.password(), HttpStatus.OK);
   }
 
+  public Mono<ResponseEntity<AuthResponse>> refreshToken(String oldTokenHeader) {
+    log.info("Refreshing token: {}", oldTokenHeader);
+    return Mono.justOrEmpty(JwtUtils.extractToken(oldTokenHeader))
+        .filter(jwtTokenProvider::validateToken)
+        .switchIfEmpty(
+            Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid JWT token")))
+        .map(jwtTokenProvider::refreshToken)
+        .map(newJwtToken -> buildAuthResponse(newJwtToken, HttpStatus.OK));
+  }
+
   private Mono<User> createAndSaveUser(AuthRequest request) {
     log.info("Creating new user with email: {}", request.email());
     User newUser = new User(request.email(), passwordEncoder.encode(request.password()));
@@ -56,13 +67,13 @@ public class AuthService {
     log.info("Authenticating user with email: {}", email);
     return authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(email, password))
-        .map(tokenProvider::createToken)
-        .map(jwt -> buildAuthResponse(jwt, status));
+        .map(jwtTokenProvider::createToken)
+        .map(jwtToken -> buildAuthResponse(jwtToken, status));
   }
 
-  private ResponseEntity<AuthResponse> buildAuthResponse(String jwt, HttpStatus status) {
+  private ResponseEntity<AuthResponse> buildAuthResponse(String jwtToken, HttpStatus status) {
     HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
-    return new ResponseEntity<>(new AuthResponse(jwt), headers, status);
+    headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken);
+    return new ResponseEntity<>(new AuthResponse(jwtToken), headers, status);
   }
 }

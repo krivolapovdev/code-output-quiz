@@ -89,4 +89,9 @@ public class JwtTokenProvider {
     }
     return false;
   }
+
+  public String refreshToken(String token) {
+    Authentication authentication = getAuthentication(token);
+    return createToken(authentication);
+  }
 }

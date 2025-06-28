@@ -5,9 +5,11 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.authservice.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -26,5 +28,11 @@ public class AuthController {
   @PostMapping("/login")
   public Mono<ResponseEntity<AuthResponse>> login(@Valid @RequestBody AuthRequest authRequest) {
     return authService.login(authRequest);
+  }
+
+  @PostMapping("/refresh-token")
+  public Mono<ResponseEntity<AuthResponse>> refreshToken(
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+    return authService.refreshToken(token);
   }
 }

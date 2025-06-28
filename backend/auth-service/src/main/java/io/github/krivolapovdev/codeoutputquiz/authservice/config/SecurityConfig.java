@@ -26,7 +26,7 @@ public class SecurityConfig {
         .authenticationManager(reactiveAuthenticationManager)
         .securityContextRepository(NoOpServerSecurityContextRepository.getInstance()) // Stateless
         .addFilterAt(
-            new JwtTokenAuthenticationFilter(tokenProvider), SecurityWebFiltersOrder.HTTP_BASIC)
+            new JwtTokenAuthenticationFilter(tokenProvider), SecurityWebFiltersOrder.AUTHENTICATION)
         .httpBasic(Customizer.withDefaults())
         .formLogin(Customizer.withDefaults())
         .build();

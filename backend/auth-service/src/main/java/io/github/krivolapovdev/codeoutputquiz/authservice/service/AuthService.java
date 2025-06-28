@@ -5,9 +5,7 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.entity.User;
 import io.github.krivolapovdev.codeoutputquiz.authservice.exception.EmailAlreadyTakenException;
 import io.github.krivolapovdev.codeoutputquiz.authservice.repository.UserRepository;
 import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
-import io.github.krivolapovdev.codeoutputquiz.authservice.request.RegistrationRequest;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
-import io.github.krivolapovdev.codeoutputquiz.authservice.response.RegistrationResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -23,39 +21,48 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
+
   private final JwtTokenProvider tokenProvider;
   private final ReactiveAuthenticationManager authenticationManager;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
-  public Mono<RegistrationResponse> register(RegistrationRequest registrationRequest) {
-    log.info("Registering user: {}", registrationRequest.email());
-
-    User user =
-        new User(
-            registrationRequest.email(), passwordEncoder.encode(registrationRequest.password()));
+  public Mono<ResponseEntity<AuthResponse>> register(AuthRequest request) {
+    log.info("Registering user: {}", request.email());
 
     return userRepository
-        .findByEmail(registrationRequest.email())
+        .findByEmail(request.email())
         .flatMap(u -> Mono.error(new EmailAlreadyTakenException("Email already exists")))
-        .switchIfEmpty(Mono.defer(() -> userRepository.save(user)))
-        .cast(User.class)
-        .map(savedUser -> new RegistrationResponse(savedUser.getId(), savedUser.getEmail()));
+        .switchIfEmpty(Mono.defer(() -> createAndSaveUser(request)))
+        .flatMap(
+            savedUser ->
+                authenticateAndBuildResponse(
+                    request.email(), request.password(), HttpStatus.CREATED));
   }
 
-  public Mono<ResponseEntity<AuthResponse>> login(AuthRequest authRequest) {
-    log.info("Logging in user: {}", authRequest.email());
+  public Mono<ResponseEntity<AuthResponse>> login(AuthRequest request) {
+    log.info("Logging in user: {}", request.email());
+    return authenticateAndBuildResponse(request.email(), request.password(), HttpStatus.OK);
+  }
 
+  private Mono<User> createAndSaveUser(AuthRequest request) {
+    log.info("Creating new user with email: {}", request.email());
+    User newUser = new User(request.email(), passwordEncoder.encode(request.password()));
+    return userRepository.save(newUser);
+  }
+
+  private Mono<ResponseEntity<AuthResponse>> authenticateAndBuildResponse(
+      String email, String password, HttpStatus status) {
+    log.info("Authenticating user with email: {}", email);
     return authenticationManager
-        .authenticate(
-            new UsernamePasswordAuthenticationToken(authRequest.email(), authRequest.password()))
+        .authenticate(new UsernamePasswordAuthenticationToken(email, password))
         .map(tokenProvider::createToken)
-        .map(
-            jwt -> {
-              HttpHeaders httpHeaders = new HttpHeaders();
-              httpHeaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
-              AuthResponse authResponse = new AuthResponse(jwt);
-              return new ResponseEntity<>(authResponse, httpHeaders, HttpStatus.OK);
-            });
+        .map(jwt -> buildAuthResponse(jwt, status));
+  }
+
+  private ResponseEntity<AuthResponse> buildAuthResponse(String jwt, HttpStatus status) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + jwt);
+    return new ResponseEntity<>(new AuthResponse(jwt), headers, status);
   }
 }

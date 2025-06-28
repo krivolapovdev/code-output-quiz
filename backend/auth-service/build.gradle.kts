@@ -13,6 +13,7 @@ val postgresVersion = "42.7.7"
 val postgresR2dbcVersion = "1.0.7.RELEASE"
 val flywayVersion = "11.9.1"
 val jjwtVersion = "0.12.6"
+val caffeineVersion = "3.2.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -22,6 +23,7 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:${springdocVersion}")
     implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
+    implementation("com.github.ben-manes.caffeine:caffeine:${caffeineVersion}")
 
     runtimeOnly("org.postgresql:postgresql:${postgresVersion}")
     runtimeOnly("org.postgresql:r2dbc-postgresql:${postgresR2dbcVersion}")

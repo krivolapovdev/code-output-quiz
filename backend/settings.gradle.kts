@@ -5,5 +5,6 @@ include(
     "eureka-server",
     "quiz-service",
     "auth-service",
+    "user-service",
     "api-gateway"
 )

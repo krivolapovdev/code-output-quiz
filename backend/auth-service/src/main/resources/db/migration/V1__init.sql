@@ -38,3 +38,20 @@ CREATE TABLE users
     email    VARCHAR(254) UNIQUE NOT NULL,
     password VARCHAR(72)         NOT NULL
 );
+
+CREATE OR REPLACE FUNCTION lowercase_email()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    NEW.email := LOWER(NEW.email);
+    RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER lowercase_email_trigger
+    BEFORE INSERT OR UPDATE
+    ON users
+    FOR EACH ROW
+EXECUTE FUNCTION lowercase_email();

@@ -18,7 +18,7 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
   @Override
   public Mono<UserDetails> findByUsername(String email) {
     return userRepository
-        .findByEmail(email)
+        .findByEmail(email.toLowerCase())
         .map(
             user ->
                 User.builder()

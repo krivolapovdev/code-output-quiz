@@ -3,13 +3,13 @@ FROM gradle:8.14.2-jdk21-alpine AS build
 
 WORKDIR /app
 
-COPY backend/build.gradle.kts backend/settings.gradle.kts backend/gradle ./
+COPY build.gradle.kts settings.gradle.kts gradle ./
 
-COPY backend/auth-service/build.gradle.kts ./auth-service/build.gradle.kts
+COPY auth-service/build.gradle.kts ./auth-service/build.gradle.kts
 
 RUN gradle --no-daemon :auth-service:dependencies
 
-COPY backend/auth-service/src ./auth-service/src
+COPY auth-service/src ./auth-service/src
 
 RUN gradle --no-daemon :auth-service:bootJar
 

@@ -3,13 +3,13 @@ FROM gradle:8.14.2-jdk21-alpine AS build
 
 WORKDIR /app
 
-COPY backend/build.gradle.kts backend/settings.gradle.kts backend/gradle ./
+COPY build.gradle.kts settings.gradle.kts gradle ./
 
-COPY backend/eureka-server/build.gradle.kts ./eureka-server/build.gradle.kts
+COPY eureka-server/build.gradle.kts ./eureka-server/build.gradle.kts
 
 RUN gradle --no-daemon :eureka-server:dependencies
 
-COPY backend/eureka-server/src ./eureka-server/src
+COPY eureka-server/src ./eureka-server/src
 
 RUN gradle --no-daemon :eureka-server:bootJar
 

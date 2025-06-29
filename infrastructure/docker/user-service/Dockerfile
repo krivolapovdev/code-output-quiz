@@ -3,13 +3,13 @@ FROM gradle:8.14.2-jdk21-alpine AS build
 
 WORKDIR /app
 
-COPY backend/build.gradle.kts backend/settings.gradle.kts backend/gradle ./
+COPY build.gradle.kts settings.gradle.kts gradle ./
 
-COPY backend/user-server/build.gradle.kts ./user-server/build.gradle.kts
+COPY user-server/build.gradle.kts ./user-server/build.gradle.kts
 
 RUN gradle --no-daemon :user-server:dependencies
 
-COPY backend/user-server/src ./user-server/src
+COPY user-server/src ./user-server/src
 
 RUN gradle --no-daemon :user-server:bootJar
 

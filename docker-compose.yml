@@ -50,8 +50,8 @@ services:
   config-server:
     container_name: config-server
     build:
-      context: .
-      dockerfile: infrastructure/docker/config-server/Dockerfile
+      context: ./backend
+      dockerfile: ../infrastructure/docker/config-server/Dockerfile
     restart: unless-stopped
     environment:
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-jwt-ultra-secure-and-ultra-long-secret}
@@ -69,8 +69,8 @@ services:
   eureka-server:
     container_name: eureka-server
     build:
-      context: .
-      dockerfile: infrastructure/docker/eureka-server/Dockerfile
+      context: ./backend
+      dockerfile: ../infrastructure/docker/eureka-server/Dockerfile
     restart: unless-stopped
     environment:
       <<: *common-variables
@@ -124,8 +124,8 @@ services:
   quiz-service:
     container_name: quiz-service
     build:
-      context: .
-      dockerfile: infrastructure/docker/quiz-service/Dockerfile
+      context: ./backend
+      dockerfile: ../infrastructure/docker/quiz-service/Dockerfile
     restart: unless-stopped
     environment:
       <<: *common-variables
@@ -177,8 +177,8 @@ services:
   auth-service:
     container_name: auth-service
     build:
-      context: .
-      dockerfile: infrastructure/docker/auth-service/Dockerfile
+      context: ./backend
+      dockerfile: ../infrastructure/docker/auth-service/Dockerfile
     restart: unless-stopped
     environment:
       <<: *common-variables
@@ -206,8 +206,8 @@ services:
   user-service:
     container_name: user-service
     build:
-      context: .
-      dockerfile: infrastructure/docker/user-service/Dockerfile
+      context: ./backend
+      dockerfile: ../infrastructure/docker/user-service/Dockerfile
     restart: unless-stopped
     environment:
       <<: *common-variables
@@ -231,8 +231,8 @@ services:
   api-gateway:
     container_name: api-gateway
     build:
-      context: .
-      dockerfile: infrastructure/docker/api-gateway/Dockerfile
+      context: ./backend
+      dockerfile: ../infrastructure/docker/api-gateway/Dockerfile
     restart: unless-stopped
     environment:
       <<: *common-variables

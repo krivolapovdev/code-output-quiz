@@ -3,13 +3,13 @@ FROM gradle:8.14.2-jdk21-alpine AS build
 
 WORKDIR /app
 
-COPY backend/build.gradle.kts backend/settings.gradle.kts backend/gradle ./
+COPY build.gradle.kts settings.gradle.kts gradle ./
 
-COPY backend/api-gateway/build.gradle.kts ./api-gateway/build.gradle.kts
+COPY api-gateway/build.gradle.kts ./api-gateway/build.gradle.kts
 
 RUN gradle --no-daemon :api-gateway:dependencies
 
-COPY backend/api-gateway/src ./api-gateway/src
+COPY api-gateway/src ./api-gateway/src
 
 RUN gradle --no-daemon :api-gateway:bootJar
 

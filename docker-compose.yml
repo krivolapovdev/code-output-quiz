@@ -53,6 +53,8 @@ services:
       context: .
       dockerfile: infrastructure/docker/config-server/Dockerfile
     restart: unless-stopped
+    environment:
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-jwt-ultra-secure-and-ultra-long-secret}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
       interval: 10s
@@ -186,7 +188,6 @@ services:
       SPRING_FLYWAY_URL: jdbc:postgresql://db-auth:5432/auth_db
       SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
       SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-jwt-ultra-secure-and-ultra-long-secret}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
       interval: 10s
@@ -200,6 +201,31 @@ services:
       db-auth:
         condition: service_healthy
       redis:
+        condition: service_healthy
+
+  user-service:
+    container_name: user-service
+    build:
+      context: .
+      dockerfile: infrastructure/docker/user-service/Dockerfile
+    restart: unless-stopped
+    environment:
+      <<: *common-variables
+      SPRING_R2DBC_URL: r2dbc:postgresql://db-user:5432/user_db
+      SPRING_R2DBC_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_R2DBC_PASSWORD: ${POSTGRES_PASSWORD:-root}
+      SPRING_FLYWAY_URL: jdbc:postgresql://db-user:5432/user_db
+      SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
+      SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "8080:8080"
+    depends_on:
+      eureka-server:
         condition: service_healthy
 
   api-gateway:

@@ -247,6 +247,21 @@ services:
       quiz-service:
         condition: service_healthy
 
+  nginx:
+    container_name: nginx
+    build:
+      context: ./frontend
+      dockerfile: ../infrastructure/docker/nginx/Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    volumes:
+      - ./infrastructure/docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+
 volumes:
   db-quiz-data:
   db-auth-data:

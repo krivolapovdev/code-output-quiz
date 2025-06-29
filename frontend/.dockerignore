@@ -1,0 +1,10 @@
+node_modules
+dist
+build
+
+.vscode
+.husky
+
+biome.json
+.dockerignore
+.streiger.config.json

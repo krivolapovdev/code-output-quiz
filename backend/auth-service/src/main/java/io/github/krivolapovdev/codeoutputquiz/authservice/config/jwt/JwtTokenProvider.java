@@ -91,6 +91,9 @@ public class JwtTokenProvider {
   }
 
   public String refreshToken(String token) {
+    if (!validateToken(token)) {
+      throw new JwtException("Invalid JWT token");
+    }
     Authentication authentication = getAuthentication(token);
     return createToken(authentication);
   }

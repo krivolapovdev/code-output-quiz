@@ -16,7 +16,6 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -49,11 +48,8 @@ public class AuthService {
   public Mono<ResponseEntity<AuthResponse>> refreshToken(String oldTokenHeader) {
     log.info("Refreshing token: {}", oldTokenHeader);
     return Mono.justOrEmpty(JwtUtils.extractToken(oldTokenHeader))
-        .filter(jwtTokenProvider::validateToken)
-        .switchIfEmpty(
-            Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid JWT token")))
         .map(jwtTokenProvider::refreshToken)
-        .map(newJwtToken -> buildAuthResponse(newJwtToken, HttpStatus.OK));
+        .map(token -> buildAuthResponse(token, HttpStatus.OK));
   }
 
   private Mono<User> createAndSaveUser(AuthRequest request) {

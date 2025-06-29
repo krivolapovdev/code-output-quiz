@@ -32,11 +32,14 @@ BEGIN
 END;
 $$;
 
+CREATE TYPE user_role AS ENUM ('USER', 'ADMIN');
+
 CREATE TABLE users
 (
     id       UUID DEFAULT uuidv7() PRIMARY KEY,
     email    VARCHAR(254) UNIQUE NOT NULL,
-    password VARCHAR(72)         NOT NULL
+    password VARCHAR(72)         NOT NULL,
+    role    user_role NOT NULL DEFAULT 'USER'
 );
 
 CREATE OR REPLACE FUNCTION lowercase_email()

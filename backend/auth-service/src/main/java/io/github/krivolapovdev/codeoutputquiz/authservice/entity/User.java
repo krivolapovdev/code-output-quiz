@@ -1,5 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.entity;
 
+import io.github.krivolapovdev.codeoutputquiz.authservice.enums.UserRoles;
 import java.util.UUID;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -16,6 +17,9 @@ public class User {
 
   @Column("password")
   private String password;
+
+  @Column("role")
+  private UserRoles role;
 
   public User(String email, String password) {
     this.email = email;

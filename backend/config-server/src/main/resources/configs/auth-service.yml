@@ -13,6 +13,3 @@ spring:
     locations: classpath:db/migration
     user: postgres
     password: root
-jwt:
-  secret-key: your-jwt-ultra-secure-and-ultra-long-secret
-  validity-in-ms: 3600000

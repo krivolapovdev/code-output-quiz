@@ -40,7 +40,7 @@ public class AuthController {
 
   @PostMapping("/refresh-token")
   public Mono<ResponseEntity<AuthResponse>> refreshToken(
-      @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-    return authService.refreshToken(token);
+      @RequestHeader(HttpHeaders.AUTHORIZATION) String refreshTokenHeader) {
+    return authService.refreshToken(refreshTokenHeader);
   }
 }

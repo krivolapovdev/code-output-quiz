@@ -2,13 +2,14 @@ package io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt;
 
 import static java.util.stream.Collectors.joining;
 
+import io.github.krivolapovdev.codeoutputquiz.authservice.enums.TokenType;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
@@ -27,8 +28,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
   private static final String AUTHORITIES_KEY = "roles";
+  private static final String TOKEN_TYPE_KEY = "token_type";
 
   private final JwtProperties jwtProperties;
+
   private SecretKey secretKey;
 
   @PostConstruct
@@ -37,32 +40,8 @@ public class JwtTokenProvider {
     this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
   }
 
-  public String createToken(Authentication authentication) {
-    String email = authentication.getName();
-    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-    var claimsBuilder = Jwts.claims().subject(email);
-    if (!authorities.isEmpty()) {
-      claimsBuilder.add(
-          AUTHORITIES_KEY,
-          authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(",")));
-    }
-
-    var claims = claimsBuilder.build();
-
-    Date now = new Date();
-    Date validity = new Date(now.getTime() + this.jwtProperties.getValidityInMs());
-
-    return Jwts.builder()
-        .claims(claims)
-        .issuedAt(now)
-        .expiration(validity)
-        .signWith(this.secretKey, Jwts.SIG.HS256)
-        .compact();
-  }
-
   public Authentication getAuthentication(String token) {
-    Claims claims =
-        Jwts.parser().verifyWith(this.secretKey).build().parseSignedClaims(token).getPayload();
+    Claims claims = parseTokenClaims(token);
 
     Object authoritiesClaim = claims.get(AUTHORITIES_KEY);
 
@@ -76,25 +55,56 @@ public class JwtTokenProvider {
     return new UsernamePasswordAuthenticationToken(principal, token, authorities);
   }
 
-  public boolean validateToken(String token) {
-    try {
-      Jws<Claims> claims =
-          Jwts.parser().verifyWith(this.secretKey).build().parseSignedClaims(token);
-      // parseClaimsJws will check expiration date. No need do here.
-      log.info("expiration date: {}", claims.getPayload().getExpiration());
-      return true;
-    } catch (JwtException | IllegalArgumentException e) {
-      log.info("Invalid JWT token: {}", e.getMessage());
-      log.trace("Invalid JWT token trace.", e);
-    }
-    return false;
+  public String createAccessToken(Authentication auth) {
+    return createToken(auth, TokenType.ACCESS);
   }
 
-  public String refreshToken(String token) {
-    if (!validateToken(token)) {
-      throw new JwtException("Invalid JWT token");
+  public String createRefreshToken(Authentication auth) {
+    return createToken(auth, TokenType.REFRESH);
+  }
+
+  public void validateRefreshToken(String token) {
+    Claims claims = parseTokenClaims(token);
+
+    String type = (String) claims.get(TOKEN_TYPE_KEY);
+    if (!"refresh".equalsIgnoreCase(type)) {
+      throw new JwtException("Provided token is not a refresh token");
     }
-    Authentication authentication = getAuthentication(token);
-    return createToken(authentication);
+  }
+
+  private Claims parseTokenClaims(String token) {
+    return Jwts.parser().verifyWith(this.secretKey).build().parseSignedClaims(token).getPayload();
+  }
+
+  private String createToken(Authentication authentication, TokenType tokenType) {
+    String email = authentication.getName();
+    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+    var claimsBuilder = Jwts.claims().subject(email);
+
+    if (!authorities.isEmpty()) {
+      claimsBuilder.add(
+          AUTHORITIES_KEY,
+          authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(",")));
+    }
+
+    claimsBuilder.add(TOKEN_TYPE_KEY, tokenType.name().toLowerCase());
+
+    var claims = claimsBuilder.build();
+
+    Date now = new Date();
+
+    Duration ttl =
+        tokenType == TokenType.ACCESS
+            ? jwtProperties.getAccessTokenExpiration()
+            : jwtProperties.getRefreshTokenExpiration();
+
+    Date expiration = new Date(now.getTime() + ttl.toMillis());
+
+    return Jwts.builder()
+        .claims(claims)
+        .issuedAt(now)
+        .expiration(expiration)
+        .signWith(this.secretKey, Jwts.SIG.HS256)
+        .compact();
   }
 }

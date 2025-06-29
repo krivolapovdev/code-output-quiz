@@ -12,4 +12,5 @@ eureka:
     prefer-ip-address: true
 jwt:
   secret-key: your-jwt-ultra-secure-and-ultra-long-secret
-  validity-in-ms: 3600000
+  access-token-expiration: 15m
+  refresh-token-expiration: 7d

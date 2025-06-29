@@ -48,8 +48,14 @@ public class AuthService {
   public Mono<ResponseEntity<AuthResponse>> refreshToken(String oldTokenHeader) {
     log.info("Refreshing token: {}", oldTokenHeader);
     return Mono.justOrEmpty(JwtUtils.extractToken(oldTokenHeader))
-        .map(jwtTokenProvider::refreshToken)
-        .map(token -> buildAuthResponse(token, HttpStatus.OK));
+        .doOnNext(jwtTokenProvider::validateRefreshToken)
+        .map(jwtTokenProvider::getAuthentication)
+        .map(
+            authentication -> {
+              String accessToken = jwtTokenProvider.createAccessToken(authentication);
+              String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
+              return buildAuthResponse(accessToken, refreshToken, HttpStatus.OK);
+            });
   }
 
   private Mono<User> createAndSaveUser(AuthRequest request) {
@@ -63,13 +69,19 @@ public class AuthService {
     log.info("Authenticating user with email: {}", email);
     return authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(email, password))
-        .map(jwtTokenProvider::createToken)
-        .map(jwtToken -> buildAuthResponse(jwtToken, status));
+        .map(
+            authentication -> {
+              String accessToken = jwtTokenProvider.createAccessToken(authentication);
+              String refreshToken = jwtTokenProvider.createRefreshToken(authentication);
+              return buildAuthResponse(accessToken, refreshToken, status);
+            });
   }
 
-  private ResponseEntity<AuthResponse> buildAuthResponse(String jwtToken, HttpStatus status) {
+  private ResponseEntity<AuthResponse> buildAuthResponse(
+      String accessToken, String refreshToken, HttpStatus status) {
     HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken);
-    return new ResponseEntity<>(new AuthResponse(jwtToken), headers, status);
+    headers.setBearerAuth(accessToken);
+    AuthResponse authResponse = new AuthResponse(accessToken, refreshToken);
+    return new ResponseEntity<>(authResponse, headers, status);
   }
 }

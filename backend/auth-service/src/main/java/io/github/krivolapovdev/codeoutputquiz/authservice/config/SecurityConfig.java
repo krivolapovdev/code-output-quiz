@@ -5,7 +5,6 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.JwtTokenPro
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -27,8 +26,6 @@ public class SecurityConfig {
         .securityContextRepository(NoOpServerSecurityContextRepository.getInstance()) // Stateless
         .addFilterAt(
             new JwtTokenAuthenticationFilter(tokenProvider), SecurityWebFiltersOrder.AUTHENTICATION)
-        .httpBasic(Customizer.withDefaults())
-        .formLogin(Customizer.withDefaults())
         .build();
   }
 }

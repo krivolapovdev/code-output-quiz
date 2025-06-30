@@ -32,8 +32,6 @@ dependencies {
     runtimeOnly("org.flywaydb:flyway-database-postgresql:${flywayVersion}")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:$jjwtVersion")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jjwtVersion")
-
-    testImplementation("org.springframework.security:spring-security-test")
 }
 
 flyway {

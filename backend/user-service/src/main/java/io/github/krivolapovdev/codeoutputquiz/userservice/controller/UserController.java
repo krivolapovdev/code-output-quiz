@@ -1,7 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.controller;
 
-import io.github.krivolapovdev.codeoutputquiz.userservice.client.AuthServiceClient;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,10 +11,9 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
-  private final AuthServiceClient authServiceClient;
-
-  @GetMapping
-  public Mono<String> ping() {
-    return Mono.just("pong");
+  @GetMapping("/secure")
+  @PreAuthorize("hasRole('USER')")
+  public Mono<String> temp() {
+    return Mono.just("log");
   }
 }

@@ -157,7 +157,7 @@ services:
     container_name: db-auth
     image: postgres:17.5-alpine3.22
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - TZ=Asia/Almaty
       - PGTZ=Asia/Almaty
@@ -182,7 +182,7 @@ services:
     restart: unless-stopped
     environment:
       <<: *common-variables
-      SPRING_R2DBC_URL: r2dbc:postgresql://db-auth:5432/auth_db
+      SPRING_R2DBC_URL: r2dbc:postgresql://db-auth:5433/auth_db
       SPRING_R2DBC_USERNAME: ${POSTGRES_USER:-postgres}
       SPRING_R2DBC_PASSWORD: ${POSTGRES_PASSWORD:-root}
       SPRING_FLYWAY_URL: jdbc:postgresql://db-auth:5432/auth_db
@@ -203,6 +203,27 @@ services:
       redis:
         condition: service_healthy
 
+  db-user:
+    container_name: db-user
+    image: postgres:17.5-alpine3.22
+    ports:
+      - "5434:5432"
+    environment:
+      - TZ=Asia/Almaty
+      - PGTZ=Asia/Almaty
+      - POSTGRES_DB=user_db
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-root}
+      - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8 --auth-host=scram-sha-256 --auth-local=scram-sha-256
+    volumes:
+      - db-user-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   user-service:
     container_name: user-service
     build:
@@ -211,7 +232,7 @@ services:
     restart: unless-stopped
     environment:
       <<: *common-variables
-      SPRING_R2DBC_URL: r2dbc:postgresql://db-user:5432/user_db
+      SPRING_R2DBC_URL: r2dbc:postgresql://db-user:5434/user_db
       SPRING_R2DBC_USERNAME: ${POSTGRES_USER:-postgres}
       SPRING_R2DBC_PASSWORD: ${POSTGRES_PASSWORD:-root}
       SPRING_FLYWAY_URL: jdbc:postgresql://db-user:5432/user_db
@@ -226,6 +247,8 @@ services:
       - "8080:8080"
     depends_on:
       eureka-server:
+        condition: service_healthy
+      db-user:
         condition: service_healthy
 
   api-gateway:
@@ -265,4 +288,5 @@ services:
 volumes:
   db-quiz-data:
   db-auth-data:
+  db-user-data:
   redis-data:

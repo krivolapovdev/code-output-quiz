@@ -5,11 +5,11 @@ springdoc:
     path: /swagger
 spring:
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/auth_db
+    url: r2dbc:postgresql://localhost:5433/auth_db
     username: postgres
     password: root
   flyway:
-    url: jdbc:postgresql://localhost:5432/auth_db
+    url: jdbc:postgresql://localhost:5433/auth_db
     locations: classpath:db/migration
     user: postgres
     password: root

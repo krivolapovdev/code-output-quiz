@@ -35,7 +35,7 @@ dependencies {
 }
 
 flyway {
-    url = "jdbc:postgresql://localhost:5432/auth_db"
+    url = "jdbc:postgresql://localhost:5433/auth_db"
     user = "postgres"
     password = "root"
     cleanDisabled = false

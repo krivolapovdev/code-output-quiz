@@ -8,10 +8,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("solved_quizzes")
+@Table("user_solved_quizzes")
 @Data
 @AllArgsConstructor
-public class SolvedQuiz {
+public class UserSolvedQuiz {
   @Column("user_id")
   private UUID userId;
 

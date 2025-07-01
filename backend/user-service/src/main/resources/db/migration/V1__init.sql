@@ -1,4 +1,4 @@
-CREATE TABLE solved_quizzes
+CREATE TABLE user_solved_quizzes
 (
     user_id   UUID NOT NULL,
     quiz_id   UUID NOT NULL,

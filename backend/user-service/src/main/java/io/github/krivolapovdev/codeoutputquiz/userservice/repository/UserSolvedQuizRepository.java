@@ -1,6 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.repository;
 
-import io.github.krivolapovdev.codeoutputquiz.userservice.entity.SolvedQuiz;
+import io.github.krivolapovdev.codeoutputquiz.userservice.entity.UserSolvedQuiz;
 import java.util.UUID;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 @Repository
-public interface SolvedQuizRepository extends ReactiveCrudRepository<SolvedQuiz, UUID> {
+public interface UserSolvedQuizRepository extends ReactiveCrudRepository<UserSolvedQuiz, UUID> {
   @Query(
       """
           SELECT
@@ -19,5 +19,5 @@ public interface SolvedQuizRepository extends ReactiveCrudRepository<SolvedQuiz,
           WHERE
               user_id = :userId
           """)
-  Flux<SolvedQuiz> findAllSolvedQuizzesByUserId(@Param("userId") UUID userId);
+  Flux<UserSolvedQuiz> findAllSolvedQuizzesByUserId(@Param("userId") UUID userId);
 }

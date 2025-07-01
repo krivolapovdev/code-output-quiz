@@ -1,6 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.service;
 
-import io.github.krivolapovdev.codeoutputquiz.userservice.repository.SolvedQuizRepository;
+import io.github.krivolapovdev.codeoutputquiz.userservice.repository.UserSolvedQuizRepository;
 import io.github.krivolapovdev.codeoutputquiz.userservice.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import reactor.core.publisher.Flux;
 @Slf4j
 @RequiredArgsConstructor
 public class UserService {
-  private final SolvedQuizRepository solvedQuizRepository;
+  private final UserSolvedQuizRepository userSolvedQuizRepository;
   private final JwtTokenProvider jwtTokenProvider;
 
   public Flux<String> getUserSolvedQuizzes() {
@@ -20,7 +20,7 @@ public class UserService {
         .map(ctx -> (String) ctx.getAuthentication().getCredentials())
         .map(jwtTokenProvider::extractUserIdFromToken)
         .doOnNext(userId -> log.info("Fetching solved quizzes for userId: {}", userId))
-        .flatMapMany(solvedQuizRepository::findAllSolvedQuizzesByUserId)
+        .flatMapMany(userSolvedQuizRepository::findAllSolvedQuizzesByUserId)
         .map(sq -> sq.getQuizId().toString());
   }
 }

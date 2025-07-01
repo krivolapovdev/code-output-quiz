@@ -13,6 +13,7 @@ import java.time.Duration;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
+import java.util.UUID;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +29,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
   private static final String AUTHORITIES_KEY = "roles";
-  private static final String TOKEN_TYPE_KEY = "token_type";
+  private static final String USER_ID_KEY = "userId";
+  private static final String TOKEN_TYPE_KEY = "tokenType";
 
   private final JwtProperties jwtProperties;
 
@@ -52,15 +54,22 @@ public class JwtTokenProvider {
 
     User principal = new User(claims.getSubject(), "", authorities);
 
-    return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    var authentication = new UsernamePasswordAuthenticationToken(principal, token, authorities);
+
+    String userIdStr = claims.get(USER_ID_KEY, String.class);
+    UUID userId = UUID.fromString(userIdStr);
+    AuthDetails authDetails = new AuthDetails(userId);
+    authentication.setDetails(authDetails);
+
+    return authentication;
   }
 
-  public String createAccessToken(Authentication auth) {
-    return createToken(auth, TokenType.ACCESS);
+  public String createAccessToken(Authentication auth, UUID userId) {
+    return createToken(auth, TokenType.ACCESS, userId);
   }
 
-  public String createRefreshToken(Authentication auth) {
-    return createToken(auth, TokenType.REFRESH);
+  public String createRefreshToken(Authentication auth, UUID userId) {
+    return createToken(auth, TokenType.REFRESH, userId);
   }
 
   public void validateRefreshToken(String token) {
@@ -76,20 +85,19 @@ public class JwtTokenProvider {
     return Jwts.parser().verifyWith(this.secretKey).build().parseSignedClaims(token).getPayload();
   }
 
-  private String createToken(Authentication authentication, TokenType tokenType) {
+  private String createToken(Authentication authentication, TokenType tokenType, UUID userId) {
     String email = authentication.getName();
     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-    var claimsBuilder = Jwts.claims().subject(email);
+    String joinedAuthorities =
+        authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(","));
 
-    if (!authorities.isEmpty()) {
-      claimsBuilder.add(
-          AUTHORITIES_KEY,
-          authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(",")));
-    }
-
-    claimsBuilder.add(TOKEN_TYPE_KEY, tokenType.name().toLowerCase());
-
-    var claims = claimsBuilder.build();
+    Claims claims =
+        Jwts.claims()
+            .subject(email)
+            .add(USER_ID_KEY, userId.toString())
+            .add(AUTHORITIES_KEY, joinedAuthorities)
+            .add(TOKEN_TYPE_KEY, tokenType.name().toLowerCase())
+            .build();
 
     Date now = new Date();
 

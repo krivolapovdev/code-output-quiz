@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { quizService } from "../api/quizService";
+import { quizMetaService } from "@/shared/api";
 
 export const useSupportedProgrammingLanguages = () => {
   const [languages, setLanguages] = useState<string[]>([]);
@@ -8,7 +8,7 @@ export const useSupportedProgrammingLanguages = () => {
   useEffect(() => {
     const fetchLanguages = async () => {
       try {
-        const data = await quizService.fetchSupportedProgrammingLanguages();
+        const data = await quizMetaService.fetchSupportedProgrammingLanguages();
         setLanguages(data);
       } catch (error) {
         setLanguages([]);

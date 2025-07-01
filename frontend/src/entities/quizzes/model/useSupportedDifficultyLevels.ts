@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { quizService } from "../api/quizService";
+import { quizMetaService } from "@/shared/api";
 
 export const useSupportedDifficultyLevels = () => {
   const [levels, setLevels] = useState<string[]>([]);
@@ -8,7 +8,7 @@ export const useSupportedDifficultyLevels = () => {
   useEffect(() => {
     const fetchLevels = async () => {
       try {
-        const data = await quizService.fetchSupportedDifficultyLevels();
+        const data = await quizMetaService.fetchSupportedDifficultyLevels();
         setLevels(data);
       } catch (error) {
         setLevels([]);

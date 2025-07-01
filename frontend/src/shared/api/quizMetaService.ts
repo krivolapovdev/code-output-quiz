@@ -1,8 +1,8 @@
-import { api } from "@/shared/api";
+import { api } from "./base";
 
-const baseURL = "/v1/quizzes";
+const baseURL = "/api/v1/quizzes/meta";
 
-export const quizService = {
+export const quizMetaService = {
   fetchSupportedProgrammingLanguages: async (): Promise<string[]> => {
     const res = await api.get<string[]>(
       `${baseURL}/supported-programming-languages`

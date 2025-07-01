@@ -1,7 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.config;
 
 import io.github.krivolapovdev.codeoutputquiz.userservice.config.jwt.JwtTokenAuthenticationFilter;
-import io.github.krivolapovdev.codeoutputquiz.userservice.config.jwt.JwtTokenProvider;
+import io.github.krivolapovdev.codeoutputquiz.userservice.security.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;

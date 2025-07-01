@@ -1,5 +1,15 @@
 server:
   port: 8082
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5434/user_db
+    username: postgres
+    password: root
+  flyway:
+    url: jdbc:postgresql://localhost:5434/user_db
+    locations: classpath:db/migration
+    user: postgres
+    password: root
 springdoc:
   swagger-ui:
     path: /swagger

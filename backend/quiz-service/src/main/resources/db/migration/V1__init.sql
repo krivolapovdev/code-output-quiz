@@ -32,17 +32,6 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION update_updated_at_column()
-    RETURNS TRIGGER
-    LANGUAGE plpgsql
-AS
-$$
-BEGIN
-    NEW.updated_at = now();
-    RETURN NEW;
-END;
-$$;
-
 CREATE TABLE IF NOT EXISTS programming_languages
 (
     id   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -69,11 +58,21 @@ CREATE TABLE IF NOT EXISTS quizzes
     updated_at              TIMESTAMPTZ DEFAULT now()
 );
 
-CREATE TRIGGER update_quizzes_updated_at
+CREATE OR REPLACE FUNCTION touch_updated_at_column()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$;
+CREATE TRIGGER quizzes_touch_updated_at_trigger
     BEFORE UPDATE
     ON quizzes
     FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
+EXECUTE FUNCTION touch_updated_at_column();
 
 CREATE OR REPLACE VIEW quizzes_view AS
 SELECT q.id,

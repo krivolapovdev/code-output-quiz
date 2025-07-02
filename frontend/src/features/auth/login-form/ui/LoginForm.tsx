@@ -1,24 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
 import { AuthField } from "@/shared/ui/auth-field";
 import { SubmitButton } from "@/shared/ui/submit-button";
-import {
-  type RegisterFormValues,
-  useRegisterForm,
-  useRegisterMutation
-} from "../model";
+import { useLoginForm } from "../model/useLoginForm";
+import { useLoginMutation } from "../model/useLoginMutation";
 
-export const RegisterForm = () => {
-  const navigate = useNavigate();
-
+export const LoginForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid }
-  } = useRegisterForm();
+  } = useLoginForm();
 
-  const { mutateAsync, isPending } = useRegisterMutation();
+  const { mutateAsync, isPending } = useLoginMutation();
+  const navigate = useNavigate();
 
-  const onSubmit = async (data: RegisterFormValues) => {
+  const onSubmit = async (data: { email: string; password: string }) => {
     await mutateAsync(data);
     navigate("/");
   };
@@ -30,10 +26,8 @@ export const RegisterForm = () => {
     >
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-200 p-8 space-y-6">
         <div className="text-center">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            Create account
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">Sign up to get started</p>
+          <h1 className="text-2xl font-semibold text-gray-900">Log in</h1>
+          <p className="text-sm text-gray-500 mt-1">Access your account</p>
         </div>
 
         <AuthField
@@ -52,26 +46,18 @@ export const RegisterForm = () => {
           error={errors.password?.message}
         />
 
-        <AuthField
-          label="Confirm Password"
-          type="password"
-          placeholder="••••••••"
-          {...register("confirmPassword")}
-          error={errors.confirmPassword?.message}
-        />
-
         <SubmitButton
-          label={isPending ? "Creating account..." : "Sign up"}
+          label={isPending ? "Logging in..." : "Log in"}
           disabled={!isValid || isPending}
         />
 
         <p className="text-sm text-center text-gray-500">
-          Already have an account?{" "}
+          Don’t have an account?{" "}
           <Link
-            to="/login"
+            to="/register"
             className="text-blue-600 hover:underline"
           >
-            Log in
+            Register
           </Link>
         </p>
       </div>

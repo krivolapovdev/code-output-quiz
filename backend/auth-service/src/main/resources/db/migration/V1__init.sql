@@ -36,13 +36,15 @@ CREATE TYPE user_role AS ENUM ('USER', 'ADMIN');
 
 CREATE TABLE users
 (
-    id       UUID DEFAULT uuidv7() PRIMARY KEY,
-    email    VARCHAR(254) UNIQUE NOT NULL,
-    password VARCHAR(72)         NOT NULL,
-    role    user_role NOT NULL DEFAULT 'USER'
+    id         UUID                         DEFAULT uuidv7() PRIMARY KEY,
+    email      VARCHAR(254) UNIQUE NOT NULL,
+    password   VARCHAR(72)         NOT NULL,
+    role       user_role           NOT NULL DEFAULT 'USER',
+    created_at TIMESTAMPTZ                  DEFAULT now(),
+    updated_at TIMESTAMPTZ                  DEFAULT now()
 );
 
-CREATE OR REPLACE FUNCTION lowercase_email()
+CREATE OR REPLACE FUNCTION set_email_to_lowercase()
     RETURNS TRIGGER
     LANGUAGE plpgsql
 AS
@@ -52,9 +54,24 @@ BEGIN
     RETURN NEW;
 END;
 $$;
-
-CREATE TRIGGER lowercase_email_trigger
+CREATE TRIGGER users_email_to_lowercase_trigger
     BEFORE INSERT OR UPDATE
     ON users
     FOR EACH ROW
-EXECUTE FUNCTION lowercase_email();
+EXECUTE FUNCTION set_email_to_lowercase();
+
+CREATE OR REPLACE FUNCTION touch_updated_at_column()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$;
+CREATE TRIGGER users_touch_updated_at_trigger
+    BEFORE UPDATE
+    ON users
+    FOR EACH ROW
+EXECUTE FUNCTION touch_updated_at_column();

@@ -1,8 +1,7 @@
 import "@/app/styles/index.css";
 
-import { ErrorBoundaryProvider } from "@/app/providers/error-boundary";
-import { ReactQueryProvider } from "@/app/providers/react-query";
-import { AppRouter } from "@/app/routes/app-router/AppRouter";
+import { ErrorBoundaryProvider, ReactQueryProvider } from "@/app/providers";
+import { AppRouter } from "@/app/routes";
 
 export const App = () => {
   return (

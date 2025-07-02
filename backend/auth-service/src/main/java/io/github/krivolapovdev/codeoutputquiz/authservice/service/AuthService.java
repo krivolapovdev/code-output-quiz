@@ -1,13 +1,13 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.service;
 
 import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.AuthDetails;
-import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.JwtTokenProvider;
 import io.github.krivolapovdev.codeoutputquiz.authservice.entity.User;
 import io.github.krivolapovdev.codeoutputquiz.authservice.exception.EmailAlreadyTakenException;
 import io.github.krivolapovdev.codeoutputquiz.authservice.repository.UserRepository;
 import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
-import io.github.krivolapovdev.codeoutputquiz.authservice.security.CustomReactiveAuthenticationManager;
+import io.github.krivolapovdev.codeoutputquiz.authservice.security.auth.CustomReactiveAuthenticationManager;
+import io.github.krivolapovdev.codeoutputquiz.authservice.security.jwt.JwtTokenProvider;
 import io.github.krivolapovdev.codeoutputquiz.authservice.util.JwtUtils;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

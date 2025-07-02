@@ -1,5 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt;
 
+import io.github.krivolapovdev.codeoutputquiz.authservice.security.jwt.JwtTokenProvider;
 import io.github.krivolapovdev.codeoutputquiz.authservice.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

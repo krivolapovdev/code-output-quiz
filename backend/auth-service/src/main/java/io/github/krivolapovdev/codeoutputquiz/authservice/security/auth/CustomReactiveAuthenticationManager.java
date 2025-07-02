@@ -1,4 +1,4 @@
-package io.github.krivolapovdev.codeoutputquiz.authservice.security;
+package io.github.krivolapovdev.codeoutputquiz.authservice.security.auth;
 
 import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.AuthDetails;
 import io.github.krivolapovdev.codeoutputquiz.authservice.repository.UserRepository;

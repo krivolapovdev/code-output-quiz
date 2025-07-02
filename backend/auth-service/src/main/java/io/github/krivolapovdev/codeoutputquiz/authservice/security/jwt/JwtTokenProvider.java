@@ -1,7 +1,9 @@
-package io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt;
+package io.github.krivolapovdev.codeoutputquiz.authservice.security.jwt;
 
 import static java.util.stream.Collectors.joining;
 
+import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.JwtProperties;
 import io.github.krivolapovdev.codeoutputquiz.authservice.enums.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

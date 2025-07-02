@@ -21,12 +21,14 @@ export const CodeBlock = ({ code, language }: CodeBlockProps) => {
 
   return (
     <pre
+      tabIndex={-1}
       className={`line-numbers language-${language} h-full rounded-lg`}
       style={{ marginTop: 0 }}
     >
       <code
         ref={codeRef}
         className={`language-${language}`}
+        tabIndex={-1}
       >
         {code}
       </code>

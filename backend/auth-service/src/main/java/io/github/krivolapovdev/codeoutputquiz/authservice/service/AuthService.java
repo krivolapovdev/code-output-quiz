@@ -12,6 +12,7 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.util.JwtUtils;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,15 +33,14 @@ public class AuthService {
   public Mono<ResponseEntity<AuthResponse>> register(AuthRequest request) {
     log.info("Registering user: {}", request.email());
 
-    return userRepository
-        .findByEmail(request.email())
-        .flatMap(u -> Mono.error(new EmailAlreadyTakenException("Email already exists")))
-        .switchIfEmpty(Mono.defer(() -> createAndSaveUser(request)))
-        .cast(User.class)
+    return createAndSaveUser(request)
         .flatMap(
             savedUser ->
                 authenticateAndBuildResponse(
-                    request.email(), request.password(), HttpStatus.CREATED));
+                    request.email(), request.password(), HttpStatus.CREATED))
+        .onErrorMap(
+            DuplicateKeyException.class,
+            e -> new EmailAlreadyTakenException("Email already exists"));
   }
 
   public Mono<ResponseEntity<AuthResponse>> login(AuthRequest request) {

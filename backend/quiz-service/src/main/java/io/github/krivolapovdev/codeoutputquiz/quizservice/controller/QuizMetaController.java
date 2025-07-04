@@ -1,6 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.controller;
 
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.response.ProgrammingLanguageResponse;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.service.QuizMetaService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class QuizMetaController {
   private final QuizMetaService quizMetaService;
 
   @GetMapping("/supported-programming-languages")
-  public Mono<List<String>> getSupportedProgrammingLanguages() {
+  public Mono<List<ProgrammingLanguageResponse>> getSupportedProgrammingLanguages() {
     return quizMetaService.getSupportedProgrammingLanguages();
   }
 

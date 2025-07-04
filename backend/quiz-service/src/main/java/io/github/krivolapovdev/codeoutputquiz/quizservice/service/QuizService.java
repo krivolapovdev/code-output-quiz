@@ -25,7 +25,7 @@ public class QuizService {
   public Mono<QuizResponse> getRandomQuiz(QuizRequest quizRequest) {
     log.info("Get random quiz {}", quizRequest);
     return quizViewRepository
-        .findRandomQuizView()
+        .findRandomQuizView(quizRequest.programmingLanguage(), quizRequest.difficultyLevel())
         .doOnNext(quiz -> log.info("Fetched quiz from DB: {}", quiz))
         .map(quizViewMapper::toResponse);
   }

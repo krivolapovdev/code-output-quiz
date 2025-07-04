@@ -6,3 +6,8 @@ export type QuizResponse = {
   programmingLanguage: string;
   difficultyLevel: string;
 };
+
+export type ProgrammingLanguageResponse = {
+  name: string;
+  displayName: string;
+};

@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { quizMetaService } from "@/shared/api/quiz";
+import {
+  type ProgrammingLanguageResponse,
+  quizMetaService
+} from "@/shared/api/quiz";
 
 export const useSupportedProgrammingLanguages = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [supportedProgrammingLanguages, setSupportedProgrammingLanguages] =
-    useState<string[]>([]);
+    useState<ProgrammingLanguageResponse[]>([]);
 
   useEffect(() => {
     const fetchLevels = async () => {

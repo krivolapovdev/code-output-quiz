@@ -1,1 +1,1 @@
-export { DifficultyTabs } from "./ui";
+export { useSupportedDifficultyLevels } from "./model";

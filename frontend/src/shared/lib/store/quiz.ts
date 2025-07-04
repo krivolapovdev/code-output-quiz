@@ -7,8 +7,8 @@ type QuizStore = {
   difficultyLevel: string;
 
   setQuiz: (quiz: QuizResponse) => void;
-  setDifficulty: (level: string) => void;
-  setLanguage: (lang: string) => void;
+  setDifficultyLevel: (level: string) => void;
+  setProgrammingLanguage: (lang: string) => void;
 };
 
 export const useQuizStore = create<QuizStore>(set => ({
@@ -17,6 +17,6 @@ export const useQuizStore = create<QuizStore>(set => ({
   programmingLanguage: "JAVA",
 
   setQuiz: quiz => set({ quiz }),
-  setDifficulty: level => set({ difficultyLevel: level }),
-  setLanguage: lang => set({ programmingLanguage: lang })
+  setDifficultyLevel: difficultyLevel => set({ difficultyLevel }),
+  setProgrammingLanguage: programmingLanguage => set({ programmingLanguage })
 }));

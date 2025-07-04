@@ -1,11 +1,12 @@
 import { Menu } from "antd";
-import { useSupportedProgrammingLanguages } from "@/entities/quizzes";
+import { useSupportedProgrammingLanguages } from "@/features/select-programming-language";
 import { getMenuItems, PROGRAMMING_KEY, USER_KEY } from "../config";
 
 export const CustomMenu = () => {
-  const { languages, loading } = useSupportedProgrammingLanguages();
+  const { supportedProgrammingLanguages, loading } =
+    useSupportedProgrammingLanguages();
 
-  const items = getMenuItems(languages);
+  const items = getMenuItems(supportedProgrammingLanguages);
 
   if (loading) {
     return <div>Loading menu...</div>;
@@ -14,7 +15,9 @@ export const CustomMenu = () => {
   return (
     <Menu
       style={{ width: 256 }}
-      defaultSelectedKeys={[languages[0]?.toLowerCase() ?? ""]}
+      defaultSelectedKeys={[
+        supportedProgrammingLanguages[0]?.toLowerCase() ?? ""
+      ]}
       defaultOpenKeys={[PROGRAMMING_KEY, USER_KEY]}
       mode="inline"
       items={items}

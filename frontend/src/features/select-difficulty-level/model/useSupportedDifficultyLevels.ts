@@ -3,15 +3,17 @@ import { quizMetaService } from "@/shared/api/quiz";
 
 export const useSupportedDifficultyLevels = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [levels, setLevels] = useState<string[]>([]);
+  const [difficultyLevels, setDifficultyLevels] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchLevels = async () => {
       try {
+        setLoading(true);
         const data = await quizMetaService.fetchSupportedDifficultyLevels();
-        setLevels(data);
+        setDifficultyLevels(data);
       } catch (error) {
-        console.error("Failed to fetch difficulty levels:", error);
+        setDifficultyLevels([]);
+        console.error("Failed to fetch supported difficulty levels", error);
       } finally {
         setLoading(false);
       }
@@ -20,5 +22,5 @@ export const useSupportedDifficultyLevels = () => {
     fetchLevels();
   }, []);
 
-  return { loading, levels };
+  return { loading, difficultyLevels };
 };

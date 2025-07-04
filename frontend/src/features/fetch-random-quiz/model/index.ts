@@ -1,1 +1,1 @@
-export * from "./use-random-quiz";
+export * from "./useRandomQuiz";

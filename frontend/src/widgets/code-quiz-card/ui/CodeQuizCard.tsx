@@ -1,6 +1,6 @@
 import { useRandomQuiz } from "@/features/fetch-random-quiz";
 import { AnswerChoicesWithEffect } from "@/features/handle-answer-selection/ui/AnswerChoicesWithEffect";
-import { DifficultyTabs } from "@/features/select-difficulty";
+import { DifficultyTabs } from "@/features/select-difficulty-level";
 import { CodeBlock } from "@/shared/ui/code-block";
 
 export const CodeQuizCard = () => {
@@ -20,10 +20,6 @@ export const CodeQuizCard = () => {
 
   const options = ["true", "false", "undefined", "temporary"];
 
-  const handleSelect = (option: string) => {
-    console.log("Selected:", option);
-  };
-
   return (
     <div className="m-8 flex w-full flex-col rounded-lg border-1 border-[#e6f4ff]">
       <DifficultyTabs />
@@ -31,10 +27,7 @@ export const CodeQuizCard = () => {
         code={quiz.code}
         language={quiz.programmingLanguage.toLowerCase()}
       />
-      <AnswerChoicesWithEffect
-        options={options}
-        onSelect={handleSelect}
-      />
+      <AnswerChoicesWithEffect options={options} />
     </div>
   );
 };

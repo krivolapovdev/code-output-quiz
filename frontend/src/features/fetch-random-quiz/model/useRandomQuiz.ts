@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import type { QuizResponse } from "@/shared/api/quiz";
 import { quizService } from "@/shared/api/quiz";
 import { useQuizStore } from "@/shared/lib/store";
 
 export const useRandomQuiz = () => {
-  const { difficultyLevel, programmingLanguage } = useQuizStore();
-  const [quiz, setQuiz] = useState<QuizResponse | null>(null);
+  const { difficultyLevel, programmingLanguage, quiz, setQuiz } =
+    useQuizStore();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +30,7 @@ export const useRandomQuiz = () => {
     };
 
     loadQuiz();
-  }, [difficultyLevel, programmingLanguage]);
+  }, [difficultyLevel, programmingLanguage, setQuiz]);
 
   return { quiz, error, loading };
 };

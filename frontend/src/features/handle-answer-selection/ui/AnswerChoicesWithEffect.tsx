@@ -1,15 +1,26 @@
 import { AnswerChoices } from "@/entities/answer-choices";
 import { startConfettiFireworks } from "@/shared/lib/confetti";
+import { useQuizStore } from "@/shared/lib/store";
+import { useReportAnswer } from "../model/useReportAnswer";
 
 type Props = {
   options: string[];
-  onSelect: (option: string) => void;
 };
 
-export const AnswerChoicesWithEffect = ({ options, onSelect }: Props) => {
+export const AnswerChoicesWithEffect = ({ options }: Props) => {
+  const { quiz } = useQuizStore();
+  const reportAnswer = useReportAnswer();
+
   const handleSelect = (option: string) => {
-    startConfettiFireworks();
-    onSelect(option);
+    console.log(`1: ${option}`);
+
+    if (quiz) {
+      console.log(`2: ${option}`);
+      if (quiz.correctAnswer === option) {
+        startConfettiFireworks();
+      }
+      reportAnswer(quiz.id, option);
+    }
   };
 
   return (

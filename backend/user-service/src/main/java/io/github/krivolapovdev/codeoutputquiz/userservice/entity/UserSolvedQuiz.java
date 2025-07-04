@@ -1,5 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.entity;
 
+import io.github.krivolapovdev.codeoutputquiz.userservice.enums.AnswerChoice;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,9 @@ public class UserSolvedQuiz {
 
   @Column("quiz_id")
   private UUID quizId;
+
+  @Column("selected_answer")
+  private AnswerChoice selectedAnswer;
 
   @Column("solved_at")
   @CreatedDate

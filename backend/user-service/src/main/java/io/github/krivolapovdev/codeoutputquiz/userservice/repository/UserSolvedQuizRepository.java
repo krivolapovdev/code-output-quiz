@@ -26,8 +26,11 @@ public interface UserSolvedQuizRepository extends ReactiveCrudRepository<UserSol
   @Modifying
   @Query(
       """
-          INSERT INTO user_solved_quizzes (user_id, quiz_id)
-          VALUES (:userId, :quizId)
+          INSERT INTO user_solved_quizzes (user_id, quiz_id, selectedAnswer)
+          VALUES (:userId, :quizId, :selectedAnswer)
           """)
-  Mono<Void> addUserSolvedQuiz(@Param("userId") UUID userId, @Param("quizId") UUID quizId);
+  Mono<Void> addUserSolvedQuiz(
+      @Param("userId") UUID userId,
+      @Param("quizId") UUID quizId,
+      @Param("selectedAnswer") String selectedAnswer);
 }

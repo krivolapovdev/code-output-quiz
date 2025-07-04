@@ -33,6 +33,9 @@ public class UserService {
         .doOnNext(
             userId ->
                 log.info("Adding solved quiz for userId: {}, quizId: {}", userId, request.quizId()))
-        .flatMap(userId -> userSolvedQuizRepository.addUserSolvedQuiz(userId, request.quizId()));
+        .flatMap(
+            userId ->
+                userSolvedQuizRepository.addUserSolvedQuiz(
+                    userId, request.quizId(), request.answerChoice().name()));
   }
 }

@@ -1,10 +1,10 @@
 import { CodeOutputQuiz } from "@/widgets/code-quiz-card";
-import { CustomMenu } from "@/widgets/custom-menu";
+import { Sidebar } from "@/widgets/sidebar";
 
 export const HomePage = () => {
   return (
     <div className="flex">
-      <CustomMenu />
+      <Sidebar />
       <CodeOutputQuiz />
     </div>
   );

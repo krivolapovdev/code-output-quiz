@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { authService } from "@/shared/api";
+import { authService } from "@/shared/api/auth";
 import type { RegisterFormValues } from "./schema";
 
 export const useRegisterMutation = () => {

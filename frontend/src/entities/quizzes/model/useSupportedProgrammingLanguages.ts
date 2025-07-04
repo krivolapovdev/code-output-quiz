@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { quizMetaService } from "@/shared/api";
+import { quizMetaService } from "@/shared/api/quiz";
 
 export const useSupportedProgrammingLanguages = () => {
   const [languages, setLanguages] = useState<string[]>([]);

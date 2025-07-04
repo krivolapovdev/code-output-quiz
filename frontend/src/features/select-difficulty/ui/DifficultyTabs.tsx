@@ -1,12 +1,10 @@
 import { Tabs } from "antd";
-import { useSupportedDifficultyLevels } from "@/entities/quizzes";
+import { useQuizStore } from "@/shared/lib/store";
+import { useSupportedDifficultyLevels } from "../model/use-supported-difficulty-levels";
 
-export const CustomTabs = () => {
+export const DifficultyTabs = () => {
   const { levels, loading } = useSupportedDifficultyLevels();
-
-  const onChange = (key: string) => {
-    console.log(key);
-  };
+  const { difficultyLevel, setDifficulty } = useQuizStore();
 
   if (loading) {
     return <div>Loading tabs...</div>;
@@ -22,7 +20,8 @@ export const CustomTabs = () => {
     <div className="flex justify-end">
       <Tabs
         type="card"
-        onChange={onChange}
+        onChange={key => setDifficulty(key)}
+        activeKey={difficultyLevel}
         items={items}
         tabBarStyle={{ margin: 0, borderRadius: 0 }}
       />

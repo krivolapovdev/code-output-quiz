@@ -1,4 +1,4 @@
-import { CodeOutputQuiz } from "@/widgets/code-output-quiz";
+import { CodeOutputQuiz } from "@/widgets/code-quiz-card";
 import { CustomMenu } from "@/widgets/custom-menu";
 
 export const HomePage = () => {

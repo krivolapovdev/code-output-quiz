@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { authService } from "@/shared/api/authService";
+import { authService } from "@/shared/api/auth";
 import type { LoginFormValues } from "./schema";
 
 export const useLoginMutation = () => {

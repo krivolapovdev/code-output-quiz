@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -44,6 +45,13 @@ public class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public Mono<ResponseStatusException> handleJwtException(JwtException ex) {
     return buildMonoResponseStatusException(HttpStatus.UNAUTHORIZED, ex.getMessage(), ex);
+  }
+
+  @ExceptionHandler(UsernameNotFoundException.class)
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  public Mono<ResponseStatusException> handleUsernameNotFoundException(
+      UsernameNotFoundException ex) {
+    return buildMonoResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
   }
 
   private Mono<ResponseStatusException> buildMonoResponseStatusException(

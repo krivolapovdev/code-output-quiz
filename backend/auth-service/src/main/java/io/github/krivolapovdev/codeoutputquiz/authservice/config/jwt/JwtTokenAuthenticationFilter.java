@@ -18,7 +18,7 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
   @Override
   public @NonNull Mono<Void> filter(
       @NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
-    return JwtUtils.extractToken(
+    return JwtUtils.extractAccessToken(
             exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
         .map(tokenProvider::getAuthentication)
         .map(

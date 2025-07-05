@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 public class JwtUtils {
   public static final String HEADER_PREFIX = "Bearer ";
 
-  public static Optional<String> extractToken(String header) {
+  public static Optional<String> extractAccessToken(String header) {
     if (StringUtils.hasText(header) && header.startsWith(HEADER_PREFIX)) {
       return Optional.of(header.substring(HEADER_PREFIX.length()).trim());
     }

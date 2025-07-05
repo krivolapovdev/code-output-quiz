@@ -10,6 +10,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Base64;
@@ -74,7 +75,7 @@ public class JwtTokenProvider {
     return createToken(auth, TokenType.REFRESH, userId);
   }
 
-  public void validateRefreshToken(String token) {
+  public void validateRefreshToken(@NotNull String token) {
     Claims claims = parseTokenClaims(token);
 
     String type = (String) claims.get(TOKEN_TYPE_KEY);

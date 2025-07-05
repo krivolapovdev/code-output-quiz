@@ -8,7 +8,6 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.authservice.security.auth.CustomReactiveAuthenticationManager;
 import io.github.krivolapovdev.codeoutputquiz.authservice.security.jwt.JwtTokenProvider;
-import io.github.krivolapovdev.codeoutputquiz.authservice.util.JwtUtils;
 import java.time.Duration;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -49,9 +48,9 @@ public class AuthService {
     return authenticateAndBuildResponse(request.email(), request.password(), HttpStatus.OK);
   }
 
-  public Mono<ResponseEntity<AuthResponse>> refreshToken(String oldTokenHeader) {
-    log.info("Refreshing token: {}", oldTokenHeader);
-    return Mono.justOrEmpty(JwtUtils.extractToken(oldTokenHeader))
+  public Mono<ResponseEntity<AuthResponse>> refreshToken(String oldTokenCookie) {
+    log.info("Refreshing token: {}", oldTokenCookie);
+    return Mono.just(oldTokenCookie)
         .doOnNext(jwtTokenProvider::validateRefreshToken)
         .map(jwtTokenProvider::getAuthentication)
         .map(

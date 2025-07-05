@@ -23,7 +23,7 @@ export const SidebarNavItem = ({
           : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
       }`}
     >
-      <div className="size-5 opacity-75">{icon}</div>
+      <div className="size-8 opacity-75">{icon}</div>
       <span className="invisible absolute start-full top-1/2 ms-4 -translate-y-1/2 rounded-sm bg-gray-900 px-2 py-1.5 text-xs font-medium text-white group-hover:visible">
         {label}
       </span>

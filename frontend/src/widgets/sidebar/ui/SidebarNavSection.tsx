@@ -1,11 +1,11 @@
-import AccountIcon from "../assets/icons/account.svg";
 import GithubIcon from "../assets/icons/github.svg";
+import User from "../assets/icons/user.svg";
 import { SidebarNavItem } from "./SidebarNavItem";
 
 const navItems = [
   {
     label: "Account",
-    icon: AccountIcon,
+    icon: User,
     href: "/login",
     alt: "Account icon"
   },

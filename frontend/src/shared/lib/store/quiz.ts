@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { QuizResponse } from "@/shared/api/quiz/types";
+import type { QuizResponse } from "@/shared/api";
 
 type QuizStore = {
   quiz: QuizResponse | null;

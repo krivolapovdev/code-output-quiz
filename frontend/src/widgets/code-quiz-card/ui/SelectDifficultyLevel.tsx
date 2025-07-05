@@ -1,6 +1,6 @@
 import { Select } from "antd";
 import { useQuizStore } from "@/shared/lib/store";
-import { useSupportedDifficultyLevels } from "../model";
+import { useSupportedDifficultyLevels } from "../model/useSupportedDifficultyLevels";
 
 const formatLabel = (level: string) =>
   level.charAt(0).toUpperCase() + level.slice(1).toLowerCase();

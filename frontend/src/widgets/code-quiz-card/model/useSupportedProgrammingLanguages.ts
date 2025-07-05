@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   type ProgrammingLanguageResponse,
   quizMetaService
-} from "@/shared/api/quiz";
+} from "@/shared/api";
 
 export const useSupportedProgrammingLanguages = () => {
   const [loading, setLoading] = useState<boolean>(true);

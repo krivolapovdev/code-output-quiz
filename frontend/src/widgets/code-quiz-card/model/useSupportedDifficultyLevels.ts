@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { quizMetaService } from "@/shared/api/quiz";
+import { quizMetaService } from "@/shared/api";
 
 export const useSupportedDifficultyLevels = () => {
   const [loading, setLoading] = useState<boolean>(true);

@@ -1,11 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { AuthField } from "@/shared/ui/auth-field";
 import { SubmitButton } from "@/shared/ui/submit-button";
-import {
-  type RegisterFormValues,
-  useRegisterForm,
-  useRegisterMutation
-} from "../model";
+import type { RegisterFormValues } from "../model/schema";
+import { useRegisterForm } from "../model/useRegisterForm";
+import { useRegisterMutation } from "../model/useRegisterMutation";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();

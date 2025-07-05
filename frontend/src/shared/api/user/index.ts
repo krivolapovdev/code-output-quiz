@@ -1,2 +1,2 @@
-export type { User } from "./types";
-export { userService } from "./userService";
+export type * from "./types";
+export * from "./userService";

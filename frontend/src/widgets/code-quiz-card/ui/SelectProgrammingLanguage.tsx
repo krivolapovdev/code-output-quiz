@@ -1,6 +1,6 @@
 import { Select } from "antd";
 import { useQuizStore } from "@/shared/lib/store";
-import { useSupportedProgrammingLanguages } from "../model";
+import { useSupportedProgrammingLanguages } from "../model/useSupportedProgrammingLanguages";
 
 export const SelectProgrammingLanguage = () => {
   const { loading, supportedProgrammingLanguages } =

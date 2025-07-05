@@ -1,15 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
-import { authService } from "@/shared/api/auth";
+import { authService } from "@/shared/api";
+import { handleAuthError, handleAuthSuccess } from "@/shared/lib/auth/auth";
 import type { LoginFormValues } from "./schema";
 
 export const useLoginMutation = () => {
   return useMutation({
     mutationFn: (payload: LoginFormValues) => authService.login(payload),
-    onSuccess: data => {
-      localStorage.setItem("accessToken", data.accessToken);
-    },
-    onError: error => {
-      console.error("Registration failed:", error);
-    }
+    onSuccess: data => handleAuthSuccess(data.accessToken),
+    onError: error => handleAuthError(error)
   });
 };

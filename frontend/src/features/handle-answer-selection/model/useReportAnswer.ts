@@ -1,4 +1,4 @@
-import { userService } from "@/shared/api/user";
+import { userService } from "@/shared/api";
 
 export const useReportAnswer = () => {
   return async (quizId: string, selectedAnswer: string) => {

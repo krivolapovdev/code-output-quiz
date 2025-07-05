@@ -1,7 +1,7 @@
-import { AnswerChoices } from "@/entities/answer-choices";
 import { startConfettiFireworks } from "@/shared/lib/confetti";
 import { useQuizStore } from "@/shared/lib/store";
 import { useReportAnswer } from "../model/useReportAnswer";
+import { AnswerChoices } from "./AnswerChoices";
 
 type Props = {
   options: string[];

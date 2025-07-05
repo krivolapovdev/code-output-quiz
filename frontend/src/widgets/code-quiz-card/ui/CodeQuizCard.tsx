@@ -1,8 +1,8 @@
 import { useRandomQuiz } from "@/features/fetch-random-quiz";
-import { AnswerChoicesWithEffect } from "@/features/handle-answer-selection/ui/AnswerChoicesWithEffect";
-import { SelectDifficultyLevel } from "@/features/select-difficulty-level/ui/SelectDifficultyLevel";
-import { SelectProgrammingLanguage } from "@/features/select-programming-language/ui";
+import { AnswerChoicesWithEffect } from "@/features/handle-answer-selection";
 import { CodeBlock } from "@/shared/ui/code-block";
+import { SelectDifficultyLevel } from "./SelectDifficultyLevel";
+import { SelectProgrammingLanguage } from "./SelectProgrammingLanguage";
 
 export const CodeQuizCard = () => {
   const { quiz, loading, error } = useRandomQuiz();

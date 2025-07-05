@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { quizService } from "@/shared/api/quiz";
+import { quizService } from "@/shared/api";
 import { useQuizStore } from "@/shared/lib/store";
 
 export const useRandomQuiz = () => {
@@ -32,5 +32,5 @@ export const useRandomQuiz = () => {
     loadQuiz();
   }, [difficultyLevel, programmingLanguage, setQuiz]);
 
-  return { quiz, error, loading };
+  return { quiz, difficultyLevel, programmingLanguage, error, loading };
 };

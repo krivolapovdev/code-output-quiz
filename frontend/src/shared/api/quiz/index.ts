@@ -1,3 +1,3 @@
-export { quizMetaService } from "./quizMetaService";
-export { quizService } from "./quizService";
-export type { ProgrammingLanguageResponse, QuizResponse } from "./types";
+export * from "./quizMetaService";
+export * from "./quizService";
+export type * from "./types";

@@ -9,12 +9,14 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.authservice.security.auth.CustomReactiveAuthenticationManager;
 import io.github.krivolapovdev.codeoutputquiz.authservice.security.jwt.JwtTokenProvider;
 import io.github.krivolapovdev.codeoutputquiz.authservice.util.JwtUtils;
+import java.time.Duration;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +34,6 @@ public class AuthService {
 
   public Mono<ResponseEntity<AuthResponse>> register(AuthRequest request) {
     log.info("Registering user: {}", request.email());
-
     return createAndSaveUser(request)
         .flatMap(
             savedUser ->
@@ -87,9 +88,18 @@ public class AuthService {
 
   private ResponseEntity<AuthResponse> buildAuthResponseEntity(
       String accessToken, String refreshToken, HttpStatus status) {
-    HttpHeaders headers = new HttpHeaders();
-    headers.setBearerAuth(accessToken);
-    AuthResponse authResponse = new AuthResponse(accessToken, refreshToken);
-    return new ResponseEntity<>(authResponse, headers, status);
+
+    ResponseCookie cookie =
+        ResponseCookie.from("refreshToken", refreshToken)
+            .httpOnly(true)
+            .secure(true)
+            .path("/api/v1/auth/refresh")
+            .maxAge(Duration.ofDays(7))
+            .sameSite("Strict")
+            .build();
+
+    return ResponseEntity.status(status)
+        .header(HttpHeaders.SET_COOKIE, cookie.toString())
+        .body(new AuthResponse(accessToken));
   }
 }

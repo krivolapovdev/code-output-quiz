@@ -5,13 +5,12 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.authservice.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -38,9 +37,9 @@ public class AuthController {
     return authService.login(authRequest);
   }
 
-  @PostMapping("/refresh-token")
+  @PostMapping("/refresh")
   public Mono<ResponseEntity<AuthResponse>> refreshToken(
-      @RequestHeader(HttpHeaders.AUTHORIZATION) String refreshTokenHeader) {
-    return authService.refreshToken(refreshTokenHeader);
+      @CookieValue("refreshToken") String refreshToken) {
+    return authService.refreshToken(refreshToken);
   }
 }

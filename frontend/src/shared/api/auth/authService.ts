@@ -15,18 +15,5 @@ export const authService = {
   login: async (payload: AuthRequest): Promise<AuthResponse> => {
     const { data } = await api.post<AuthResponse>(`${baseURL}/login`, payload);
     return data;
-  },
-
-  refreshToken: async (refreshToken: string): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>(
-      `${baseURL}/refresh-token`,
-      {},
-      {
-        headers: {
-          Authorization: refreshToken
-        }
-      }
-    );
-    return data;
   }
 };

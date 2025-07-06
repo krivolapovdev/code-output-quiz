@@ -275,6 +275,8 @@ services:
     build:
       context: ./frontend
       dockerfile: ../infrastructure/docker/nginx/Dockerfile
+      args:
+        VITE_API_URL: https://code-output-quiz.ru/
     restart: unless-stopped
     ports:
       - "80:80"

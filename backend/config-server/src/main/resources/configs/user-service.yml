@@ -10,6 +10,8 @@ spring:
     locations: classpath:db/migration
     user: postgres
     password: root
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration
 springdoc:
   swagger-ui:
     path: /swagger

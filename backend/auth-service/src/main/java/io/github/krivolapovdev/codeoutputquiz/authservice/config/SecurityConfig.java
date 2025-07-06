@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity.CsrfSpec;
+import org.springframework.security.config.web.server.ServerHttpSecurity.FormLoginSpec;
+import org.springframework.security.config.web.server.ServerHttpSecurity.HttpBasicSpec;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 
@@ -21,12 +24,14 @@ public class SecurityConfig {
       ServerHttpSecurity http,
       JwtTokenProvider jwtTokenProvider,
       ReactiveAuthenticationManager reactiveAuthenticationManager) {
-    return http.csrf(ServerHttpSecurity.CsrfSpec::disable)
+    return http.csrf(CsrfSpec::disable)
         .authenticationManager(reactiveAuthenticationManager)
         .securityContextRepository(NoOpServerSecurityContextRepository.getInstance()) // Stateless
         .addFilterAt(
             new JwtTokenAuthenticationFilter(jwtTokenProvider),
             SecurityWebFiltersOrder.AUTHENTICATION)
+        .httpBasic(HttpBasicSpec::disable)
+        .formLogin(FormLoginSpec::disable)
         .build();
   }
 }

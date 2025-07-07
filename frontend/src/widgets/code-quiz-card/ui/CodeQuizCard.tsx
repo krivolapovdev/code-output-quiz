@@ -8,7 +8,7 @@ export const CodeQuizCard = () => {
   const { quiz, loading, error } = useRandomQuiz();
 
   if (loading) {
-    return <div className="p-8">Loading quiz...</div>;
+    return <div className="p-8 text-black">Loading quiz...</div>;
   }
 
   if (error) {

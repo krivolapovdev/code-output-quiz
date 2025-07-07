@@ -14,8 +14,7 @@ public enum ProgrammingLanguage {
   CSHARP("C#"),
   JAVASCRIPT("JavaScript"),
   RUST("Rust"),
-  SWIFT("Swift"),
-  PHP("PHP");
+  POSTGRESQL("PostgreSQL");
 
   private final String displayName;
 }

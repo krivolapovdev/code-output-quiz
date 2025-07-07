@@ -48,33 +48,34 @@ CREATE TYPE answer_choice AS ENUM ('A', 'B', 'C', 'D');
 
 CREATE TABLE IF NOT EXISTS quizzes
 (
-    id                      UUID        DEFAULT uuidv7() PRIMARY KEY,
+    id                      UUID                   DEFAULT uuidv7() PRIMARY KEY,
     code                    TEXT          NOT NULL UNIQUE,
     correct_answer          answer_choice NOT NULL,
     explanation             TEXT          NOT NULL,
     programming_language_id BIGINT        NOT NULL REFERENCES programming_languages (id),
     difficulty_level_id     BIGINT        NOT NULL REFERENCES difficulty_levels (id),
-    created_at              TIMESTAMPTZ DEFAULT now(),
-    updated_at              TIMESTAMPTZ DEFAULT now()
+    rating                  BIGINT        NOT NULL DEFAULT 0,
+    created_at              TIMESTAMPTZ            DEFAULT now(),
+    updated_at              TIMESTAMPTZ            DEFAULT now()
 );
 
-CREATE OR REPLACE FUNCTION touch_updated_at_column()
-    RETURNS TRIGGER
-    LANGUAGE plpgsql
-AS
-$$
-BEGIN
-    NEW.updated_at = now();
-    RETURN NEW;
-END;
-$$;
-CREATE TRIGGER quizzes_touch_updated_at_trigger
-    BEFORE UPDATE
-    ON quizzes
-    FOR EACH ROW
-EXECUTE FUNCTION touch_updated_at_column();
+CREATE TABLE IF NOT EXISTS quiz_answer_choices
+(
+    id      BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    quiz_id UUID          NOT NULL REFERENCES quizzes (id) ON DELETE CASCADE,
+    choice  answer_choice NOT NULL,
+    text    TEXT          NOT NULL,
+    UNIQUE (quiz_id, choice)
+);
 
 CREATE OR REPLACE VIEW quizzes_view AS
+WITH choices AS (SELECT quiz_id,
+                        MAX(CASE WHEN choice = 'A' THEN text END) AS option_a,
+                        MAX(CASE WHEN choice = 'B' THEN text END) AS option_b,
+                        MAX(CASE WHEN choice = 'C' THEN text END) AS option_c,
+                        MAX(CASE WHEN choice = 'D' THEN text END) AS option_d
+                 FROM quiz_answer_choices
+                 GROUP BY quiz_id)
 SELECT q.id,
        q.code,
        q.correct_answer,
@@ -82,29 +83,12 @@ SELECT q.id,
        dl.level AS difficulty_level,
        pl.name  AS programming_language,
        q.created_at,
-       q.updated_at
-FROM quizzes AS q
-         JOIN difficulty_levels AS dl ON q.difficulty_level_id = dl.id
-         JOIN programming_languages AS pl ON q.programming_language_id = pl.id;
-
-INSERT INTO programming_languages (name)
-VALUES ('JAVA'),
-       ('PYTHON'),
-       ('C'),
-       ('CPP'),
-       ('GO'),
-       ('CSHARP'),
-       ('JAVASCRIPT'),
-       ('RUST'),
-       ('SWIFT'),
-       ('PHP');
-
-INSERT INTO difficulty_levels (level)
-VALUES ('BEGINNER'),
-       ('INTERMEDIATE'),
-       ('ADVANCED');
-
-INSERT INTO quizzes (code, correct_answer, explanation, programming_language_id,
-                     difficulty_level_id)
-VALUES ('quiz_java_main', 'A', 'sample', 1, 1),
-       ('quiz_python_def', 'B', 'temp', 2, 2);
+       q.updated_at,
+       c.option_a,
+       c.option_b,
+       c.option_c,
+       c.option_d
+FROM quizzes q
+         JOIN difficulty_levels dl ON q.difficulty_level_id = dl.id
+         JOIN programming_languages pl ON q.programming_language_id = pl.id
+         JOIN choices c ON c.quiz_id = q.id;

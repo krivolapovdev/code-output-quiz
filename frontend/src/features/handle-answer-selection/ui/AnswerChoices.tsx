@@ -3,6 +3,9 @@ import type { AnswerChoiceData } from "@/shared/api/quiz";
 type Props = {
   answerChoiceData: AnswerChoiceData[];
   onSelect: (option: string) => void;
+  selectedAnswer?: string | null;
+  correctAnswer?: string;
+  showFeedback?: boolean;
 };
 
 const labelColors = [
@@ -12,22 +15,43 @@ const labelColors = [
   "text-purple-600"
 ];
 
-export const AnswerChoices = ({ answerChoiceData, onSelect }: Props) => {
+export const AnswerChoices = ({
+  answerChoiceData,
+  onSelect,
+  selectedAnswer,
+  correctAnswer,
+  showFeedback
+}: Props) => {
   return (
     <div className="mt-6 grid grid-cols-2 gap-4">
       {answerChoiceData.map((data, index) => {
-        const label = String.fromCharCode("A".charCodeAt(0) + index);
+        const label = data.choice;
+        const isCorrect = label === correctAnswer;
+        const isSelected = label === selectedAnswer;
+
+        let borderColor = "border-transparent";
+
+        if (showFeedback) {
+          if (isCorrect) {
+            borderColor = "border-green-500";
+          } else if (isSelected) {
+            borderColor = "border-yellow-500";
+          } else {
+            borderColor = "border-gray-200";
+          }
+        }
+
         return (
           <button
             key={data.text}
             type="button"
             onClick={() => onSelect(label)}
-            className="flex cursor-pointer items-start gap-2 rounded-md border border-transparent bg-white px-4 py-2 text-left text-black transition-all duration-200 hover:border-blue-500"
+            className={`flex cursor-pointer items-start gap-2 rounded-md border ${borderColor} bg-white px-4 py-2 text-left text-black transition-all duration-200 hover:border-blue-500`}
           >
             <span
               className={`font-semibold ${labelColors[index % labelColors.length]}`}
             >
-              {data.choice})
+              {label})
             </span>{" "}
             <span>{data.text}</span>
           </button>

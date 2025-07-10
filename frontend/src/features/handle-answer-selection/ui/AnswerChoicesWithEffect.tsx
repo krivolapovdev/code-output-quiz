@@ -6,9 +6,19 @@ import { AnswerChoices } from "./AnswerChoices";
 
 type Props = {
   answerChoices: AnswerChoiceData[];
+  onAnswerClick?: (answer: string) => void;
+  selectedAnswer?: string | null;
+  correctAnswer?: string;
+  showFeedback?: boolean;
 };
 
-export const AnswerChoicesWithEffect = ({ answerChoices }: Props) => {
+export const AnswerChoicesWithEffect = ({
+  answerChoices,
+  onAnswerClick,
+  selectedAnswer,
+  correctAnswer,
+  showFeedback
+}: Props) => {
   const { quiz } = useQuizStore();
   const reportAnswer = useReportAnswer();
 
@@ -21,13 +31,17 @@ export const AnswerChoicesWithEffect = ({ answerChoices }: Props) => {
       startConfettiFireworks();
     }
 
-    reportAnswer(quiz.id, option);
+    void reportAnswer(quiz.id, option);
+    onAnswerClick?.(option);
   };
 
   return (
     <AnswerChoices
       answerChoiceData={answerChoices}
       onSelect={handleSelect}
+      selectedAnswer={selectedAnswer}
+      correctAnswer={correctAnswer}
+      showFeedback={showFeedback}
     />
   );
 };

@@ -1,2 +1,2 @@
-export * from "./auth";
 export * from "./authService";
+export * from "./types.ts";

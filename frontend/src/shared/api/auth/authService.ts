@@ -1,5 +1,5 @@
 import { api } from "../base";
-import type { AuthRequest, AuthResponse } from "./auth";
+import type { AuthRequest, AuthResponse } from "./types.ts";
 
 const baseURL = "/api/v1/auth";
 

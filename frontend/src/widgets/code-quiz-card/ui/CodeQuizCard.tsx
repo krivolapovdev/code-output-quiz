@@ -9,7 +9,7 @@ import { SelectDifficultyLevel } from "./SelectDifficultyLevel";
 import { SelectProgrammingLanguage } from "./SelectProgrammingLanguage";
 
 export const CodeQuizCard = () => {
-  const { quiz, loading, error } = useRandomQuiz();
+  const { quiz, loading, error, refetch } = useRandomQuiz();
   const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -37,6 +37,7 @@ export const CodeQuizCard = () => {
   const handleNext = () => {
     setIsModalOpen(false);
     setSelectedAnswer(null);
+    void refetch();
   };
 
   return (

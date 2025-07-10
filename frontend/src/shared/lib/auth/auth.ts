@@ -10,8 +10,8 @@ export const handleAuthSuccess = (accessToken: string) => {
   const payload = getJwtPayloadFromToken(accessToken);
   if (payload != null) {
     const user: User = {
-      id: payload.id,
-      email: payload.email
+      id: payload.userId,
+      email: payload.sub
     };
     setUser(user);
   }

@@ -11,7 +11,7 @@ export const LoginForm = () => {
     formState: { errors, isValid }
   } = useLoginForm();
 
-  const { mutateAsync, isPending } = useLoginMutation();
+  const { mutateAsync, isPending, error } = useLoginMutation();
   const navigate = useNavigate();
 
   const onSubmit = async (data: { email: string; password: string }) => {
@@ -60,6 +60,10 @@ export const LoginForm = () => {
             Register
           </Link>
         </p>
+
+        {error && (
+          <p className="text-sm text-red-500 text-center">{error.message}</p>
+        )}
       </div>
     </form>
   );

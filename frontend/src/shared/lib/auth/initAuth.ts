@@ -10,14 +10,12 @@ export const initAuth = () => {
   }
 
   const payload = getJwtPayloadFromToken(token);
-  console.log("Payload from token:", payload);
 
   if (payload) {
     const user: User = {
       id: payload.userId,
       email: payload.sub
     };
-    console.log("User initialized from token:", user);
 
     useUserStore.getState().setUser(user);
   }

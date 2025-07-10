@@ -14,7 +14,7 @@ export const RegisterForm = () => {
     formState: { errors, isValid }
   } = useRegisterForm();
 
-  const { mutateAsync, isPending } = useRegisterMutation();
+  const { mutateAsync, isPending, error } = useRegisterMutation();
 
   const onSubmit = async (data: RegisterFormValues) => {
     await mutateAsync(data);
@@ -72,6 +72,10 @@ export const RegisterForm = () => {
             Log in
           </Link>
         </p>
+
+        {error && (
+          <p className="text-sm text-red-500 text-center">{error.message}</p>
+        )}
       </div>
     </form>
   );

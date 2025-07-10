@@ -1,8 +1,10 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.response;
 
+import io.github.krivolapovdev.codeoutputquiz.quizservice.entity.AnswerChoiceData;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.AnswerChoice;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
+import java.util.List;
 import java.util.UUID;
 
 public record QuizResponse(
@@ -11,4 +13,5 @@ public record QuizResponse(
     AnswerChoice correctAnswer,
     String explanation,
     ProgrammingLanguage programmingLanguage,
-    DifficultyLevel difficultyLevel) {}
+    DifficultyLevel difficultyLevel,
+    List<AnswerChoiceData> answerChoices) {}

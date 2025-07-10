@@ -1,17 +1,18 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.entity;
 
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.AnswerChoice;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("quizzes")
+@Table("quizzes_with_choices")
 @AllArgsConstructor
 @Data
 public class Quiz {
@@ -28,17 +29,18 @@ public class Quiz {
   @Column("explanation")
   private String explanation;
 
-  @Column("programming_language_id")
-  private Long programmingLanguageId;
+  @Column("programming_language")
+  private ProgrammingLanguage programmingLanguage;
 
-  @Column("difficulty_level_id")
-  private Long difficultyLevelId;
+  @Column("difficulty_level")
+  private DifficultyLevel difficultyLevel;
 
-  @CreatedDate
   @Column("created_at")
   private OffsetDateTime createdAt;
 
-  @LastModifiedDate
   @Column("updated_at")
   private OffsetDateTime updatedAt;
+
+  @Column("answer_choices")
+  private List<AnswerChoiceData> answerChoices;
 }

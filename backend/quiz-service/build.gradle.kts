@@ -27,9 +27,9 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:$springdocVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("org.mapstruct:mapstruct:$mapstructVersion")
+    implementation("org.postgresql:r2dbc-postgresql:$postgresR2dbcVersion")
 
     runtimeOnly("org.postgresql:postgresql:$postgresVersion")
-    runtimeOnly("org.postgresql:r2dbc-postgresql:$postgresR2dbcVersion")
     runtimeOnly("org.flywaydb:flyway-core:$flywayVersion")
     runtimeOnly("org.flywaydb:flyway-database-postgresql:$flywayVersion")
 

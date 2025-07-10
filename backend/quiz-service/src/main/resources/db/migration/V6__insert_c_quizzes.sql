@@ -1,5 +1,5 @@
 SELECT insert_quiz_with_choices(
-        $code$#include <stdio.h>
+               $code$#include <stdio.h>
 
 int main() {
     int numbers[] = {1, 2, 3, 4, 5};
@@ -19,18 +19,20 @@ int main() {
 
     return 0;
 }$code$,
-        'C',
-        'BEGINNER',
-        'B',
-        'This program squares only even numbers from the array `numbers[]`. The numbers 2 and 4 are even, and their squares (4 and 16) are returned.',
-        '1 4 9 16 25',
-        '4 16',
-        '2 4',
-        '1 9 25'
-     );
+               'C',
+               'BEGINNER',
+               'B',
+               'This program squares only even numbers from the array `numbers[]`. The numbers 2 and 4 are even, and their squares (4 and 16) are returned.',
+               array [
+                   row ('A', '1 4 9 16 25')::answer_choice_data,
+                   row ('B', '4 16')::answer_choice_data,
+                   row ('C', '2 4')::answer_choice_data,
+                   row ('D', '1 9 25')::answer_choice_data
+                   ]
+       );
 
 SELECT insert_quiz_with_choices(
-        $code$#include <stdio.h>
+               $code$#include <stdio.h>
 
 void swap(int *x, int *y) {
     int temp = *x;
@@ -46,18 +48,20 @@ int main() {
 
     return 0;
 }$code$,
-        'C',
-        'BEGINNER',
-        'B',
-        'The `swap` function swaps the values of `a` and `b` using pointers. After the swap, `a` becomes 10 and `b` becomes 5.',
-        'a = 5, b = 10',
-        'a = 10, b = 5',
-        'Compilation error',
-        'Undefined behavior'
-     );
+               'C',
+               'BEGINNER',
+               'B',
+               'The `swap` function swaps the values of `a` and `b` using pointers. After the swap, `a` becomes 10 and `b` becomes 5.',
+               array [
+                   row ('A', 'a = 5, b = 10')::answer_choice_data,
+                   row ('B', 'a = 10, b = 5')::answer_choice_data,
+                   row ('C', 'Compilation error')::answer_choice_data,
+                   row ('D', 'Undefined behavior')::answer_choice_data
+                   ]
+       );
 
 SELECT insert_quiz_with_choices(
-        $code$#include <stdio.h>
+               $code$#include <stdio.h>
 
 void reverse_array(int arr[], int size) {
     int start = 0, end = size - 1;
@@ -82,18 +86,20 @@ int main() {
 
     return 0;
 }$code$,
-        'C',
-        'INTERMEDIATE',
-        'B',
-        'The function `reverse_array` reverses the elements of the array. The initial array `{1, 2, 3, 4, 5}` is reversed to `{5, 4, 3, 2, 1}`.',
-        '1 2 3 4 5',
-        '5 4 3 2 1',
-        'Compilation error',
-        'Undefined behavior'
-     );
+               'C',
+               'INTERMEDIATE',
+               'B',
+               'The function `reverse_array` reverses the elements of the array. The initial array `{1, 2, 3, 4, 5}` is reversed to `{5, 4, 3, 2, 1}`.',
+               array [
+                   row ('A', '1 2 3 4 5')::answer_choice_data,
+                   row ('B', '5 4 3 2 1')::answer_choice_data,
+                   row ('C', 'Compilation error')::answer_choice_data,
+                   row ('D', 'Undefined behavior')::answer_choice_data
+                   ]
+       );
 
 SELECT insert_quiz_with_choices(
-        $code$#include <stdio.h>
+               $code$#include <stdio.h>
 #include <stdlib.h>
 
 void *memory_allocate(size_t size) {
@@ -121,18 +127,20 @@ int main() {
     free(arr);
     return 0;
 }$code$,
-        'C',
-        'ADVANCED',
-        'B',
-        'The program correctly allocates memory for an integer array and fills it with values 1 through 5. After printing the array, the memory is freed.',
-        'Memory allocation failed',
-        '1 2 3 4 5',
-        '0 1 2 3 4',
-        'Compilation error due to invalid pointer type'
-     );
+               'C',
+               'ADVANCED',
+               'B',
+               'The program correctly allocates memory for an integer array and fills it with values 1 through 5. After printing the array, the memory is freed.',
+               array [
+                   row ('A', 'Memory allocation failed')::answer_choice_data,
+                   row ('B', '1 2 3 4 5')::answer_choice_data,
+                   row ('C', '0 1 2 3 4')::answer_choice_data,
+                   row ('D', 'Compilation error due to invalid pointer type')::answer_choice_data
+                   ]
+       );
 
 SELECT insert_quiz_with_choices(
-        $code$#include <stdio.h>
+               $code$#include <stdio.h>
 #include <stdlib.h>
 
 int *merge_arrays(int *arr1, int size1, int *arr2, int size2) {
@@ -168,12 +176,14 @@ int main() {
     free(merged);
     return 0;
 }$code$,
-        'C',
-        'ADVANCED',
-        'B',
-        'The `merge_arrays` function merges two arrays into a new dynamically allocated array. The merged result is "1 2 3 4 5 6".',
-        'Memory allocation failed',
-        '1 2 3 4 5 6',
-        '1 2 3 3 4 5 6',
-        'Compilation error due to invalid pointer type'
-     );
+               'C',
+               'ADVANCED',
+               'B',
+               'The `merge_arrays` function merges two arrays into a new dynamically allocated array. The merged result is "1 2 3 4 5 6".',
+               array [
+                   row ('A', 'Memory allocation failed')::answer_choice_data,
+                   row ('B', '1 2 3 4 5 6')::answer_choice_data,
+                   row ('C', '1 2 3 3 4 5 6')::answer_choice_data,
+                   row ('D', 'Compilation error due to invalid pointer type')::answer_choice_data
+                   ]
+       );

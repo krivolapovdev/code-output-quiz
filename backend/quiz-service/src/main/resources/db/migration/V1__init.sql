@@ -61,19 +61,18 @@ CREATE TABLE IF NOT EXISTS quizzes
 
 CREATE TABLE IF NOT EXISTS quiz_answer_choices
 (
-    id      BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     quiz_id UUID          NOT NULL REFERENCES quizzes (id) ON DELETE CASCADE,
     choice  answer_choice NOT NULL,
     text    TEXT          NOT NULL,
-    UNIQUE (quiz_id, choice)
+    PRIMARY KEY (quiz_id, choice)
 );
 
-CREATE OR REPLACE VIEW quizzes_view AS
+CREATE OR REPLACE VIEW quizzes_with_choices AS
 WITH choices AS (SELECT quiz_id,
-                        MAX(CASE WHEN choice = 'A' THEN text END) AS option_a,
-                        MAX(CASE WHEN choice = 'B' THEN text END) AS option_b,
-                        MAX(CASE WHEN choice = 'C' THEN text END) AS option_c,
-                        MAX(CASE WHEN choice = 'D' THEN text END) AS option_d
+                        json_agg(json_build_object(
+                                'choice', choice,
+                                'text', text
+                                 )) AS answer_choices
                  FROM quiz_answer_choices
                  GROUP BY quiz_id)
 SELECT q.id,
@@ -84,11 +83,8 @@ SELECT q.id,
        pl.name  AS programming_language,
        q.created_at,
        q.updated_at,
-       c.option_a,
-       c.option_b,
-       c.option_c,
-       c.option_d
-FROM quizzes q
-         JOIN difficulty_levels dl ON q.difficulty_level_id = dl.id
-         JOIN programming_languages pl ON q.programming_language_id = pl.id
+       c.answer_choices
+FROM quizzes AS q
+         JOIN difficulty_levels AS dl ON q.difficulty_level_id = dl.id
+         JOIN programming_languages AS pl ON q.programming_language_id = pl.id
          JOIN choices c ON c.quiz_id = q.id;

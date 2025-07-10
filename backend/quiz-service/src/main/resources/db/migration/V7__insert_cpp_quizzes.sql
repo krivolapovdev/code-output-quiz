@@ -1,5 +1,5 @@
 SELECT insert_quiz_with_choices(
-        $code$#include <iostream>
+               $code$#include <iostream>
 #include <vector>
 
 std::vector<int> square_evens(std::vector<int> numbers) {
@@ -21,18 +21,20 @@ int main() {
     }
     return 0;
 }$code$,
-        'CPP',
-        'BEGINNER',
-        'B',
-        'The function squares only even numbers from the input list. The even numbers are 2 and 4, and their squares are 4 and 16.',
-        '1 4 9 16 25',
-        '4 16',
-        '2 4',
-        '1 9 25'
-     );
+               'CPP',
+               'BEGINNER',
+               'B',
+               'The function squares only even numbers from the input list. The even numbers are 2 and 4, and their squares are 4 and 16.',
+               array [
+                   row ('A', '1 4 9 16 25')::answer_choice_data,
+                   row ('B', '4 16')::answer_choice_data,
+                   row ('C', '2 4')::answer_choice_data,
+                   row ('D', '1 9 25')::answer_choice_data
+                   ]
+       );
 
 SELECT insert_quiz_with_choices(
-        $code$#include <iostream>
+               $code$#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -51,18 +53,20 @@ int main() {
     }
     return 0;
 }$code$,
-        'CPP',
-        'INTERMEDIATE',
-        'A',
-        'The function removes duplicates by first sorting the vector, then using unique to eliminate adjacent duplicates, and finally erasing extra elements. The final output is 1 2 3 4 5.',
-        '1 2 3 4 5',
-        '1 1 2 2 3 3 4 5',
-        '1 2 3 2 4 1 5',
-        '3 2 1 4 5'
-     );
+               'CPP',
+               'INTERMEDIATE',
+               'A',
+               'The function removes duplicates by first sorting the vector, then using unique to eliminate adjacent duplicates, and finally erasing extra elements. The final output is 1 2 3 4 5.',
+               array [
+                   row ('A', '1 2 3 4 5')::answer_choice_data,
+                   row ('B', '1 1 2 2 3 3 4 5')::answer_choice_data,
+                   row ('C', '1 2 3 2 4 1 5')::answer_choice_data,
+                   row ('D', '3 2 1 4 5')::answer_choice_data
+                   ]
+       );
 
 SELECT insert_quiz_with_choices(
-        $code$#include <iostream>
+               $code$#include <iostream>
 #include <vector>
 #include <algorithm>
 
@@ -99,12 +103,14 @@ int main() {
     }
     return 0;
 }$code$,
-        'CPP',
-        'ADVANCED',
-        'A',
-        'The function merges two sorted arrays into a single sorted array. The output is 1 2 3 4 5 6 7 8.',
-        '1 2 3 4 5 6 7 8',
-        '1 3 5 7 2 4 6 8',
-        '2 4 6 8 1 3 5 7',
-        '1 2 3 4 5 6 7'
-     );
+               'CPP',
+               'ADVANCED',
+               'A',
+               'The function merges two sorted arrays into a single sorted array. The output is 1 2 3 4 5 6 7 8.',
+               array [
+                   row ('A', '1 2 3 4 5 6 7 8')::answer_choice_data,
+                   row ('B', '1 3 5 7 2 4 6 8')::answer_choice_data,
+                   row ('C', '2 4 6 8 1 3 5 7')::answer_choice_data,
+                   row ('D', '1 2 3 4 5 6 7')::answer_choice_data
+                   ]
+       );

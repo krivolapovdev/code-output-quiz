@@ -1,5 +1,5 @@
 SELECT insert_quiz_with_choices(
-        $code$package main
+               $code$package main
 
 import "fmt"
 
@@ -11,18 +11,20 @@ func main() {
     }
     fmt.Println(sum)
 }$code$,
-        'GO',
-        'BEGINNER',
-        'B',
-        'The program defines a slice `numbers` containing the integers 1 through 5. The `for` loop iterates over the elements of the slice, and the `sum` variable accumulates the total of all the numbers in the slice. The sum of 1 + 2 + 3 + 4 + 5 is 15, which is printed.',
-        '10',
-        '15',
-        '5',
-        '0'
-     );
+               'GO',
+               'BEGINNER',
+               'B',
+               'The program defines a slice `numbers` containing the integers 1 through 5. The `for` loop iterates over the elements of the slice, and the `sum` variable accumulates the total of all the numbers in the slice. The sum of 1 + 2 + 3 + 4 + 5 is 15, which is printed.',
+               array [
+                   row ('A', '10')::answer_choice_data,
+                   row ('B', '15')::answer_choice_data,
+                   row ('C', '5')::answer_choice_data,
+                   row ('D', '0')::answer_choice_data
+                   ]
+       );
 
 SELECT insert_quiz_with_choices(
-        $code$package main
+               $code$package main
 
 import "fmt"
 
@@ -41,18 +43,20 @@ func mapValues(nums []int, f func(int) int) []int {
     }
     return result
 }$code$,
-        'GO',
-        'INTERMEDIATE',
-        'A',
-        'The program defines a slice `nums` containing integers 1 through 5. The `mapValues` function takes the slice and a function `f`, which squares each element of the slice. The resulting squared values (1, 4, 9, 16, 25) are stored in the `result` slice and printed.',
-        '[1, 4, 9, 16, 25]',
-        '[1, 2, 3, 4, 5]',
-        '[0, 1, 4, 9, 16]',
-        '[1, 2, 3, 4, 5, 6]'
-     );
+               'GO',
+               'INTERMEDIATE',
+               'A',
+               'The program defines a slice `nums` containing integers 1 through 5. The `mapValues` function takes the slice and a function `f`, which squares each element of the slice. The resulting squared values (1, 4, 9, 16, 25) are stored in the `result` slice and printed.',
+               array [
+                   row ('A', '[1, 4, 9, 16, 25]')::answer_choice_data,
+                   row ('B', '[1, 2, 3, 4, 5]')::answer_choice_data,
+                   row ('C', '[0, 1, 4, 9, 16]')::answer_choice_data,
+                   row ('D', '[1, 2, 3, 4, 5, 6]')::answer_choice_data
+                   ]
+       );
 
 SELECT insert_quiz_with_choices(
-        $code$package main
+               $code$package main
 
 import "fmt"
 
@@ -84,12 +88,14 @@ func filter(people []Person, f func(Person) bool) []Person {
     }
     return result
 }$code$,
-        'GO',
-        'ADVANCED',
-        'B',
-        'The program defines a slice `people` containing `Person` structs. The `filter` function filters the slice by a condition: it returns people whose age is greater than 30. Thus, only "Charlie" with age 35 is included in the result.',
-        '[{"Alice", 30}, {"Bob", 25}]',
-        '[{"Charlie", 35}]',
-        '[{"Alice", 30}, {"Charlie", 35}]',
-        '[{"Bob", 25}]'
-     );
+               'GO',
+               'ADVANCED',
+               'B',
+               'The program defines a slice `people` containing `Person` structs. The `filter` function filters the slice by a condition: it returns people whose age is greater than 30. Thus, only "Charlie" with age 35 is included in the result.',
+               array [
+                   row ('A', '[{"Alice", 30}, {"Bob", 25}]')::answer_choice_data,
+                   row ('B', '[{"Charlie", 35}]')::answer_choice_data,
+                   row ('C', '[{"Alice", 30}, {"Charlie", 35}]')::answer_choice_data,
+                   row ('D', '[{"Bob", 25}]')::answer_choice_data
+                   ]
+       );

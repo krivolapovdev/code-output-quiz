@@ -1,5 +1,7 @@
+import type { AnswerChoiceData } from "@/shared/api/quiz";
+
 type Props = {
-  options: string[];
+  answerChoiceData: AnswerChoiceData[];
   onSelect: (option: string) => void;
 };
 
@@ -10,14 +12,14 @@ const labelColors = [
   "text-purple-600"
 ];
 
-export const AnswerChoices = ({ options, onSelect }: Props) => {
+export const AnswerChoices = ({ answerChoiceData, onSelect }: Props) => {
   return (
     <div className="mt-6 grid grid-cols-2 gap-4">
-      {options.map((option, index) => {
+      {answerChoiceData.map((data, index) => {
         const label = String.fromCharCode("A".charCodeAt(0) + index);
         return (
           <button
-            key={option}
+            key={data.text}
             type="button"
             onClick={() => onSelect(label)}
             className="flex cursor-pointer items-start gap-2 rounded-md border border-transparent bg-white px-4 py-2 text-left text-black transition-all duration-200 hover:border-blue-500"
@@ -25,9 +27,9 @@ export const AnswerChoices = ({ options, onSelect }: Props) => {
             <span
               className={`font-semibold ${labelColors[index % labelColors.length]}`}
             >
-              {label})
+              {data.choice})
             </span>{" "}
-            <span>{option}</span>
+            <span>{data.text}</span>
           </button>
         );
       })}

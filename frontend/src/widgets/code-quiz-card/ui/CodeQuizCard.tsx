@@ -20,8 +20,6 @@ export const CodeQuizCard = () => {
     return null;
   }
 
-  const options = ["true", "false", "undefined", "temporary"];
-
   return (
     <div className="m-8 flex w-full flex-col rounded-lg border-1 border-[#e6f4ff]">
       <div className="mb-4 flex flex-row gap-x-4 justify-end">
@@ -32,7 +30,7 @@ export const CodeQuizCard = () => {
         code={quiz.code}
         language={prismLanguageResolver.resolve(quiz.programmingLanguage)}
       />
-      <AnswerChoicesWithEffect options={options} />
+      <AnswerChoicesWithEffect answerChoices={quiz.answerChoices} />
     </div>
   );
 };

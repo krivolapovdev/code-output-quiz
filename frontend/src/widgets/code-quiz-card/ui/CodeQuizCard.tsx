@@ -1,6 +1,7 @@
 import { useRandomQuiz } from "@/features/fetch-random-quiz";
 import { AnswerChoicesWithEffect } from "@/features/handle-answer-selection";
 import { CodeBlock } from "@/shared/ui/code-block";
+import { prismLanguageResolver } from "../lib";
 import { SelectDifficultyLevel } from "./SelectDifficultyLevel";
 import { SelectProgrammingLanguage } from "./SelectProgrammingLanguage";
 
@@ -29,7 +30,7 @@ export const CodeQuizCard = () => {
       </div>
       <CodeBlock
         code={quiz.code}
-        language={quiz.programmingLanguage.toLowerCase()}
+        language={prismLanguageResolver.resolve(quiz.programmingLanguage)}
       />
       <AnswerChoicesWithEffect options={options} />
     </div>

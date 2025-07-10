@@ -3,7 +3,16 @@ import { useEffect, useRef } from "react";
 import "prismjs/plugins/line-numbers/prism-line-numbers";
 import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 import "prismjs/themes/prism-tomorrow.css";
-import "prismjs/components/index";
+
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-c";
+import "prismjs/components/prism-cpp";
+import "prismjs/components/prism-go";
+import "prismjs/components/prism-csharp";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-rust";
+import "prismjs/components/prism-sql";
 
 type CodeBlockProps = {
   code: string;

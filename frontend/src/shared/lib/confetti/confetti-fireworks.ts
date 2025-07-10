@@ -19,7 +19,7 @@ export const startConfettiFireworks = (duration = 1500) => {
       return clearInterval(interval);
     }
 
-    const particleCount = 50 * (timeLeft / duration);
+    const particleCount = 100 * (timeLeft / duration);
 
     confetti({
       ...defaults,

@@ -19,14 +19,9 @@ export const SelectDifficultyLevel = () => {
   return (
     <Select
       showSearch
-      defaultValue="BEGINNER"
+      value={useQuizStore.getState().difficultyLevel}
       className="sm:w-48 w-25"
       optionFilterProp="label"
-      filterSort={(optionA, optionB) =>
-        (optionA?.label ?? "")
-          .toLowerCase()
-          .localeCompare((optionB?.label ?? "").toLowerCase())
-      }
       onChange={value => setDifficultyLevel(value)}
       options={options}
     />

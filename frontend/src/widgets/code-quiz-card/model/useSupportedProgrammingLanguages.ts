@@ -17,7 +17,7 @@ export const useSupportedProgrammingLanguages = () => {
         setSupportedProgrammingLanguages(data);
       } catch (error) {
         setSupportedProgrammingLanguages([]);
-        console.error("Failed to fetch supported difficulty levels", error);
+        console.error("Failed to fetch supported programming languages", error);
       } finally {
         setLoading(false);
       }

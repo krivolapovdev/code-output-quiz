@@ -18,7 +18,7 @@ export const handleAuthSuccess = (accessToken: string) => {
 };
 
 export const handleAuthError = (error: Error) => {
-  console.error("Registration failed:", error);
+  console.error("Authentication failed:", error);
 
   const { clearUser } = useUserStore.getState();
 

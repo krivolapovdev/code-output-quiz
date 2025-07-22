@@ -1,4 +1,4 @@
-package io.github.krivolapovdev.codeoutputquiz.quizservice.entity;
+package io.github.krivolapovdev.codeoutputquiz.quizservice.view;
 
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.AnswerChoice;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;

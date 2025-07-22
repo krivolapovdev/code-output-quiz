@@ -1,8 +1,8 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.repository;
 
-import io.github.krivolapovdev.codeoutputquiz.quizservice.entity.Quiz;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.view.Quiz;
 import io.lettuce.core.dynamic.annotation.Param;
 import java.util.UUID;
 import org.springframework.data.r2dbc.repository.Query;

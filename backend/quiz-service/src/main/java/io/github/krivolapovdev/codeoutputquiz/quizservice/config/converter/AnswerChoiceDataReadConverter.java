@@ -3,7 +3,7 @@ package io.github.krivolapovdev.codeoutputquiz.quizservice.config.converter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.entity.AnswerChoiceData;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.view.AnswerChoiceData;
 import io.r2dbc.postgresql.codec.Json;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class AnswerChoiceDataReadConverter implements Converter<Json, List<Answe
     try {
       return objectMapper.readValue(source.asString(), new TypeReference<>() {});
     } catch (JsonProcessingException e) {
-      throw new IllegalStateException("Failed to parse options JSON", e);
+      throw new IllegalStateException("Failed to deserialize answer choices from JSON: ", e);
     }
   }
 }

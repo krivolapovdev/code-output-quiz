@@ -8,3 +8,6 @@ spring:
     group:
       dev:
         - native
+  devtools:
+    restart:
+      enabled: false

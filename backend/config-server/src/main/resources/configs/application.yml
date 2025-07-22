@@ -4,6 +4,9 @@ spring:
       override-system-properties: false
   instance:
     instance-id: ${spring.application.name}:${random.uuid}
+  devtools:
+    restart:
+      enabled: false
 eureka:
   client:
     serviceUrl:

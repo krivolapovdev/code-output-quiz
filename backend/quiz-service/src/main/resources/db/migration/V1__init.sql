@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS quiz_answer_choices
     quiz_id UUID          NOT NULL REFERENCES quizzes (id) ON DELETE CASCADE,
     choice  answer_choice NOT NULL,
     text    TEXT          NOT NULL,
-    CONSTRAINT id PRIMARY KEY (quiz_id, choice)
+    CONSTRAINT quiz_answer_choices_pk PRIMARY KEY (quiz_id, choice)
 );
 
 CREATE OR REPLACE VIEW quizzes_with_choices AS

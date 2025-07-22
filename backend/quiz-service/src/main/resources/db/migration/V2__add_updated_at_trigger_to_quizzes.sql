@@ -8,6 +8,7 @@ BEGIN
     RETURN NEW;
 END;
 $$;
+
 CREATE TRIGGER quizzes_touch_updated_at_trigger
     BEFORE UPDATE
     ON quizzes

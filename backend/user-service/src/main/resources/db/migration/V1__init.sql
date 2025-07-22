@@ -6,5 +6,5 @@ CREATE TABLE user_solved_quizzes
     quiz_id         UUID          NOT NULL,
     selected_answer answer_choice NOT NULL,
     solved_at       TIMESTAMPTZ DEFAULT now(),
-    CONSTRAINT id PRIMARY KEY (user_id, quiz_id)
+    CONSTRAINT user_solved_quizzes_pk PRIMARY KEY (user_id, quiz_id)
 );

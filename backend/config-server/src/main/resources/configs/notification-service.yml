@@ -3,6 +3,10 @@ server:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 mailjet:
   publicKey: ${MAILJET_PUBLIC_KEY}
   privateKey: ${MAILJET_PRIVATE_KEY}

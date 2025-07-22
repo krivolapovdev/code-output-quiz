@@ -1,6 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.controller;
 
-import io.github.krivolapovdev.codeoutputquiz.userservice.request.AddUserSolvedQuizRequest;
+import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserSolvedQuizRequest;
 import io.github.krivolapovdev.codeoutputquiz.userservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class UserController {
   @PostMapping("/me/solved-quizzes")
   @PreAuthorize("isAuthenticated()")
   public Mono<Void> addUserSolvedQuiz(
-      @Valid @RequestBody AddUserSolvedQuizRequest addUserSolvedQuizRequest) {
-    return userService.addUserSolvedQuiz(addUserSolvedQuizRequest);
+      @Valid @RequestBody UserSolvedQuizRequest userSolvedQuizRequest) {
+    return userService.addUserSolvedQuiz(userSolvedQuizRequest);
   }
 }

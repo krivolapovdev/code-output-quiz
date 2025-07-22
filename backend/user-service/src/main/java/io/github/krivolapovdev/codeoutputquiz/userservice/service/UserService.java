@@ -1,7 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.service;
 
 import io.github.krivolapovdev.codeoutputquiz.userservice.repository.UserSolvedQuizRepository;
-import io.github.krivolapovdev.codeoutputquiz.userservice.request.AddUserSolvedQuizRequest;
+import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserSolvedQuizRequest;
 import io.github.krivolapovdev.codeoutputquiz.userservice.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class UserService {
         .map(sq -> sq.getQuizId().toString());
   }
 
-  public Mono<Void> addUserSolvedQuiz(AddUserSolvedQuizRequest request) {
+  public Mono<Void> addUserSolvedQuiz(UserSolvedQuizRequest request) {
     return ReactiveSecurityContextHolder.getContext()
         .map(ctx -> (String) ctx.getAuthentication().getCredentials())
         .map(jwtTokenProvider::extractUserIdFromToken)

@@ -15,7 +15,7 @@ export const SidebarFooter = () => {
       <button
         type="button"
         onClick={logout}
-        className="group relative flex w-full justify-center rounded-lg px-2 py-1.5 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+        className="group relative flex w-full justify-center rounded-lg px-2 py-1.5 text-sm text-gray-500 hover:bg-gray-50 hover:text-gray-700 cursor-pointer"
       >
         <div className="size-5 opacity-75">
           <img

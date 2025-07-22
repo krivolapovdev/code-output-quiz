@@ -1,6 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.repository;
 
 import io.github.krivolapovdev.codeoutputquiz.userservice.entity.UserSolvedQuiz;
+import io.github.krivolapovdev.codeoutputquiz.userservice.enums.AnswerChoice;
 import java.util.UUID;
 import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
@@ -26,11 +27,13 @@ public interface UserSolvedQuizRepository extends ReactiveCrudRepository<UserSol
   @Modifying
   @Query(
       """
-          INSERT INTO user_solved_quizzes (user_id, quiz_id, selectedAnswer)
-          VALUES (:userId, :quizId, :selectedAnswer)
+          INSERT INTO
+              user_solved_quizzes (user_id, quiz_id, selected_answer)
+          VALUES
+              (:userId, :quizId, :selectedAnswer::answer_choice)
           """)
   Mono<Void> addUserSolvedQuiz(
       @Param("userId") UUID userId,
       @Param("quizId") UUID quizId,
-      @Param("selectedAnswer") String selectedAnswer);
+      @Param("selectedAnswer") AnswerChoice selectedAnswer);
 }

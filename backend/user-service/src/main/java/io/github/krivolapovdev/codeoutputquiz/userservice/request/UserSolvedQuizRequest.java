@@ -4,4 +4,4 @@ import io.github.krivolapovdev.codeoutputquiz.userservice.enums.AnswerChoice;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
-public record UserSolvedQuizRequest(@NotNull UUID quizId, AnswerChoice answerChoice) {}
+public record UserSolvedQuizRequest(@NotNull UUID quizId, @NotNull AnswerChoice selectedAnswer) {}

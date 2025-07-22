@@ -13,6 +13,9 @@ export const userService = {
     quizId: string,
     selectedAnswer: string
   ): Promise<void> => {
-    await api.post<void>(baseURL, { quizId, selectedAnswer });
+    await api.post<void>(`${baseURL}/me/solved-quizzes`, {
+      quizId,
+      selectedAnswer
+    });
   }
 };

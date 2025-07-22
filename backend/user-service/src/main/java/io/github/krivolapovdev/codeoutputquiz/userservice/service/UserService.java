@@ -36,6 +36,6 @@ public class UserService {
         .flatMap(
             userId ->
                 userSolvedQuizRepository.addUserSolvedQuiz(
-                    userId, request.quizId(), request.answerChoice().name()));
+                    userId, request.quizId(), request.selectedAnswer()));
   }
 }

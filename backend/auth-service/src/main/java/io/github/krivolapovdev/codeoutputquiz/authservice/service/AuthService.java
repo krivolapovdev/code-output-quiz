@@ -2,7 +2,9 @@ package io.github.krivolapovdev.codeoutputquiz.authservice.service;
 
 import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.AuthDetails;
 import io.github.krivolapovdev.codeoutputquiz.authservice.entity.User;
+import io.github.krivolapovdev.codeoutputquiz.authservice.event.EmailNotificationEvent;
 import io.github.krivolapovdev.codeoutputquiz.authservice.exception.EmailAlreadyTakenException;
+import io.github.krivolapovdev.codeoutputquiz.authservice.producer.EmailNotificationProducer;
 import io.github.krivolapovdev.codeoutputquiz.authservice.repository.UserRepository;
 import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
@@ -30,14 +32,18 @@ public class AuthService {
   private final CustomReactiveAuthenticationManager customReactiveAuthenticationManager;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
+  private final EmailNotificationProducer emailNotificationProducer;
 
   public Mono<ResponseEntity<AuthResponse>> register(AuthRequest request) {
-    log.info("Registering user: {}", request.email());
+    log.info("Attempting to register user: {}", request.email());
+
     return createAndSaveUser(request)
+        .doOnSuccess(user -> log.info("User registered successfully: {}", user.getEmail()))
+        .flatMap(user -> sendWelcomeEmail(user).thenReturn(user))
         .flatMap(
-            savedUser ->
+            user ->
                 authenticateAndBuildResponse(
-                    request.email(), request.password(), HttpStatus.CREATED))
+                    user.getEmail(), request.password(), HttpStatus.CREATED))
         .onErrorMap(
             DuplicateKeyException.class,
             e -> new EmailAlreadyTakenException("Email already exists"));
@@ -100,5 +106,28 @@ public class AuthService {
     return ResponseEntity.status(status)
         .header(HttpHeaders.SET_COOKIE, cookie.toString())
         .body(new AuthResponse(accessToken));
+  }
+
+  private Mono<Void> sendWelcomeEmail(User user) {
+    var event =
+        new EmailNotificationEvent(
+            user.getEmail(),
+            "Welcome to CodeOutputQuiz!",
+            """
+        Thanks for registering, %s!
+
+        You can now enjoy solving programming output questions 🚀
+
+        Want to contribute or give feedback?
+        Visit our GitHub: https://github.com/krivolapovdev/code-output-quiz
+        """
+                .formatted(user.getEmail()));
+
+    return emailNotificationProducer
+        .sendEmailNotificationEvent(event)
+        .doOnSuccess(unused -> log.info("Welcome email sent to {}", user.getEmail()))
+        .doOnError(error -> log.error("Failed to send welcome email to {}", user.getEmail(), error))
+        .then()
+        .onErrorResume(e -> Mono.empty());
   }
 }

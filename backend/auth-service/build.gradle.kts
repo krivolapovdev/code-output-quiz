@@ -22,6 +22,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
+    implementation("org.springframework.cloud:spring-cloud-stream-binder-kafka-reactive")
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:${springdocVersion}")
     implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
     implementation("com.github.ben-manes.caffeine:caffeine:${caffeineVersion}")

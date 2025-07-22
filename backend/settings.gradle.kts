@@ -6,5 +6,6 @@ include(
     "quiz-service",
     "auth-service",
     "user-service",
+    "notification-service",
     "api-gateway"
 )

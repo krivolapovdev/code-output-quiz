@@ -17,3 +17,5 @@ jwt:
   secret-key: your-jwt-ultra-secure-and-ultra-long-secret
   access-token-expiration: 15m
   refresh-token-expiration: 7d
+loki:
+  url: http://localhost:3100/loki/api/v1/push

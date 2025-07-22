@@ -16,5 +16,4 @@ management:
     sampling:
       probability: 1
     enabled: true
-logging:
-  config: classpath:logback-spring-dev.xml
+

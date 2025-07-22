@@ -1,6 +1,7 @@
 x-common-variables: &common-variables
   CONFIG_SERVER: http://config-server:8888
   EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+  LOKI_URL: http://loki:3100/loki/api/v1/push
 
 services:
   prometheus:
@@ -54,6 +55,7 @@ services:
       dockerfile: ../infrastructure/docker/config-server/Dockerfile
     restart: unless-stopped
     environment:
+      <<: *common-variables
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-jwt-ultra-secure-and-ultra-long-secret}
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]

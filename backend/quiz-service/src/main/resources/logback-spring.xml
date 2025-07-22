@@ -2,7 +2,9 @@
 <configuration>
   <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
   <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
   <springProperty scope="context" name="application" source="spring.application.name"/>
+  <springProperty scope="context" name="lokiUrl" source="loki.url"/>
 
   <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
     <batch>
@@ -10,7 +12,7 @@
       <timeoutMs>1000</timeoutMs>
     </batch>
     <http>
-      <url>http://loki:3100/loki/api/v1/push</url>
+      <url>${lokiUrl}</url>
     </http>
     <labels>
       app = ${application}

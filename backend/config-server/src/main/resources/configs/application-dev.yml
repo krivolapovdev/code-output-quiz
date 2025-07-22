@@ -1,3 +1,7 @@
+spring:
+  devtools:
+    restart:
+      enabled: false
 management:
   endpoints:
     web:

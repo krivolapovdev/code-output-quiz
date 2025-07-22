@@ -1,9 +1,10 @@
 import { Modal } from "antd";
 import type { AnswerChoiceData } from "@/shared/api/quiz";
+import { QuizResultModalButtons } from "./QuizResultModalButtons.tsx";
 
 type Props = {
   open: boolean;
-  onClose: () => void;
+  callNext: () => void;
   selected: AnswerChoiceData | undefined;
   correct: AnswerChoiceData | undefined;
   explanation: string;
@@ -12,7 +13,7 @@ type Props = {
 
 export const QuizResultModal = ({
   open,
-  onClose,
+  callNext,
   selected,
   correct,
   explanation,
@@ -23,7 +24,6 @@ export const QuizResultModal = ({
   return (
     <Modal
       open={open}
-      onCancel={onClose}
       footer={null}
       closable={false}
       maskClosable={false}
@@ -50,15 +50,11 @@ export const QuizResultModal = ({
           {showExplanation ? explanation : "Only for logged in users"}
         </p>
 
-        <div className="flex justify-end pt-2">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded bg-blue-600 px-5 py-2 text-white hover:bg-blue-700 transition cursor-pointer"
-          >
-            Next
-          </button>
-        </div>
+        <QuizResultModalButtons
+          onLike={callNext}
+          onDislike={callNext}
+          onNext={callNext}
+        />
       </div>
     </Modal>
   );

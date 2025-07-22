@@ -4,7 +4,7 @@ import { AnswerChoicesWithEffect } from "@/features/handle-answer-selection";
 import { useUserStore } from "@/shared/lib/store";
 import { CodeBlock } from "@/shared/ui/code-block";
 import { prismLanguageResolver } from "../lib";
-import { QuizResultModal } from "./quiz-result-modal";
+import { QuizResultModal } from "./QuizResultModal.tsx";
 import { SelectDifficultyLevel } from "./SelectDifficultyLevel";
 import { SelectProgrammingLanguage } from "./SelectProgrammingLanguage";
 
@@ -62,7 +62,7 @@ export const CodeQuizCard = () => {
 
       <QuizResultModal
         open={isModalOpen}
-        onClose={handleNext}
+        callNext={handleNext}
         selected={selected}
         correct={correct}
         explanation={quiz.explanation}

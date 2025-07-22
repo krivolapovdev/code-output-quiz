@@ -1,3 +1,6 @@
+spring:
+  flyway:
+    clean-disabled: false
 management:
   endpoints:
     web:

@@ -1,13 +1,3 @@
-plugins {
-    id("org.flywaydb.flyway") version "11.9.1"
-}
-
-buildscript {
-    dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.9.1")
-    }
-}
-
 val springdocVersion = "2.8.9"
 val postgresVersion = "42.7.7"
 val postgresR2dbcVersion = "1.0.7.RELEASE"
@@ -27,18 +17,11 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:${springdocVersion}")
     implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
     implementation("com.github.ben-manes.caffeine:caffeine:${caffeineVersion}")
+    implementation("org.flywaydb:flyway-core:${flywayVersion}")
 
     runtimeOnly("org.postgresql:postgresql:${postgresVersion}")
     runtimeOnly("org.postgresql:r2dbc-postgresql:${postgresR2dbcVersion}")
-    runtimeOnly("org.flywaydb:flyway-core:${flywayVersion}")
     runtimeOnly("org.flywaydb:flyway-database-postgresql:${flywayVersion}")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:$jjwtVersion")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jjwtVersion")
-}
-
-flyway {
-    url = "jdbc:postgresql://localhost:5433/auth_db"
-    user = "postgres"
-    password = "root"
-    cleanDisabled = false
 }

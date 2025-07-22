@@ -1,13 +1,3 @@
-plugins {
-    id("org.flywaydb.flyway") version "11.9.1"
-}
-
-buildscript {
-    dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.9.1")
-    }
-}
-
 val openAiVersion = "1.0.0-M6"
 val springdocVersion = "2.8.9"
 val postgresR2dbcVersion = "1.0.7.RELEASE"
@@ -28,17 +18,10 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
     implementation("org.mapstruct:mapstruct:$mapstructVersion")
     implementation("org.postgresql:r2dbc-postgresql:$postgresR2dbcVersion")
+    implementation("org.flywaydb:flyway-core:$flywayVersion")
 
     runtimeOnly("org.postgresql:postgresql:$postgresVersion")
-    runtimeOnly("org.flywaydb:flyway-core:$flywayVersion")
     runtimeOnly("org.flywaydb:flyway-database-postgresql:$flywayVersion")
 
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
-}
-
-flyway {
-    url = "jdbc:postgresql://localhost:5432/quiz_db"
-    user = "postgres"
-    password = "root"
-    cleanDisabled = false
 }

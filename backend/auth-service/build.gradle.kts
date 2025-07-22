@@ -8,7 +8,7 @@ buildscript {
     }
 }
 
-val springdocVersion = "2.8.8"
+val springdocVersion = "2.8.9"
 val postgresVersion = "42.7.7"
 val postgresR2dbcVersion = "1.0.7.RELEASE"
 val flywayVersion = "11.9.1"

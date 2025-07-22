@@ -1,7 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.controller;
 
-import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserSolvedQuizRequest;
-import io.github.krivolapovdev.codeoutputquiz.userservice.service.UserService;
+import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserQuizReactionRequest;
+import io.github.krivolapovdev.codeoutputquiz.userservice.service.UserQuizReactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,13 +14,12 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
-public class UserController {
-  private final UserService userService;
+public class UserQuizReactionController {
+  private final UserQuizReactionService userQuizReactionService;
 
-  @PostMapping("/me/solved-quizzes")
+  @PostMapping("/me/quiz-reactions")
   @PreAuthorize("isAuthenticated()")
-  public Mono<Void> addUserSolvedQuiz(
-      @Valid @RequestBody UserSolvedQuizRequest userSolvedQuizRequest) {
-    return userService.addUserSolvedQuiz(userSolvedQuizRequest);
+  public Mono<Void> reactToQuiz(@Valid @RequestBody UserQuizReactionRequest request) {
+    return userQuizReactionService.reactToQuiz(request);
   }
 }

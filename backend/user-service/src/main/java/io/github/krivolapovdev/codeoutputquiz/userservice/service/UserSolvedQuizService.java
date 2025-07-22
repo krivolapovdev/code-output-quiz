@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class UserService {
+public class UserSolvedQuizService {
   private final UserSolvedQuizRepository userSolvedQuizRepository;
   private final JwtTokenProvider jwtTokenProvider;
 

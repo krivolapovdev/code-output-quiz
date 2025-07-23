@@ -1,6 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.enums;
 
-public enum UserRoles {
+public enum UserRole {
   USER,
   ADMIN,
 }

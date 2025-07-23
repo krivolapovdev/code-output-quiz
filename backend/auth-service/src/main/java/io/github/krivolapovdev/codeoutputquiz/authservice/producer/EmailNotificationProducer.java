@@ -20,7 +20,7 @@ public class EmailNotificationProducer {
 
   public Mono<SenderResult<Void>> sendEmailNotificationEvent(
       @NonNull EmailNotificationEvent event) {
-    log.info("Sending email notification event to: {}", event.to());
+    log.info("Sending email notification event to: {}", event.recipientEmail());
     return Mono.fromCallable(() -> objectMapper.writeValueAsString(event))
         .map(json -> new ProducerRecord<String, String>("email-events", json))
         .flatMap(kafkaProducer::send)

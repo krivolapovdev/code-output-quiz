@@ -2,6 +2,7 @@ package io.github.krivolapovdev.codeoutputquiz.authservice.service;
 
 import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.AuthDetails;
 import io.github.krivolapovdev.codeoutputquiz.authservice.entity.User;
+import io.github.krivolapovdev.codeoutputquiz.authservice.enums.NotificationType;
 import io.github.krivolapovdev.codeoutputquiz.authservice.event.EmailNotificationEvent;
 import io.github.krivolapovdev.codeoutputquiz.authservice.exception.EmailAlreadyTakenException;
 import io.github.krivolapovdev.codeoutputquiz.authservice.producer.EmailNotificationProducer;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,7 +41,7 @@ public class AuthService {
 
     return createAndSaveUser(request)
         .doOnSuccess(user -> log.info("User registered successfully: {}", user.getEmail()))
-        .flatMap(user -> sendWelcomeEmail(user).thenReturn(user))
+        .flatMap(user -> sendWelcomeEmail(user.getEmail()).thenReturn(user))
         .flatMap(
             user ->
                 authenticateAndBuildResponse(
@@ -108,25 +110,15 @@ public class AuthService {
         .body(new AuthResponse(accessToken));
   }
 
-  private Mono<Void> sendWelcomeEmail(User user) {
-    var event =
-        new EmailNotificationEvent(
-            user.getEmail(),
-            "Welcome to CodeOutputQuiz!",
-            """
-        Thanks for registering, %s!
-
-        You can now enjoy solving programming output questions 🚀
-
-        Want to contribute or give feedback?
-        Visit our GitHub: https://github.com/krivolapovdev/code-output-quiz
-        """
-                .formatted(user.getEmail()));
-
+  private Mono<Void> sendWelcomeEmail(@NonNull String email) {
+    var event = new EmailNotificationEvent(email, NotificationType.WELCOME_USER);
     return emailNotificationProducer
         .sendEmailNotificationEvent(event)
-        .doOnSuccess(unused -> log.info("Welcome email sent to {}", user.getEmail()))
-        .doOnError(error -> log.error("Failed to send welcome email to {}", user.getEmail(), error))
+        .doOnSuccess(unused -> log.info("Welcome email sent to: {}", email))
+        .doOnError(
+            error ->
+                log.error(
+                    "Failed recipientEmail send welcome email recipientEmail {}", email, error))
         .then()
         .onErrorResume(e -> Mono.empty());
   }

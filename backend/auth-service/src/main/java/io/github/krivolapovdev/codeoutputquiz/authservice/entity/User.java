@@ -1,6 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.entity;
 
-import io.github.krivolapovdev.codeoutputquiz.authservice.enums.UserRoles;
+import io.github.krivolapovdev.codeoutputquiz.authservice.enums.UserRole;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class User {
   private String password;
 
   @Column("role")
-  private UserRoles role;
+  private UserRole role;
 
   @Column("created_at")
   private OffsetDateTime createdAt;

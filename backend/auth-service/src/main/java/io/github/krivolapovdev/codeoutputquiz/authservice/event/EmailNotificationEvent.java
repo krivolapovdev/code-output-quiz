@@ -1,3 +1,5 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.event;
 
-public record EmailNotificationEvent(String to, String subject, String content) {}
+import io.github.krivolapovdev.codeoutputquiz.authservice.enums.NotificationType;
+
+public record EmailNotificationEvent(String recipientEmail, NotificationType type) {}

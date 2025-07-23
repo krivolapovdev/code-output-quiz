@@ -1,4 +1,4 @@
-package io.github.nellshark.codeoutputquiz.notificationservice.listener;
+package io.github.nellshark.codeoutputquiz.notificationservice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.nellshark.codeoutputquiz.notificationservice.event.EmailNotificationEvent;
@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class EmailNotificationListener {
+public class EmailNotificationConsumer {
   private final ReactiveKafkaConsumerTemplate<String, String> kafkaConsumer;
   private final EmailService emailService;
   private final ObjectMapper objectMapper;

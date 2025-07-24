@@ -13,6 +13,21 @@ jobs:
     env:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+
+      GRAFANA_ADMIN_USER: ${{ secrets.GRAFANA_ADMIN_USER }}
+      GRAFANA_ADMIN_PASSWORD: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
+
+      MAILJET_PUBLIC_KEY: ${{ secrets.MAILJET_PUBLIC_KEY }}
+      MAILJET_PRIVATE_KEY: ${{ secrets.MAILJET_PRIVATE_KEY }}
+      MAILJET_SENDER_EMAIL: ${{ secrets.MAILJET_SENDER_EMAIL }}
+
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+
       IMAGE_TAG: ${{ github.ref_name }}
 
     steps:
@@ -20,28 +35,95 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
-        run: echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PASSWORD }}
 
-      - name: Build & Push microservices to Docker Hub
-        run: |
-          SERVICES=(
-            api-gateway
-            auth-service
-            config-server
-            eureka-server
-            notification-service
-            quiz-service
-            user-service
-            nginx
-          )
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
-          for SERVICE in "${SERVICES[@]}"; do
-            IMAGE="$DOCKERHUB_USERNAME/$SERVICE:$IMAGE_TAG"
-            echo "Building and pushing $IMAGE"
-            docker build \
-              -t $IMAGE \
-              -t $DOCKERHUB_USERNAME/$SERVICE:latest \
-              -f infrastructure/docker/$SERVICE/Dockerfile ./backend
-            docker push $IMAGE
-            docker push $DOCKERHUB_USERNAME/$SERVICE:latest
-          done
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Push config-server
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./infrastructure/docker/config-server/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/config-server:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/config-server:latest
+
+      - name: Build & Push eureka-server
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./infrastructure/docker/eureka-server/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/eureka-server:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/eureka-server:latest
+
+      - name: Build & Push auth-service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./infrastructure/docker/auth-service/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/auth-service:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/auth-service:latest
+
+      - name: Build & Push notification-service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./infrastructure/docker/notification-service/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/notification-service:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/notification-service:latest
+
+      - name: Build & Push quiz-service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./infrastructure/docker/quiz-service/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/quiz-service:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/quiz-service:latest
+
+      - name: Build & Push user-service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./infrastructure/docker/user-service/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/user-service:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/user-service:latest
+
+      - name: Build & Push api-gateway
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./infrastructure/docker/api-gateway/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/api-gateway:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/api-gateway:latest
+
+      - name: Build & Push nginx
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          file: ./infrastructure/docker/nginx/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/nginx:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/nginx:latest
+          build-args: |
+                VITE_API_URL=https://code-output-quiz.ru/

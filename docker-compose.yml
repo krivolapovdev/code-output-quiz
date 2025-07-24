@@ -274,10 +274,8 @@ services:
         condition: service_healthy
 
   api-gateway:
+    image: krivolapovdev/api-gateway:latest
     container_name: api-gateway
-    build:
-      context: ./backend
-      dockerfile: ../infrastructure/docker/api-gateway/Dockerfile
     restart: unless-stopped
     environment:
       <<: *common-variables

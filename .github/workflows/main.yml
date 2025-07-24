@@ -1,0 +1,47 @@
+name: Build and Deploy
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-22.04
+
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+      IMAGE_TAG: ${{ github.ref_name }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        run: echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+      - name: Build & Push microservices to Docker Hub
+        run: |
+          SERVICES=(
+            api-gateway
+            auth-service
+            config-server
+            eureka-server
+            notification-service
+            quiz-service
+            user-service
+            nginx
+          )
+
+          for SERVICE in "${SERVICES[@]}"; do
+            IMAGE="$DOCKERHUB_USERNAME/$SERVICE:$IMAGE_TAG"
+            echo "Building and pushing $IMAGE"
+            docker build \
+              -t $IMAGE \
+              -t $DOCKERHUB_USERNAME/$SERVICE:latest \
+              -f infrastructure/docker/$SERVICE/Dockerfile ./backend
+            docker push $IMAGE
+            docker push $DOCKERHUB_USERNAME/$SERVICE:latest
+          done

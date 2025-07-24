@@ -5,19 +5,19 @@ WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts gradle ./
 
-COPY notification-server/build.gradle.kts ./notification-server/build.gradle.kts
+COPY notification-service/build.gradle.kts ./notification-service/build.gradle.kts
 
-RUN gradle --no-daemon :notification-server:dependencies
+RUN gradle --no-daemon :notification-service:dependencies
 
-COPY notification-server/src ./notification-server/src
+COPY notification-service/src ./notification-service/src
 
-RUN gradle --no-daemon :notification-server:bootJar
+RUN gradle --no-daemon :notification-service:bootJar
 
 # Run stage
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-COPY --from=build /app/notification-server/build/libs/*.jar ./notification-server.jar
+COPY --from=build /app/notification-service/build/libs/*.jar ./notification-service.jar
 
-ENTRYPOINT ["java", "-jar", "notification-server.jar"]
+ENTRYPOINT ["java", "-jar", "notification-service.jar"]

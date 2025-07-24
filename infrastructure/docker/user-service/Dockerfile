@@ -5,19 +5,19 @@ WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts gradle ./
 
-COPY user-server/build.gradle.kts ./user-server/build.gradle.kts
+COPY user-service/build.gradle.kts ./user-service/build.gradle.kts
 
-RUN gradle --no-daemon :user-server:dependencies
+RUN gradle --no-daemon :user-service:dependencies
 
-COPY user-server/src ./user-server/src
+COPY user-service/src ./user-service/src
 
-RUN gradle --no-daemon :user-server:bootJar
+RUN gradle --no-daemon :user-service:bootJar
 
 # Run stage
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-COPY --from=build /app/user-server/build/libs/*.jar ./user-server.jar
+COPY --from=build /app/user-service/build/libs/*.jar ./user-service.jar
 
-ENTRYPOINT ["java", "-jar", "user-server.jar"]
+ENTRYPOINT ["java", "-jar", "user-service.jar"]

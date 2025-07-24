@@ -46,7 +46,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build & Push config-server
+      - name: Build & Push config-server Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -56,7 +56,7 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/config-server:${{ env.IMAGE_TAG }}
             ${{ env.DOCKERHUB_USERNAME }}/config-server:latest
 
-      - name: Build & Push eureka-server
+      - name: Build & Push eureka-server Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -66,7 +66,7 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/eureka-server:${{ env.IMAGE_TAG }}
             ${{ env.DOCKERHUB_USERNAME }}/eureka-server:latest
 
-      - name: Build & Push auth-service
+      - name: Build & Push auth-service Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -76,7 +76,7 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/auth-service:${{ env.IMAGE_TAG }}
             ${{ env.DOCKERHUB_USERNAME }}/auth-service:latest
 
-      - name: Build & Push notification-service
+      - name: Build & Push notification-service Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -86,7 +86,7 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/notification-service:${{ env.IMAGE_TAG }}
             ${{ env.DOCKERHUB_USERNAME }}/notification-service:latest
 
-      - name: Build & Push quiz-service
+      - name: Build & Push quiz-service Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -96,7 +96,7 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/quiz-service:${{ env.IMAGE_TAG }}
             ${{ env.DOCKERHUB_USERNAME }}/quiz-service:latest
 
-      - name: Build & Push user-service
+      - name: Build & Push user-service Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -106,7 +106,7 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/user-service:${{ env.IMAGE_TAG }}
             ${{ env.DOCKERHUB_USERNAME }}/user-service:latest
 
-      - name: Build & Push api-gateway
+      - name: Build & Push api-gateway Image
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -116,14 +116,44 @@ jobs:
             ${{ env.DOCKERHUB_USERNAME }}/api-gateway:${{ env.IMAGE_TAG }}
             ${{ env.DOCKERHUB_USERNAME }}/api-gateway:latest
 
-      - name: Build & Push nginx
+      - name: Build & Push nginx Image
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
-          file: ./infrastructure/docker/nginx/Dockerfile
+          file: ./frontend/Dockerfile
           push: true
           tags: |
             ${{ env.DOCKERHUB_USERNAME }}/nginx:${{ env.IMAGE_TAG }}
             ${{ env.DOCKERHUB_USERNAME }}/nginx:latest
           build-args: |
                 VITE_API_URL=https://code-output-quiz.ru/
+
+      - name: Build & Push Prometheus Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./infrastructure/docker/prometheus
+          file: ./infrastructure/docker/prometheus/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/prometheus:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/prometheus:latest
+
+      - name: Build & Push Loki Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./infrastructure/docker/loki
+          file: ./infrastructure/docker/loki/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/loki:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/loki:latest
+
+      - name: Build & Push grafana Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./infrastructure/docker/grafana
+          file: ./infrastructure/docker/grafana/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/grafana:${{ env.IMAGE_TAG }}
+            ${{ env.DOCKERHUB_USERNAME }}/grafana:latest

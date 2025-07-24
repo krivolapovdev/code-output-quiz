@@ -2,16 +2,17 @@ package io.github.krivolapovdev.codeoutputquiz.quizservice.repository;
 
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.view.Quiz;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.view.QuizView;
 import io.lettuce.core.dynamic.annotation.Param;
 import java.util.UUID;
+import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
 @Repository
-public interface QuizRepository extends ReactiveCrudRepository<Quiz, UUID> {
+public interface QuizViewRepository extends ReactiveCrudRepository<QuizView, UUID> {
   @Query(
       """
       SELECT
@@ -27,7 +28,28 @@ public interface QuizRepository extends ReactiveCrudRepository<Quiz, UUID> {
       LIMIT
         1
       """)
-  Mono<Quiz> findRandomQuizView(
+  Mono<QuizView> findRandomQuizView(
       @Param("programmingLanguage") ProgrammingLanguage programmingLanguage,
       @Param("difficultyLevel") DifficultyLevel difficultyLevel);
+
+  @Modifying
+  @Query(
+      """
+      SELECT
+          insert_quiz_with_choices(
+              :code,
+              :lang,
+              :level,
+              :correctAnswer::answer_choice,
+              :explanation,
+              :answerChoicesJson::jsonb
+          )
+      """)
+  Mono<Void> insertQuizWithChoices(
+      @Param("code") String code,
+      @Param("lang") String lang,
+      @Param("level") String level,
+      @Param("correctAnswer") String correctAnswer,
+      @Param("explanation") String explanation,
+      @Param("answerChoicesJson") String answerChoicesJson);
 }

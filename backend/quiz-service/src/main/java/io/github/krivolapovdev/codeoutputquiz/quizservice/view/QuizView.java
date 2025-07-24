@@ -15,7 +15,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("quizzes_with_choices")
 @AllArgsConstructor
 @Data
-public class Quiz {
+public class QuizView {
   @Id
   @Column("id")
   private UUID id;

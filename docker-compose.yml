@@ -127,12 +127,12 @@ services:
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8084/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 5
     ports:
-      - "8080:8080"
+      - "8084:8084"
     depends_on:
       eureka-server:
         condition: service_healthy
@@ -190,7 +190,7 @@ services:
       SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
       SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: kafka:9092
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -236,7 +236,7 @@ services:
       MAILJET_PRIVATE_KEY: ${MAILJET_PRIVATE_KEY}
       MAILJET_SENDER_EMAIL: ${MAILJET_SENDER_EMAIL}
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8083/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -261,7 +261,7 @@ services:
       SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
       SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/actuator/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 5

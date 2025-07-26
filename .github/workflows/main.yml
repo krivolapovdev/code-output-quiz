@@ -170,6 +170,18 @@ jobs:
     timeout-minutes: 30
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Copy files via SSH
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: docker-compose.yml
+          target: ~/
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -177,6 +189,8 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            cd ~
+
             export POSTGRES_USER="${{ secrets.POSTGRES_USER }}"
             export POSTGRES_PASSWORD="${{ secrets.POSTGRES_PASSWORD }}"
             export GRAFANA_ADMIN_USER="${{ secrets.GRAFANA_ADMIN_USER }}"
@@ -187,17 +201,7 @@ jobs:
             export JWT_SECRET_KEY="${{ secrets.JWT_SECRET_KEY }}"
             export DEEPSEEK_API_KEY="${{ secrets.DEEPSEEK_API_KEY }}"
 
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/config-server:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/eureka-server:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/auth-service:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/notification-service:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/quiz-service:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/user-service:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nginx:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/prometheus:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/loki:latest
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/grafana:latest
-
-            docker compose -f docker-compose.yml down
-            docker compose -f docker-compose.yml up -d
+            docker compose pull
+            docker image prune -f
+            docker compose down --remove-orphans
+            docker compose up -d

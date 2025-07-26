@@ -198,8 +198,8 @@ jobs:
             export MAILJET_PUBLIC_KEY="${{ secrets.MAILJET_PUBLIC_KEY }}"
             export MAILJET_PRIVATE_KEY="${{ secrets.MAILJET_PRIVATE_KEY }}"
             export MAILJET_SENDER_EMAIL="${{ secrets.MAILJET_SENDER_EMAIL }}"
-            export JWT_SECRET_KEY="${{ secrets.JWT_SECRET_KEY }}"
             export DEEPSEEK_API_KEY="${{ secrets.DEEPSEEK_API_KEY }}"
+            export JWT_SECRET_KEY="$(uuidgen)$(uuidgen)$(uuidgen)"
 
             docker compose pull
             docker image prune -f

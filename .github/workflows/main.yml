@@ -31,7 +31,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build & Push config-server Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./backend
           file: ./infrastructure/docker/config-server/Dockerfile
@@ -43,7 +43,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/config-server:latest
 
       - name: Build & Push eureka-server Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./backend
           file: ./infrastructure/docker/eureka-server/Dockerfile
@@ -55,7 +55,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/eureka-server:latest
 
       - name: Build & Push auth-service Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./backend
           file: ./infrastructure/docker/auth-service/Dockerfile
@@ -67,7 +67,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/auth-service:latest
 
       - name: Build & Push notification-service Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./backend
           file: ./infrastructure/docker/notification-service/Dockerfile
@@ -79,7 +79,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/notification-service:latest
 
       - name: Build & Push quiz-service Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./backend
           file: ./infrastructure/docker/quiz-service/Dockerfile
@@ -91,7 +91,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/quiz-service:latest
 
       - name: Build & Push user-service Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./backend
           file: ./infrastructure/docker/user-service/Dockerfile
@@ -103,7 +103,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/user-service:latest
 
       - name: Build & Push api-gateway Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./backend
           file: ./infrastructure/docker/api-gateway/Dockerfile
@@ -115,7 +115,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/api-gateway:latest
 
       - name: Build & Push nginx Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./frontend
           file: ./frontend/Dockerfile
@@ -129,7 +129,7 @@ jobs:
             VITE_API_URL=${{ secrets.VITE_API_URL }}
 
       - name: Build & Push Prometheus Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./infrastructure/docker/prometheus
           file: ./infrastructure/docker/prometheus/Dockerfile
@@ -141,7 +141,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/prometheus:latest
 
       - name: Build & Push Loki Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./infrastructure/docker/loki
           file: ./infrastructure/docker/loki/Dockerfile
@@ -153,7 +153,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/loki:latest
 
       - name: Build & Push grafana Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./infrastructure/docker/grafana
           file: ./infrastructure/docker/grafana/Dockerfile

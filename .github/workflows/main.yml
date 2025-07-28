@@ -33,9 +33,9 @@ jobs:
       - name: Bake & Push All Images
         uses: docker/bake-action@v6
         env:
-          DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
-          IMAGE_TAG=${{ github.ref_name }}
-          VITE_API_URL=${{ secrets.VITE_API_URL }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          IMAGE_TAG: ${{ github.ref_name }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         with:
           push: true
           files: ./docker-bake.hcl

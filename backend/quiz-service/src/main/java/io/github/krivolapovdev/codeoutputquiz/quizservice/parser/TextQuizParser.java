@@ -17,7 +17,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class TextQuizParser {
   private static final Pattern CODE_PATTERN =
-      Pattern.compile("\\*\\*Code\\*\\*:\\s*(.*?)\\s*(?=\\*\\*Options\\*\\*)", Pattern.DOTALL);
+      Pattern.compile(
+          "\\*\\*Code\\*\\*:\\s*(?:```\\w+\\s*)?(.*?)\\s*(?:```)?\\s*(?=\\*\\*Options\\*\\*)",
+          Pattern.DOTALL);
   private static final Pattern OPTIONS_PATTERN =
       Pattern.compile("\\*\\*Options\\*\\*:\\s*(.*?)\\s*(?=\\*\\*Answer\\*\\*)", Pattern.DOTALL);
   private static final Pattern ANSWER_PATTERN = Pattern.compile("\\*\\*Answer\\*\\*:\\s*(\\w)");

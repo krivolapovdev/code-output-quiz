@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost"
+              - "http://localhost:5173"
+              - "http://code-output-quiz.ru"
+              - "https://code-output-quiz.ru"

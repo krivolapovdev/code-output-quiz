@@ -23,7 +23,7 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: "http://localhost:5173"
+            allowedOrigins: "https://code-output-quiz.ru"
             allowedMethods: "*"
             allowedHeaders: "*"
             allowCredentials: true

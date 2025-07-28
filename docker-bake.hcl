@@ -14,11 +14,17 @@ group "default" {
   ]
 }
 
-variable "DOCKERHUB_USERNAME" {}
+variable "DOCKERHUB_USERNAME" {
+  default = "krivolapovdev"
+}
 
-variable "IMAGE_TAG" {}
+variable "IMAGE_TAG" {
+  default = "latest"
+}
 
-variable "VITE_API_URL" {}
+variable "VITE_API_URL" {
+  default = "localhost"
+}
 
 
 target "config-server" {

@@ -1,10 +1,14 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.security.jwt;
 
+import io.github.krivolapovdev.codeoutputquiz.userservice.config.jwt.AuthDetails;
 import io.github.krivolapovdev.codeoutputquiz.userservice.config.jwt.JwtProperties;
+import io.github.krivolapovdev.codeoutputquiz.userservice.enums.TokenType;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Collection;
@@ -25,6 +29,7 @@ import org.springframework.stereotype.Component;
 public class JwtTokenProvider {
   private static final String AUTHORITIES_KEY = "roles";
   private static final String USER_ID_KEY = "userId";
+  private static final String TOKEN_TYPE_KEY = "tokenType";
 
   private final JwtProperties jwtProperties;
 
@@ -48,7 +53,25 @@ public class JwtTokenProvider {
 
     User principal = new User(claims.getSubject(), "", authorities);
 
-    return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    var authenticationToken =
+        new UsernamePasswordAuthenticationToken(principal, token, authorities);
+
+    String userIdStr = claims.get(USER_ID_KEY, String.class);
+    UUID userId = UUID.fromString(userIdStr);
+    AuthDetails authDetails = new AuthDetails(userId);
+    authenticationToken.setDetails(authDetails);
+
+    return authenticationToken;
+  }
+
+  public void validateTokenType(@NotNull String token, @NotNull TokenType expectedType) {
+    Claims claims = parseTokenClaims(token);
+    String actual = (String) claims.get(TOKEN_TYPE_KEY);
+
+    if (!expectedType.name().equalsIgnoreCase(actual)) {
+      throw new JwtException(
+          "Invalid token type: expected " + expectedType + ", but was " + actual);
+    }
   }
 
   public UUID extractUserIdFromToken(String token) {

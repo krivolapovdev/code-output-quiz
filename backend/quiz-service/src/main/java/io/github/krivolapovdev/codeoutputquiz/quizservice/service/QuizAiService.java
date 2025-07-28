@@ -33,7 +33,7 @@ public class QuizAiService {
 
   @PostConstruct
   public void init() {
-    Flux.interval(Duration.ofMinutes(1), Duration.ofMinutes(3))
+    Flux.interval(Duration.ofMinutes(1), Duration.ofMinutes(10))
         .onBackpressureDrop()
         .concatMap(tick -> generateNewQuizzes())
         .subscribeOn(Schedulers.boundedElastic())

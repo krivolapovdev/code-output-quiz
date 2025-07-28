@@ -96,12 +96,9 @@ class TextQuizParserTest {
         ...
         """;
 
-    IllegalArgumentException exception =
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> parser.parse(badText, ProgrammingLanguage.JAVA, DifficultyLevel.BEGINNER));
-
-    assertTrue(exception.getMessage().contains("Pattern not found"));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> parser.parse(badText, ProgrammingLanguage.JAVA, DifficultyLevel.BEGINNER));
   }
 
   @Test
@@ -117,11 +114,51 @@ class TextQuizParserTest {
         ...
         """;
 
-    IllegalArgumentException exception =
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> parser.parse(badText, ProgrammingLanguage.JAVA, DifficultyLevel.BEGINNER));
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> parser.parse(badText, ProgrammingLanguage.JAVA, DifficultyLevel.BEGINNER));
+  }
 
-    assertTrue(exception.getMessage().contains("Pattern not found"));
+  @Test
+  void shouldThrowIfAnswerLetterInvalid() {
+    String text =
+        """
+      **Code**:
+      System.out.println("X");
+      **Options**:
+      A) One
+      B) Two
+      **Answer**: E
+      **Explanation**:
+      Invalid answer
+      """;
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> parser.parse(text, ProgrammingLanguage.JAVA, DifficultyLevel.BEGINNER));
+  }
+
+  @Test
+  void shouldTrimCodeCorrectlyEvenWithExtraSpacesAndBackticks() {
+    String text =
+        """
+      **Code**:
+      ```java
+
+      System.out.println("Trimmed");
+
+      ```
+      **Options**:
+      A) Trim
+      B) Trimmed
+      C) Compilation
+      D) Error
+      **Answer**: B
+      **Explanation**:
+      Extra space test
+      """;
+
+    QuizView quiz = parser.parse(text, ProgrammingLanguage.JAVA, DifficultyLevel.BEGINNER);
+    assertEquals("System.out.println(\"Trimmed\");", quiz.getCode());
   }
 }

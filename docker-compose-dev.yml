@@ -9,32 +9,34 @@ services:
     container_name: prometheus
     build:
       context: ./infrastructure/docker/prometheus
-    restart: no
     ports:
       - "9090:9090"
+    restart: no
 
   loki:
     container_name: loki
     build:
       context: ./infrastructure/docker/loki
-    restart: no
     ports:
       - "3100:3100"
+    restart: no
 
   grafana:
     container_name: grafana
-    restart: no
     build:
       context: ./infrastructure/docker/grafana
+    ports:
+      - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
-    ports:
-      - "3000:3000"
     depends_on:
-      - prometheus
-      - loki
+      prometheus:
+        condition: service_started
+      loki:
+        condition: service_started
+    restart: no
 
   zipkin:
     image: openzipkin/zipkin:3.5.1
@@ -47,8 +49,9 @@ services:
     container_name: config-server
     build:
       context: ./backend
-      dockerfile: ../infrastructure/docker/config-server/Dockerfile
-    restart: no
+      dockerfile: ./config-server/Dockerfile
+    ports:
+      - "8888:8888"
     environment:
       <<: *common-variables
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-jwt-ultra-secure-and-ultra-long-secret}
@@ -57,18 +60,22 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "8888:8888"
     depends_on:
-      - grafana
-      - zipkin
+      loki:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      zipkin:
+        condition: service_started
+    restart: no
 
   eureka-server:
     container_name: eureka-server
     build:
       context: ./backend
-      dockerfile: ../infrastructure/docker/eureka-server/Dockerfile
-    restart: no
+      dockerfile: ./eureka-server/Dockerfile
+    ports:
+      - "8761:8761"
     environment:
       <<: *common-variables
     healthcheck:
@@ -76,15 +83,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "8761:8761"
     depends_on:
+      loki:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      zipkin:
+        condition: service_started
       config-server:
         condition: service_healthy
+    restart: no
 
   db-quiz:
-    container_name: db-quiz
     image: postgres:17.5-alpine3.22
+    container_name: db-quiz
     ports:
       - "5432:5432"
     environment:
@@ -94,23 +106,21 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-root}
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8 --auth-host=scram-sha-256 --auth-local=scram-sha-256
-    volumes:
-      - db-quiz-data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 5
+    volumes:
+      - db-quiz-data:/var/lib/postgresql/data
     restart: no
 
   redis:
-    container_name: redis
     image: redis:8.0.2-alpine3.21
+    container_name: redis
     ports:
       - "6379:6379"
     command: [ "redis-server", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru" ]
-    volumes:
-      - redis-data:/data
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
@@ -122,8 +132,9 @@ services:
     container_name: quiz-service
     build:
       context: ./backend
-      dockerfile: ../infrastructure/docker/quiz-service/Dockerfile
-    restart: no
+      dockerfile: ./quiz-service/Dockerfile
+    ports:
+      - "8084:8084"
     environment:
       <<: *common-variables
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
@@ -140,19 +151,26 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "8084:8084"
     depends_on:
+      loki:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      zipkin:
+        condition: service_started
+      config-server:
+        condition: service_healthy
       eureka-server:
         condition: service_healthy
       db-quiz:
         condition: service_healthy
       redis:
         condition: service_healthy
+    restart: no
 
   db-auth:
-    container_name: db-auth
     image: postgres:17.5-alpine3.22
+    container_name: db-auth
     ports:
       - "5433:5432"
     environment:
@@ -162,17 +180,18 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-root}
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8 --auth-host=scram-sha-256 --auth-local=scram-sha-256
-    volumes:
-      - db-auth-data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 5
+    volumes:
+      - db-auth-data:/var/lib/postgresql/data
     restart: no
 
   kafka:
     image: bitnami/kafka:4.0.0
+    container_name: kafka
     ports:
       - "9092:9092"
     environment:
@@ -180,20 +199,24 @@ services:
       - KAFKA_CFG_PROCESS_ROLES=controller,broker
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
       - KAFKA_CFG_LISTENERS=INTERNAL://:29092,CLIENT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:29092,CLIENT://localhost:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:29092,CLIENT://host.docker.internal:9092
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,CLIENT:PLAINTEXT,CONTROLLER:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_CFG_LOG_RETENTION_HOURS=168
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+    restart: no
 
   auth-service:
     container_name: auth-service
     build:
       context: ./backend
-      dockerfile: ../infrastructure/docker/auth-service/Dockerfile
-    restart: no
+      dockerfile: ./auth-service/Dockerfile
+    ports:
+      - "8081:8081"
     environment:
       <<: *common-variables
-      SPRING_R2DBC_URL: r2dbc:postgresql://db-auth:5433/auth_db
+      SPRING_R2DBC_URL: r2dbc:postgresql://db-auth:5432/auth_db
       SPRING_R2DBC_USERNAME: ${POSTGRES_USER:-postgres}
       SPRING_R2DBC_PASSWORD: ${POSTGRES_PASSWORD:-root}
       SPRING_FLYWAY_URL: jdbc:postgresql://db-auth:5432/auth_db
@@ -205,19 +228,26 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "8081:8081"
     depends_on:
+      loki:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      zipkin:
+        condition: service_started
+      kafka:
+        condition: service_started
+      config-server:
+        condition: service_healthy
       eureka-server:
         condition: service_healthy
       db-auth:
         condition: service_healthy
-      kafka:
-        condition: service_started
+    restart: no
 
   db-user:
-    container_name: db-user
     image: postgres:17.5-alpine3.22
+    container_name: db-user
     ports:
       - "5434:5432"
     environment:
@@ -227,21 +257,57 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-root}
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8 --auth-host=scram-sha-256 --auth-local=scram-sha-256
-    volumes:
-      - db-user-data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
       retries: 5
+    volumes:
+      - db-user-data:/var/lib/postgresql/data
+    restart: no
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./backend
+      dockerfile: ./user-service/Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      <<: *common-variables
+      SPRING_R2DBC_URL: r2dbc:postgresql://db-user:5432/user_db
+      SPRING_R2DBC_USERNAME: ${POSTGRES_USER:-postgres}
+      SPRING_R2DBC_PASSWORD: ${POSTGRES_PASSWORD:-root}
+      SPRING_FLYWAY_URL: jdbc:postgresql://db-user:5432/user_db
+      SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
+      SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      loki:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      zipkin:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      db-user:
+        condition: service_healthy
     restart: no
 
   notification-service:
     container_name: notification-service
     build:
       context: ./backend
-      dockerfile: ../infrastructure/docker/notification-service/Dockerfile
-    restart: no
+      dockerfile: ./notification-service/Dockerfile
+    ports:
+      - "8083:8083"
     environment:
       <<: *common-variables
       SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: kafka:9092
@@ -253,76 +319,72 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "8083:8083"
     depends_on:
-      eureka-server:
-        condition: service_healthy
+      loki:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      zipkin:
+        condition: service_started
       kafka:
         condition: service_started
-
-  user-service:
-    container_name: user-service
-    build:
-      context: ./backend
-      dockerfile: ../infrastructure/docker/user-service/Dockerfile
-    restart: no
-    environment:
-      <<: *common-variables
-      SPRING_R2DBC_URL: r2dbc:postgresql://db-user:5434/user_db
-      SPRING_R2DBC_USERNAME: ${POSTGRES_USER:-postgres}
-      SPRING_R2DBC_PASSWORD: ${POSTGRES_PASSWORD:-root}
-      SPRING_FLYWAY_URL: jdbc:postgresql://db-user:5432/user_db
-      SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
-      SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    ports:
-      - "8082:8082"
-    depends_on:
+      config-server:
+        condition: service_healthy
       eureka-server:
         condition: service_healthy
-      db-user:
-        condition: service_healthy
+    restart: no
 
   api-gateway:
     container_name: api-gateway
     build:
       context: ./backend
-      dockerfile: ../infrastructure/docker/api-gateway/Dockerfile
-    restart: no
+      dockerfile: ./api-gateway/Dockerfile
+    ports:
+      - "8765:8765"
     environment:
       <<: *common-variables
+      SPRING_PROFILES_ACTIVE: dev
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "8765:8765"
     depends_on:
+      loki:
+        condition: service_started
+      prometheus:
+        condition: service_started
+      zipkin:
+        condition: service_started
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
       quiz-service:
         condition: service_healthy
+      user-service:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      notification-service:
+        condition: service_healthy
+    restart: no
 
   nginx:
     container_name: nginx
     build:
       context: ./frontend
       args:
-        VITE_API_URL: https://code-output-quiz.ru/
-    restart: no
+        VITE_API_URL: http://localhost:8765
     ports:
       - "80:80"
       - "443:443"
     depends_on:
       api-gateway:
         condition: service_healthy
+    restart: no
 
 volumes:
   db-quiz-data:
   db-auth-data:
   db-user-data:
-  redis-data:

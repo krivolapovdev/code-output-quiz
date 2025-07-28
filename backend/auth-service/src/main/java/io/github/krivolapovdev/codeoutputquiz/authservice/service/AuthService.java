@@ -119,6 +119,7 @@ public class AuthService {
   }
 
   public Mono<ResponseEntity<Void>> logout() {
+    log.info("Logging out user");
     ResponseCookie accessCookie = buildCookie("accessToken", "", "/", Duration.ZERO);
     ResponseCookie refreshCookie =
         buildCookie("refreshToken", "", "/api/v1/auth/refresh", Duration.ZERO);

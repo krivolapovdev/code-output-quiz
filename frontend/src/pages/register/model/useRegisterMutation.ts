@@ -6,7 +6,7 @@ import type { RegisterFormValues } from "./schema";
 export const useRegisterMutation = () => {
   return useMutation({
     mutationFn: (data: RegisterFormValues) => authService.register(data),
-    onSuccess: data => handleAuthSuccess(data.accessToken),
+    onSuccess: _ => handleAuthSuccess(),
     onError: error => handleAuthError(error)
   });
 };

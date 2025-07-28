@@ -1,11 +1,11 @@
+import type { User } from "@/shared/api";
 import { api } from "../base";
-import type { User } from "./types";
 
 const baseURL = "/api/v1/users";
 
 export const userService = {
-  getUser: async (): Promise<User> => {
-    const { data } = await api.get<User>(`${baseURL}/me`);
+  getCurrentUser: async (): Promise<User> => {
+    const { data } = await api.get(`${baseURL}/me`);
     return data;
   },
 

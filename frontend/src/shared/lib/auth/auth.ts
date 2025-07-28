@@ -1,27 +1,17 @@
-import type { User } from "@/shared/api/user";
-import { getJwtPayloadFromToken } from "../jwt";
+import { userService } from "@/shared/api";
 import { useUserStore } from "../store";
 
-export const handleAuthSuccess = (accessToken: string) => {
-  const { setUser } = useUserStore.getState();
-
-  localStorage.setItem("accessToken", accessToken);
-
-  const payload = getJwtPayloadFromToken(accessToken);
-  if (payload != null) {
-    const user: User = {
-      id: payload.userId,
-      email: payload.sub
-    };
-    setUser(user);
+export const handleAuthSuccess = async () => {
+  try {
+    const user = await userService.getCurrentUser();
+    useUserStore.getState().setUser(user);
+  } catch (e) {
+    console.error("Failed to fetch current user:", e);
+    useUserStore.getState().setUser(null);
   }
 };
 
 export const handleAuthError = (error: Error) => {
   console.error("Authentication failed:", error);
-
-  const { clearUser } = useUserStore.getState();
-
-  localStorage.removeItem("accessToken");
-  clearUser();
+  useUserStore.getState().setUser(null);
 };

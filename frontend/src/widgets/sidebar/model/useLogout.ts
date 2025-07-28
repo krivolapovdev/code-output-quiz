@@ -1,13 +1,19 @@
 import { useNavigate } from "react-router-dom";
+import { authService } from "@/shared/api";
 import { useUserStore } from "@/shared/lib/store";
 
 export const useLogout = () => {
   const navigate = useNavigate();
-  const { clearUser } = useUserStore();
+  const { setUser } = useUserStore();
 
-  return () => {
-    localStorage.removeItem("accessToken");
-    clearUser();
+  return async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error("Logout request failed", error);
+    }
+
+    setUser(null);
     navigate("/");
   };
 };

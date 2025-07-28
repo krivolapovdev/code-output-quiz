@@ -1,19 +1,18 @@
 import { api } from "../base";
-import type { AuthRequest, AuthResponse } from "./types.ts";
+import type { AuthRequest } from "./types.ts";
 
 const baseURL = "/api/v1/auth";
 
 export const authService = {
-  register: async (payload: AuthRequest): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>(
-      `${baseURL}/register`,
-      payload
-    );
-    return data;
+  register: async (payload: AuthRequest): Promise<void> => {
+    await api.post(`${baseURL}/register`, payload);
   },
 
-  login: async (payload: AuthRequest): Promise<AuthResponse> => {
-    const { data } = await api.post<AuthResponse>(`${baseURL}/login`, payload);
-    return data;
+  login: async (payload: AuthRequest): Promise<void> => {
+    await api.post(`${baseURL}/login`, payload);
+  },
+
+  logout: async (): Promise<void> => {
+    await api.post(`${baseURL}/logout`);
   }
 };

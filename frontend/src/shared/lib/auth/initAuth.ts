@@ -1,22 +1,14 @@
-import type { User } from "@/shared/api/user";
-import { getJwtPayloadFromToken } from "../jwt";
-import { useUserStore } from "../store";
+import { userService } from "@/shared/api";
+import { useUserStore } from "@/shared/lib/store";
 
-export const initAuth = () => {
-  const token = localStorage.getItem("accessToken");
+export const initAuth = async () => {
+  const { setUser } = useUserStore.getState();
 
-  if (!token) {
-    return;
-  }
-
-  const payload = getJwtPayloadFromToken(token);
-
-  if (payload) {
-    const user: User = {
-      id: payload.userId,
-      email: payload.sub
-    };
-
-    useUserStore.getState().setUser(user);
+  try {
+    const user = await userService.getCurrentUser();
+    setUser(user);
+  } catch (error) {
+    console.error("initAuth failed:", error);
+    setUser(null);
   }
 };

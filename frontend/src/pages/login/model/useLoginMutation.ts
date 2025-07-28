@@ -6,7 +6,7 @@ import type { LoginFormValues } from "./schema";
 export const useLoginMutation = () => {
   return useMutation({
     mutationFn: (payload: LoginFormValues) => authService.login(payload),
-    onSuccess: data => handleAuthSuccess(data.accessToken),
+    onSuccess: _ => handleAuthSuccess(),
     onError: error => handleAuthError(error)
   });
 };

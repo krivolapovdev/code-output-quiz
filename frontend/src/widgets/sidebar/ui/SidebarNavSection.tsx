@@ -4,7 +4,7 @@ import { SidebarNavItem } from "./SidebarNavItem";
 
 const navItems = [
   {
-    label: "Account",
+    label: "Login",
     icon: User,
     href: "/login",
     alt: "Account icon"

@@ -57,14 +57,15 @@ public class JwtTokenProvider {
 
     User principal = new User(claims.getSubject(), "", authorities);
 
-    var authentication = new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    var authenticationToken =
+        new UsernamePasswordAuthenticationToken(principal, token, authorities);
 
     String userIdStr = claims.get(USER_ID_KEY, String.class);
     UUID userId = UUID.fromString(userIdStr);
     AuthDetails authDetails = new AuthDetails(userId);
-    authentication.setDetails(authDetails);
+    authenticationToken.setDetails(authDetails);
 
-    return authentication;
+    return authenticationToken;
   }
 
   public String createAccessToken(Authentication auth, UUID userId) {
@@ -75,12 +76,13 @@ public class JwtTokenProvider {
     return createToken(auth, TokenType.REFRESH, userId);
   }
 
-  public void validateRefreshToken(@NotNull String token) {
+  public void validateTokenType(@NotNull String token, @NotNull TokenType expectedType) {
     Claims claims = parseTokenClaims(token);
+    String actual = (String) claims.get(TOKEN_TYPE_KEY);
 
-    String type = (String) claims.get(TOKEN_TYPE_KEY);
-    if (!"refresh".equalsIgnoreCase(type)) {
-      throw new JwtException("Provided token is not a refresh token");
+    if (!expectedType.name().equalsIgnoreCase(actual)) {
+      throw new JwtException(
+          "Invalid token type: expected " + expectedType + ", but was " + actual);
     }
   }
 

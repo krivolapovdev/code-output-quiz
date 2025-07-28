@@ -42,4 +42,9 @@ public class AuthController {
       @CookieValue("refreshToken") String refreshToken) {
     return authService.refreshToken(refreshToken);
   }
+
+  @PostMapping("/logout")
+  public Mono<ResponseEntity<Void>> logout() {
+    return authService.logout();
+  }
 }

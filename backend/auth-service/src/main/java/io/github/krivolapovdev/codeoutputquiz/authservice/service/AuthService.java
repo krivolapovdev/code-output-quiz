@@ -3,6 +3,7 @@ package io.github.krivolapovdev.codeoutputquiz.authservice.service;
 import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.AuthDetails;
 import io.github.krivolapovdev.codeoutputquiz.authservice.entity.User;
 import io.github.krivolapovdev.codeoutputquiz.authservice.enums.NotificationType;
+import io.github.krivolapovdev.codeoutputquiz.authservice.enums.TokenType;
 import io.github.krivolapovdev.codeoutputquiz.authservice.event.EmailNotificationEvent;
 import io.github.krivolapovdev.codeoutputquiz.authservice.exception.EmailAlreadyTakenException;
 import io.github.krivolapovdev.codeoutputquiz.authservice.producer.EmailNotificationProducer;
@@ -36,9 +37,8 @@ public class AuthService {
   private final PasswordEncoder passwordEncoder;
   private final EmailNotificationProducer emailNotificationProducer;
 
-  public Mono<ResponseEntity<AuthResponse>> register(AuthRequest request) {
+  public Mono<ResponseEntity<AuthResponse>> register(@NonNull AuthRequest request) {
     log.info("Attempting to register user: {}", request.email());
-
     return createAndSaveUser(request)
         .doOnSuccess(user -> log.info("User registered successfully: {}", user.getEmail()))
         .flatMap(user -> sendWelcomeEmail(user.getEmail()).thenReturn(user))
@@ -51,7 +51,7 @@ public class AuthService {
             e -> new EmailAlreadyTakenException("Email already exists"));
   }
 
-  public Mono<ResponseEntity<AuthResponse>> login(AuthRequest request) {
+  public Mono<ResponseEntity<AuthResponse>> login(@NonNull AuthRequest request) {
     log.info("Logging in user: {}", request.email());
     return authenticateAndBuildResponse(request.email(), request.password(), HttpStatus.OK);
   }
@@ -59,7 +59,7 @@ public class AuthService {
   public Mono<ResponseEntity<AuthResponse>> refreshToken(String oldTokenCookie) {
     log.info("Refreshing token: {}", oldTokenCookie);
     return Mono.just(oldTokenCookie)
-        .doOnNext(jwtTokenProvider::validateRefreshToken)
+        .doOnNext(token -> jwtTokenProvider.validateTokenType(token, TokenType.REFRESH))
         .map(jwtTokenProvider::getAuthentication)
         .map(
             authentication -> {
@@ -95,19 +95,14 @@ public class AuthService {
 
   private ResponseEntity<AuthResponse> buildAuthResponseEntity(
       String accessToken, String refreshToken, HttpStatus status) {
-
-    ResponseCookie cookie =
-        ResponseCookie.from("refreshToken", refreshToken)
-            .httpOnly(true)
-            .secure(true)
-            .path("/api/v1/auth/refresh")
-            .maxAge(Duration.ofDays(7))
-            .sameSite("Strict")
-            .build();
-
+    ResponseCookie accessCookie =
+        buildCookie("accessToken", accessToken, "/", Duration.ofMinutes(15));
+    ResponseCookie refreshCookie =
+        buildCookie("refreshToken", refreshToken, "/api/v1/auth/refresh", Duration.ofDays(7));
     return ResponseEntity.status(status)
-        .header(HttpHeaders.SET_COOKIE, cookie.toString())
-        .body(new AuthResponse(accessToken));
+        .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+        .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+        .body(new AuthResponse());
   }
 
   private Mono<Void> sendWelcomeEmail(@NonNull String email) {
@@ -121,5 +116,26 @@ public class AuthService {
                     "Failed recipientEmail send welcome email recipientEmail {}", email, error))
         .then()
         .onErrorResume(e -> Mono.empty());
+  }
+
+  public Mono<ResponseEntity<Void>> logout() {
+    ResponseCookie accessCookie = buildCookie("accessToken", "", "/", Duration.ZERO);
+    ResponseCookie refreshCookie =
+        buildCookie("refreshToken", "", "/api/v1/auth/refresh", Duration.ZERO);
+    return Mono.just(
+        ResponseEntity.noContent()
+            .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+            .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+            .build());
+  }
+
+  private ResponseCookie buildCookie(String name, String value, String path, Duration maxAge) {
+    return ResponseCookie.from(name, value)
+        .httpOnly(true)
+        .secure(true)
+        .sameSite("Strict")
+        .path(path)
+        .maxAge(maxAge)
+        .build();
   }
 }

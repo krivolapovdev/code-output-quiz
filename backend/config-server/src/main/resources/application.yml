@@ -8,8 +8,5 @@ spring:
     group:
       dev:
         - native
-  devtools:
-    restart:
-      enabled: false
 loki:
   url: http://localhost:3100/loki/api/v1/push

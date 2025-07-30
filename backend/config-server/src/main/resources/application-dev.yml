@@ -16,4 +16,3 @@ management:
     sampling:
       probability: 1
     enabled: true
-

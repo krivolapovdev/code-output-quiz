@@ -1,4 +1,4 @@
-package io.github.nellshark.codeoutputquiz.notificationservice.config;
+package io.github.krivolapovdev.codeoutputquiz.notificationservice.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

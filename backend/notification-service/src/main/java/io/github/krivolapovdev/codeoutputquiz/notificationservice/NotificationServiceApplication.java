@@ -1,4 +1,4 @@
-package io.github.nellshark.codeoutputquiz.notificationservice;
+package io.github.krivolapovdev.codeoutputquiz.notificationservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

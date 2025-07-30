@@ -1,4 +1,4 @@
-package io.github.nellshark.codeoutputquiz.notificationservice.service;
+package io.github.krivolapovdev.codeoutputquiz.notificationservice.service;
 
 import reactor.core.publisher.Mono;
 

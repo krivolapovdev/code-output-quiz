@@ -1,10 +1,10 @@
-package io.github.nellshark.codeoutputquiz.notificationservice.consumer;
+package io.github.krivolapovdev.codeoutputquiz.notificationservice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.nellshark.codeoutputquiz.notificationservice.enums.NotificationType;
-import io.github.nellshark.codeoutputquiz.notificationservice.event.EmailNotificationEvent;
-import io.github.nellshark.codeoutputquiz.notificationservice.handler.EmailNotificationHandler;
-import io.github.nellshark.codeoutputquiz.notificationservice.service.EmailService;
+import io.github.krivolapovdev.codeoutputquiz.notificationservice.enums.NotificationType;
+import io.github.krivolapovdev.codeoutputquiz.notificationservice.event.EmailNotificationEvent;
+import io.github.krivolapovdev.codeoutputquiz.notificationservice.handler.EmailNotificationHandler;
+import io.github.krivolapovdev.codeoutputquiz.notificationservice.service.EmailService;
 import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

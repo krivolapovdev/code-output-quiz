@@ -1,4 +1,4 @@
-package io.github.nellshark.codeoutputquiz.notificationservice;
+package io.github.krivolapovdev.codeoutputquiz.notificationservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

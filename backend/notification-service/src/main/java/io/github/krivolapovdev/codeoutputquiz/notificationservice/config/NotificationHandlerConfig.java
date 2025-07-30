@@ -1,7 +1,7 @@
-package io.github.nellshark.codeoutputquiz.notificationservice.config;
+package io.github.krivolapovdev.codeoutputquiz.notificationservice.config;
 
-import io.github.nellshark.codeoutputquiz.notificationservice.enums.NotificationType;
-import io.github.nellshark.codeoutputquiz.notificationservice.handler.EmailNotificationHandler;
+import io.github.krivolapovdev.codeoutputquiz.notificationservice.enums.NotificationType;
+import io.github.krivolapovdev.codeoutputquiz.notificationservice.handler.EmailNotificationHandler;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

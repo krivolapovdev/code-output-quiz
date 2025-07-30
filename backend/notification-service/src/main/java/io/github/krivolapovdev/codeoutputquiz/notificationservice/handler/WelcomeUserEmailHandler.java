@@ -1,7 +1,7 @@
-package io.github.nellshark.codeoutputquiz.notificationservice.handler;
+package io.github.krivolapovdev.codeoutputquiz.notificationservice.handler;
 
-import io.github.nellshark.codeoutputquiz.notificationservice.enums.NotificationType;
-import io.github.nellshark.codeoutputquiz.notificationservice.service.EmailService;
+import io.github.krivolapovdev.codeoutputquiz.notificationservice.enums.NotificationType;
+import io.github.krivolapovdev.codeoutputquiz.notificationservice.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;

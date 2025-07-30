@@ -1,4 +1,4 @@
-package io.github.nellshark.codeoutputquiz.notificationservice.config;
+package io.github.krivolapovdev.codeoutputquiz.notificationservice.config;
 
 import java.util.Collections;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;

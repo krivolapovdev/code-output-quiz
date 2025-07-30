@@ -1,11 +1,11 @@
-package io.github.nellshark.codeoutputquiz.notificationservice.service;
+package io.github.krivolapovdev.codeoutputquiz.notificationservice.service;
 
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.transactional.SendContact;
 import com.mailjet.client.transactional.SendEmailsRequest;
 import com.mailjet.client.transactional.TransactionalEmail;
 import com.mailjet.client.transactional.response.SendEmailsResponse;
-import io.github.nellshark.codeoutputquiz.notificationservice.config.MailjetEmailProperties;
+import io.github.krivolapovdev.codeoutputquiz.notificationservice.config.MailjetEmailProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

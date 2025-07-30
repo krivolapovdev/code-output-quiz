@@ -32,7 +32,7 @@ export const CodeBlock = ({ code, language }: CodeBlockProps) => {
     <pre
       tabIndex={-1}
       className={`line-numbers language-${language} h-full rounded-lg`}
-      style={{ marginTop: 0 }}
+      style={{ marginTop: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" }}
     >
       <code
         ref={codeRef}

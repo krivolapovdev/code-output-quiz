@@ -3,6 +3,8 @@ x-common-variables: &common-variables
   EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
   LOKI_URL: http://loki:3100/loki/api/v1/push
   MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+  SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: kafka:9092
+  SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: kafka:9092
 
 services:
   prometheus:
@@ -222,7 +224,6 @@ services:
       SPRING_FLYWAY_URL: jdbc:postgresql://db-auth:5432/auth_db
       SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
       SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
-      SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: kafka:9092
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
       interval: 10s
@@ -310,7 +311,6 @@ services:
       - "8083:8083"
     environment:
       <<: *common-variables
-      SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: kafka:9092
       MAILJET_PUBLIC_KEY: ${MAILJET_PUBLIC_KEY}
       MAILJET_PRIVATE_KEY: ${MAILJET_PRIVATE_KEY}
       MAILJET_SENDER_EMAIL: ${MAILJET_SENDER_EMAIL}

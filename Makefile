@@ -1,8 +1,10 @@
 up:
-	docker compose -f docker-compose.yml up --build
+	docker buildx bake -f docker-bake.hcl --load
+	docker compose -f docker-compose.yml up
 
 up-dev:
-	docker compose -f docker-compose-dev.yml up --build
+	docker buildx bake -f docker-bake.hcl --load
+	docker compose -f docker-compose-dev.yml up
 
 down:
 	docker compose -f docker-compose.yml down

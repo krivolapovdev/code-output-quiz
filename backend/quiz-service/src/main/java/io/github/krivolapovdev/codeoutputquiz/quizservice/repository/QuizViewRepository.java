@@ -15,19 +15,19 @@ import reactor.core.publisher.Mono;
 public interface QuizViewRepository extends ReactiveCrudRepository<QuizView, UUID> {
   @Query(
       """
-      SELECT
-        *
-      FROM
-        quizzes_with_choices
-      WHERE
-          programming_language = :programmingLanguage
-      AND
-          difficulty_level = :difficultyLevel
-      ORDER BY
-        random()
-      LIMIT
-        1
-      """)
+          SELECT
+            *
+          FROM
+            quizzes_with_choices
+          WHERE
+              programming_language = :programmingLanguage
+          AND
+              difficulty_level = :difficultyLevel
+          ORDER BY
+            random()
+          LIMIT
+            1
+          """)
   Mono<QuizView> findRandomQuizView(
       @Param("programmingLanguage") ProgrammingLanguage programmingLanguage,
       @Param("difficultyLevel") DifficultyLevel difficultyLevel);
@@ -35,16 +35,16 @@ public interface QuizViewRepository extends ReactiveCrudRepository<QuizView, UUI
   @Modifying
   @Query(
       """
-      SELECT
-          insert_quiz_with_choices(
-              :code,
-              :lang,
-              :level,
-              :correctAnswer::answer_choice,
-              :explanation,
-              :answerChoicesJson::jsonb
-          )
-      """)
+          SELECT
+              insert_quiz_with_choices(
+                  :code,
+                  :lang,
+                  :level,
+                  :correctAnswer::answer_choice,
+                  :explanation,
+                  :answerChoicesJson::jsonb
+              )
+          """)
   Mono<Void> insertQuizWithChoices(
       @Param("code") String code,
       @Param("lang") String lang,
@@ -52,4 +52,32 @@ public interface QuizViewRepository extends ReactiveCrudRepository<QuizView, UUI
       @Param("correctAnswer") String correctAnswer,
       @Param("explanation") String explanation,
       @Param("answerChoicesJson") String answerChoicesJson);
+
+  @Query(
+      """
+          SELECT
+              *
+          FROM
+              quizzes_with_choices AS qwc
+          WHERE
+              qwc.programming_language = :lang
+          AND
+              qwc.difficulty_level = :level
+          AND NOT EXISTS (
+              SELECT
+                  1
+              FROM
+                  solved_quizzes AS sq
+              WHERE
+                  sq.quiz_id = qwc.id
+              AND
+                  sq.user_id = :userId
+          )
+          LIMIT
+              1
+          """)
+  Mono<QuizView> findUserUnsolvedQuiz(
+      @Param("programmingLanguage") ProgrammingLanguage programmingLanguage,
+      @Param("difficultyLevel") DifficultyLevel difficultyLevel,
+      @Param("userId") UUID userId);
 }

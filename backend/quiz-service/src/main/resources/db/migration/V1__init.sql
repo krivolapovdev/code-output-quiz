@@ -32,13 +32,13 @@ BEGIN
 END;
 $$;
 
-CREATE TABLE IF NOT EXISTS programming_languages
+CREATE TABLE programming_languages
 (
     id   BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT UNIQUE NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS difficulty_levels
+CREATE TABLE difficulty_levels
 (
     id    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     level TEXT UNIQUE NOT NULL
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS difficulty_levels
 
 CREATE TYPE answer_choice AS ENUM ('A', 'B', 'C', 'D');
 
-CREATE TABLE IF NOT EXISTS quizzes
+CREATE TABLE quizzes
 (
     id                      UUID                   DEFAULT uuidv7() PRIMARY KEY,
     code                    TEXT          NOT NULL UNIQUE,
@@ -54,12 +54,11 @@ CREATE TABLE IF NOT EXISTS quizzes
     explanation             TEXT          NOT NULL,
     programming_language_id BIGINT        NOT NULL REFERENCES programming_languages (id),
     difficulty_level_id     BIGINT        NOT NULL REFERENCES difficulty_levels (id),
-    rating                  BIGINT        NOT NULL DEFAULT 0,
     created_at              TIMESTAMPTZ            DEFAULT now(),
     updated_at              TIMESTAMPTZ            DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS quiz_answer_choices
+CREATE TABLE quiz_answer_choices
 (
     quiz_id UUID          NOT NULL REFERENCES quizzes (id) ON DELETE CASCADE,
     choice  answer_choice NOT NULL,

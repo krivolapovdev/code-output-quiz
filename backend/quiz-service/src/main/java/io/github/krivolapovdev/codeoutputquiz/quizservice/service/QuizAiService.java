@@ -36,7 +36,6 @@ public class QuizAiService {
     Flux.interval(Duration.ofMinutes(1), Duration.ofMinutes(10))
         .onBackpressureDrop()
         .concatMap(tick -> generateNewQuizzes())
-        .subscribeOn(Schedulers.boundedElastic())
         .subscribe();
   }
 
@@ -48,7 +47,7 @@ public class QuizAiService {
                         Stream.of(DifficultyLevel.values())
                             .map(level -> new QuizRequest(language, level))))
         .doOnNext(request -> log.info("Generating quiz for: {}", request))
-        .flatMap(this::generateQuiz, 1)
+        .concatMap(this::generateQuiz)
         .flatMap(this::saveQuizWithChoices)
         .thenMany(Flux.empty());
   }

@@ -1,5 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.service;
 
+import io.github.krivolapovdev.codeoutputquiz.userservice.event.QuizSolvedEvent;
+import io.github.krivolapovdev.codeoutputquiz.userservice.producer.QuizSolvedProducer;
 import io.github.krivolapovdev.codeoutputquiz.userservice.repository.UserSolvedQuizRepository;
 import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserSolvedQuizRequest;
 import io.github.krivolapovdev.codeoutputquiz.userservice.security.jwt.JwtTokenProvider;
@@ -15,6 +17,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserSolvedQuizService {
   private final UserSolvedQuizRepository userSolvedQuizRepository;
+  private final QuizSolvedProducer quizSolvedProducer;
   private final JwtTokenProvider jwtTokenProvider;
 
   public Flux<String> getUserSolvedQuizzes() {
@@ -35,7 +38,11 @@ public class UserSolvedQuizService {
                 log.info("Adding solved quiz for userId: {}, quizId: {}", userId, request.quizId()))
         .flatMap(
             userId ->
-                userSolvedQuizRepository.addUserSolvedQuiz(
-                    userId, request.quizId(), request.selectedAnswer()));
+                userSolvedQuizRepository
+                    .addUserSolvedQuiz(userId, request.quizId(), request.selectedAnswer())
+                    .then(
+                        quizSolvedProducer.sendQuizSolvedEvent(
+                            new QuizSolvedEvent(userId, request.quizId()))))
+        .then();
   }
 }

@@ -14,6 +14,8 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:${springdocVersion}")
     implementation("io.jsonwebtoken:jjwt-api:${jjwtVersion}")
     implementation("org.flywaydb:flyway-core:${flywayVersion}")
+    implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
+    implementation("org.springframework.cloud:spring-cloud-stream-binder-kafka-reactive")
 
     runtimeOnly("org.postgresql:postgresql:${postgresVersion}")
     runtimeOnly("org.postgresql:r2dbc-postgresql:${postgresR2dbcVersion}")

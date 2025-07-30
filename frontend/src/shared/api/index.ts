@@ -1,5 +1,6 @@
 export { authService } from "./auth";
 export {
+  type AnswerChoiceData,
   type ProgrammingLanguageResponse,
   type QuizResponse,
   quizMetaService,

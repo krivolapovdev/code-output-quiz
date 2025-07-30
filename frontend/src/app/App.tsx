@@ -2,9 +2,9 @@ import "@/app/styles/index.css";
 
 import { ErrorBoundaryProvider, ReactQueryProvider } from "@/app/providers";
 import { AppRouter } from "@/app/routes";
-import { initAuth } from "@/shared/lib/auth/initAuth";
+import { initAuth } from "@/shared/lib/auth";
 
-initAuth();
+void initAuth();
 
 export const App = () => {
   return (

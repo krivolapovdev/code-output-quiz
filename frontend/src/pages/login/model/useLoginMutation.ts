@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { authService } from "@/shared/api";
-import { handleAuthError, handleAuthSuccess } from "@/shared/lib/auth/auth";
+import { handleAuthError, handleAuthSuccess } from "@/shared/lib/auth";
 import type { LoginFormValues } from "./schema";
 
 export const useLoginMutation = () => {

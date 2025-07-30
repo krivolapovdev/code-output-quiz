@@ -1,8 +1,8 @@
-import type { AnswerChoiceData } from "@/shared/api/quiz";
+import type { AnswerChoiceData } from "@/shared/api";
 import { startConfettiFireworks } from "@/shared/lib/confetti";
 import { useQuizStore } from "@/shared/lib/store";
-import { useReportAnswer } from "../model/useReportAnswer";
-import { AnswerChoices } from "./AnswerChoices";
+import { useReportAnswer } from "../model";
+import { AnswerChoices } from "./AnswerChoices.tsx";
 
 type Props = {
   answerChoices: AnswerChoiceData[];

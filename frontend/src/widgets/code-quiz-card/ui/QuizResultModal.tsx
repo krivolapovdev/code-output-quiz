@@ -1,5 +1,5 @@
 import { Modal } from "antd";
-import type { AnswerChoiceData } from "@/shared/api/quiz";
+import type { AnswerChoiceData } from "@/shared/api";
 import { QuizResultModalButtons } from "./QuizResultModalButtons.tsx";
 
 type Props = {

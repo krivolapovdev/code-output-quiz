@@ -1,0 +1,1 @@
+export { useNextQuiz } from "./model";

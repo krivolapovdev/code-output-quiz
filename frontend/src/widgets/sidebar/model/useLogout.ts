@@ -1,19 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { useNextQuiz } from "@/features/fetch-next-quiz";
 import { authService } from "@/shared/api";
 import { useUserStore } from "@/shared/lib/store";
 
 export const useLogout = () => {
-  const navigate = useNavigate();
-  const { setUser } = useUserStore();
+  const { refetch } = useNextQuiz();
 
   return async () => {
-    try {
-      await authService.logout();
-    } catch (error) {
-      console.error("Logout request failed", error);
-    }
-
-    setUser(null);
-    navigate("/");
+    await authService.logout();
+    useUserStore.getState().setUser(null);
+    await refetch();
   };
 };

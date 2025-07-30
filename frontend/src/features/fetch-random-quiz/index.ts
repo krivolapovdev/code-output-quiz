@@ -1,1 +1,0 @@
-export { useRandomQuiz } from "./model";

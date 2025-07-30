@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { useRandomQuiz } from "@/features/fetch-random-quiz";
-import { AnswerChoicesWithEffect } from "@/features/handle-answer-selection";
+import { useNextQuiz } from "@/features/fetch-next-quiz";
 import { useUserStore } from "@/shared/lib/store";
 import { CodeBlock } from "@/shared/ui/code-block";
 import { prismLanguageResolver } from "../lib";
-import { QuizResultModal } from "./QuizResultModal.tsx";
+import { AnswerChoicesWithEffect } from "./AnswerChoicesWithEffect";
+import { QuizResultModal } from "./QuizResultModal";
 import { SelectDifficultyLevel } from "./SelectDifficultyLevel";
 import { SelectProgrammingLanguage } from "./SelectProgrammingLanguage";
 
 export const CodeQuizCard = () => {
-  const { quiz, loading, error, refetch } = useRandomQuiz();
+  const { quiz, loading, error, refetch } = useNextQuiz();
   const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);

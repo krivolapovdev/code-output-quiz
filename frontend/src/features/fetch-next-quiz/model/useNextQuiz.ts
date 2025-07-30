@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { quizService } from "@/shared/api";
-import { useQuizStore } from "@/shared/lib/store";
+import { useQuizStore, useUserStore } from "@/shared/lib/store";
 
-export const useRandomQuiz = () => {
+export const useNextQuiz = () => {
   const { difficultyLevel, programmingLanguage, quiz, setQuiz } =
     useQuizStore();
 
@@ -13,10 +13,12 @@ export const useRandomQuiz = () => {
     setLoading(true);
     setError(null);
     try {
-      const result = await quizService.getRandomQuiz(
-        programmingLanguage,
-        difficultyLevel
-      );
+      const result = useUserStore.getState().user
+        ? await quizService.getUserUnsolvedQuiz(
+            programmingLanguage,
+            difficultyLevel
+          )
+        : await quizService.getRandomQuiz(programmingLanguage, difficultyLevel);
       setQuiz(result);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Unknown error");

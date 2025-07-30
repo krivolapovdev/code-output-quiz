@@ -8,7 +8,21 @@ export const quizService = {
     programmingLanguage: string,
     difficultyLevel: string
   ): Promise<QuizResponse> => {
-    const { data } = await api.get<QuizResponse>(`${baseURL}`, {
+    const { data } = await api.get<QuizResponse>(`${baseURL}/random`, {
+      params: {
+        programmingLanguage,
+        difficultyLevel
+      }
+    });
+
+    return data;
+  },
+
+  getUserUnsolvedQuiz: async (
+    programmingLanguage: string,
+    difficultyLevel: string
+  ): Promise<QuizResponse> => {
+    const { data } = await api.get<QuizResponse>(`${baseURL}/unsolved`, {
       params: {
         programmingLanguage,
         difficultyLevel

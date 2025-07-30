@@ -1,4 +1,4 @@
-import type { AnswerChoiceData } from "@/shared/api/quiz";
+import type { AnswerChoiceData } from "@/shared/api";
 
 type Props = {
   answerChoiceData: AnswerChoiceData[];

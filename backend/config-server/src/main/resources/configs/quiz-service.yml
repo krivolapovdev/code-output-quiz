@@ -1,8 +1,5 @@
 server:
   port: 8084
-springdoc:
-  swagger-ui:
-    path: /swagger
 spring:
   ai:
     openai:
@@ -24,3 +21,8 @@ spring:
     redis:
       host: localhost
       port: 6379
+  kafka:
+    consumer:
+      group-id: quiz-service
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration

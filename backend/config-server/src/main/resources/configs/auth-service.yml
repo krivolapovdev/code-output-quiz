@@ -1,8 +1,5 @@
 server:
   port: 8081
-springdoc:
-  swagger-ui:
-    path: /swagger
 spring:
   r2dbc:
     url: r2dbc:postgresql://localhost:5433/auth_db
@@ -13,8 +10,4 @@ spring:
     locations: classpath:db/migration
     user: postgres
     password: root
-  kafka:
-    producer:
-      bootstrap-servers: localhost:9092
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+

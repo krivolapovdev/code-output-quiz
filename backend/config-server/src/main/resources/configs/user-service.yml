@@ -12,6 +12,3 @@ spring:
     password: root
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration
-springdoc:
-  swagger-ui:
-    path: /swagger

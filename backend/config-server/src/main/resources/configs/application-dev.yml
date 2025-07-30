@@ -13,3 +13,6 @@ management:
     sampling:
       probability: 1
     enabled: true
+springdoc:
+  swagger-ui:
+    path: /swagger

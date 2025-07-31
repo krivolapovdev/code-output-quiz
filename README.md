@@ -2,7 +2,7 @@
    <img src="./.github/logo.svg" alt="logo" width="35%">
    <h1>Code Output Quiz</h1>
 
-   <p>
+   <div>
       <a href="https://github.com/krivolapovdev/code-output-quiz/blob/master/LICENSE">
          <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License">
       </a>
@@ -21,7 +21,7 @@
       <a href="https://github.com/krivolapovdev/code-output-quiz/graphs/commit-activity">
          <img src="https://github.com/krivolapovdev/code-output-quiz/actions/workflows/main.yml/badge.svg" alt="CI/CD">
       </a>
-   </p>
+   </div>
 
   <p>Made with ❤️</p>
 </div>
@@ -39,8 +39,6 @@
 - [📬 Contact](#-contact)
 - [⚖️ License](#️-license)
 
----
-
 ## 📑 Introduction
 
 **Code Output Quiz** is an open-source platform where users test their programming knowledge by
@@ -51,8 +49,6 @@ challenge how well you understand real-world behavior of code.
 
 Choose your programming language, set your difficulty level, and start solving!
 
----
-
 ## 🌐 Visit the Site
 
 <div align="center">
@@ -60,26 +56,23 @@ Choose your programming language, set your difficulty level, and start solving!
         <img src="./.github/site.gif" alt="Website Preview" width="80%" style="border-radius: 6px;">
     </a>
     <br />
-    <a href="https://code-output-quiz.ru/" style="font-size: 1.1rem; text-decoration: none;">
+    <a href="https://code-output-quiz.ru/" target="_blank" rel="noopener noreferrer">
         ➡️ Visit Live Site
     </a>
 </div>
 
----
 
 ## 🧠 Features
 
 - 🧬 AI-powered quiz generation.
 - 🌐 Language & difficulty filters.
 - 🔒 Secure authentication using JWT.
-- 📈 Real-time observability (Prometheus, Grafana, Zipkin).
+- 📈 Real-time observability (Prometheus, Grafana, Loki, Zipkin).
 - 📦 Microservice architecture.
 - 🚪 API Gateway for unified routing and access control.
 - 📨 Kafka-powered event-driven communication.
 - 🖥️ Responsive UI built with React & Tailwind CSS.
 - ⚙️ DevOps-ready setup with Docker & GitHub Actions.
-
----
 
 ## 📦 Quickstart
 
@@ -95,22 +88,20 @@ Prerequisites:
    git clone https://github.com/krivolapovdev/code-output-quiz
    cd code-output-quiz
    ```
-2. Configure environment **variables**:
+2. Configure **environment variables**:
    ```bash
    cp .env.example .env
    nano .env
    ```
-3. Build and **start** all services using Docker:
+3. **Build and start** all services using Docker:
    ```bash
    docker buildx bake -f docker-bake.hcl --load
    docker compose -f docker-compose.yml up
    ```
-4. Open http://localhost in your browser.
+4. Open **http://localhost** in your browser.
 
 > [!NOTE]
 > The project is in active development. Expect frequent changes.
-
----
 
 ## 🛠 Tech Stack
 
@@ -121,8 +112,6 @@ Prerequisites:
 | **Observability** | Prometheus, Grafana, Loki, Zipkin                                                             |
 | **Gateway**       | Spring Cloud Gateway, NGINX                                                                   |
 | **DevOps**        | Docker, GitHub Actions                                                                        |
-
----
 
 ## 🧑‍💻 Contributing
 
@@ -144,8 +133,6 @@ You can contribute by:
 - 📝 Enhancing documentation or developer setup
 - 📈 Improving observability or CI/CD workflows
 
----
-
 ## 💬 Support
 
 Encountering a bug? Have a question? Want to suggest a feature? We're here to help!
@@ -160,15 +147,11 @@ You can also check the
 existing [issues list](https://github.com/krivolapovdev/code-output-quiz/issues) to see if your
 question has already been answered.
 
----
-
 ## 💖 Like the Project?
 
 If you find this project useful or interesting, please consider starring ✨ it on GitHub!
 
 It helps others discover the project and motivates continued development.
-
----
 
 ## 📬 Contact
 
@@ -177,8 +160,6 @@ It helps others discover the project and motivates continued development.
 | 📧 Email         | [KrivolapovVladislav1998@gmail.com](mailto:KrivolapovVladislav1998@gmail.com) |
 | 💬 Telegram      | [@krivolapovdev](https://t.me/krivolapovdev)                                  |
 | :octocat: GitHub | [@krivolapovdev](https://github.com/krivolapovdev)                            |
-
----
 
 ## ⚖️ License
 

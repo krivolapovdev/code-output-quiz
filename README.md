@@ -32,10 +32,10 @@
 - [🌐 Visit the Site](#-visit-the-site)
 - [🧠 Features](#-features)
 - [🚀 Quickstart](#-quickstart)
-- [🛠 Tech Stack](#-tech-stack)
+- [🛠 Tech Stack](#-techstack)
 - [🧑‍💻 Contributing](#-contributing)
 - [💬 Support](#-support)
-- [💖 Like the Project?](#-like-the-project)
+- [💖 Like](#-like)
 - [📬 Contact](#-contact)
 - [⚖️ License](#️-license)
 
@@ -103,7 +103,7 @@ Prerequisites:
 > [!NOTE]
 > The project is in active development. Expect frequent changes.
 
-## 🛠 Tech Stack
+## 🛠 TechStack
 
 | 🧩 Area           | 🧰 Technologies                                                                               |
 |-------------------|-----------------------------------------------------------------------------------------------|
@@ -147,7 +147,7 @@ You can also check the
 existing [issues list](https://github.com/krivolapovdev/code-output-quiz/issues) to see if your
 question has already been answered.
 
-## 💖 Like the Project?
+## 💖 Like
 
 If you find this project useful or interesting, please consider starring ✨ it on GitHub!
 

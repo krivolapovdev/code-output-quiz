@@ -29,10 +29,10 @@
 ## 📚 Table of Contents
 
 - [📑 Introduction](#-introduction)
-- [🌐 Visit the Site](#-visit-the-site)
+- [🌐 Site](#-site)
 - [🧠 Features](#-features)
 - [🚀 Quickstart](#-quickstart)
-- [🛠 Tech Stack](#-techstack)
+- [🛠 TechStack](#-techstack)
 - [🧑‍💻 Contributing](#-contributing)
 - [💬 Support](#-support)
 - [💖 Like](#-like)
@@ -49,7 +49,7 @@ challenge how well you understand real-world behavior of code.
 
 Choose your programming language, set your difficulty level, and start solving!
 
-## 🌐 Visit the Site
+## 🌐 Site
 
 <div align="center">
     <a href="https://code-output-quiz.ru/">
@@ -60,7 +60,6 @@ Choose your programming language, set your difficulty level, and start solving!
         ➡️ Visit Live Site
     </a>
 </div>
-
 
 ## 🧠 Features
 
@@ -83,6 +82,9 @@ Prerequisites:
 - [Docker](https://www.docker.com/)
 - [Git](https://git-scm.com/)
 
+> [!NOTE]
+> The project is in active development. Expect frequent changes.
+
 1. **Clone** this repository:
    ```bash
    git clone https://github.com/krivolapovdev/code-output-quiz
@@ -99,9 +101,6 @@ Prerequisites:
    docker compose -f docker-compose.yml up
    ```
 4. Open **http://localhost** in your browser.
-
-> [!NOTE]
-> The project is in active development. Expect frequent changes.
 
 ## 🛠 TechStack
 

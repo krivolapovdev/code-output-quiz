@@ -2,28 +2,14 @@
    <img src="./.github/logo.svg" alt="logo" width="35%">
    <h1>Code Output Quiz</h1>
 
-   <div>
-      <a href="https://github.com/krivolapovdev/code-output-quiz/blob/master/LICENSE">
-         <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="MIT License">
-      </a>
-      <a href="https://github.com/krivolapovdev/code-output-quiz">
-         <img src="https://img.shields.io/github/repo-size/krivolapovdev/code-output-quiz.svg" alt="Repository Size">
-      </a>
-      <a href="https://github.com/krivolapovdev/code-output-quiz/pulls">
-         <img src="https://img.shields.io/github/issues-pr-raw/krivolapovdev/code-output-quiz.svg" alt="Pull Requests">
-      </a>
-      <a href="https://github.com/krivolapovdev/code-output-quiz/issues">
-         <img src="https://img.shields.io/github/issues-raw/krivolapovdev/code-output-quiz.svg" alt="Open Issues">
-      </a>
-      <a href="https://github.com/krivolapovdev/code-output-quiz/graphs/commit-activity">
-         <img src="https://img.shields.io/github/last-commit/krivolapovdev/code-output-quiz.svg" alt="Last Commit">
-      </a>
-      <a href="https://github.com/krivolapovdev/code-output-quiz/graphs/commit-activity">
-         <img src="https://github.com/krivolapovdev/code-output-quiz/actions/workflows/main.yml/badge.svg" alt="CI/CD">
-      </a>
-   </div>
+   [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/krivolapovdev/code-output-quiz/blob/master/LICENSE)
+   [![Repo Size](https://img.shields.io/github/repo-size/krivolapovdev/code-output-quiz.svg)](https://github.com/krivolapovdev/code-output-quiz)
+   [![Pull Requests](https://img.shields.io/github/issues-pr-raw/krivolapovdev/code-output-quiz.svg)](https://github.com/krivolapovdev/code-output-quiz/pulls)
+   [![Open Issues](https://img.shields.io/github/issues-raw/krivolapovdev/code-output-quiz.svg)](https://github.com/krivolapovdev/code-output-quiz/issues)
+   [![Last Commit](https://img.shields.io/github/last-commit/krivolapovdev/code-output-quiz.svg)](https://github.com/krivolapovdev/code-output-quiz/graphs/commit-activity)
+   [![CI/CD](https://github.com/krivolapovdev/code-output-quiz/actions/workflows/main.yml/badge.svg)](https://github.com/krivolapovdev/code-output-quiz/actions)
 
-  <p>Made with ❤️</p>
+   <p>Made with ❤️</p>
 </div>
 
 ## 📚 Table of Contents

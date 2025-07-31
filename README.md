@@ -84,7 +84,7 @@ Prerequisites:
 3. **Build and start** all services using Docker:
    ```bash
    docker buildx bake -f docker-bake.hcl --load
-   docker compose -f docker-compose.yml up
+   docker compose -f docker-compose-dev.yml up
    ```
 4. Open **http://localhost** in your browser.
 

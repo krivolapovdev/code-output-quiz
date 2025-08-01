@@ -1,0 +1,28 @@
+name: Certbot SSL Renewal
+
+on:
+  schedule:
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+
+jobs:
+  renew-certbot:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+
+    steps:
+      - name: SSH into Server & Renew SSL
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd ~
+
+            docker run --rm \
+              -v certbot-ssl:/etc/letsencrypt \
+              -v certbot-www:/var/www/certbot \
+              certbot/certbot renew --webroot -w /var/www/certbot || true
+
+            docker compose exec nginx nginx -s reload

@@ -361,6 +361,9 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    volumes:
+      - certbot-ssl:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
     depends_on:
       api-gateway:
         condition: service_healthy
@@ -372,4 +375,5 @@ volumes:
   db-user-data:
   redis-data:
   kafka-data:
-
+  certbot-ssl:
+  certbot-www:

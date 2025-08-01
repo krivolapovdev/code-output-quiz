@@ -380,4 +380,6 @@ volumes:
   redis-data:
   kafka-data:
   certbot-ssl:
+    external: true
   certbot-www:
+    external: true

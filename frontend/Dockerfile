@@ -24,4 +24,6 @@ COPY --from=build /app/dist /usr/share/nginx/html
 
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
+RUN mkdir -p /etc/letsencrypt/live /etc/letsencrypt/archive
+
 CMD ["nginx", "-g", "daemon off;"]

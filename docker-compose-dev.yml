@@ -61,7 +61,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     depends_on:
       loki:
         condition: service_started
@@ -84,7 +84,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     depends_on:
       loki:
         condition: service_started
@@ -112,7 +112,7 @@ services:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     volumes:
       - db-quiz-data:/var/lib/postgresql/data
     restart: no
@@ -127,7 +127,7 @@ services:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     restart: no
 
   kafka:
@@ -170,7 +170,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8084/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     depends_on:
       loki:
         condition: service_started
@@ -206,7 +206,7 @@ services:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     volumes:
       - db-auth-data:/var/lib/postgresql/data
     restart: no
@@ -230,7 +230,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     depends_on:
       loki:
         condition: service_started
@@ -264,7 +264,7 @@ services:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     volumes:
       - db-user-data:/var/lib/postgresql/data
     restart: no
@@ -288,7 +288,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     depends_on:
       loki:
         condition: service_started
@@ -322,7 +322,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8083/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     depends_on:
       loki:
         condition: service_started
@@ -352,7 +352,7 @@ services:
       test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
     depends_on:
       loki:
         condition: service_started

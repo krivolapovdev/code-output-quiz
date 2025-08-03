@@ -14,6 +14,9 @@ services:
     ports:
       - "9090:9090"
     restart: no
+    profiles:
+      - ''
+      - dev
 
   loki:
     container_name: loki
@@ -22,6 +25,9 @@ services:
     ports:
       - "3100:3100"
     restart: no
+    profiles:
+      - ''
+      - dev
 
   grafana:
     container_name: grafana
@@ -39,6 +45,9 @@ services:
       loki:
         condition: service_started
     restart: no
+    profiles:
+      - ''
+      - dev
 
   zipkin:
     image: openzipkin/zipkin:3.5.1
@@ -46,6 +55,9 @@ services:
     ports:
       - "9411:9411"
     restart: no
+    profiles:
+      - ''
+      - dev
 
   config-server:
     container_name: config-server
@@ -70,6 +82,8 @@ services:
       zipkin:
         condition: service_started
     restart: no
+    profiles:
+      - dev
 
   eureka-server:
     container_name: eureka-server
@@ -95,6 +109,8 @@ services:
       config-server:
         condition: service_healthy
     restart: no
+    profiles:
+      - dev
 
   db-quiz:
     image: postgres:17.5-alpine3.22
@@ -116,6 +132,9 @@ services:
     volumes:
       - db-quiz-data:/var/lib/postgresql/data
     restart: no
+    profiles:
+      - ''
+      - dev
 
   redis:
     image: redis:8.0.2-alpine3.21
@@ -129,6 +148,9 @@ services:
       timeout: 5s
       retries: 10
     restart: no
+    profiles:
+      - ''
+      - dev
 
   kafka:
     image: bitnami/kafka:4.0.0
@@ -147,6 +169,9 @@ services:
       - KAFKA_CFG_LOG_RETENTION_HOURS=168
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
     restart: no
+    profiles:
+      - ''
+      - dev
 
   quiz-service:
     container_name: quiz-service
@@ -189,6 +214,8 @@ services:
       redis:
         condition: service_healthy
     restart: no
+    profiles:
+      - dev
 
   db-auth:
     image: postgres:17.5-alpine3.22
@@ -210,6 +237,9 @@ services:
     volumes:
       - db-auth-data:/var/lib/postgresql/data
     restart: no
+    profiles:
+      - ''
+      - dev
 
   auth-service:
     container_name: auth-service
@@ -247,6 +277,8 @@ services:
       db-auth:
         condition: service_healthy
     restart: no
+    profiles:
+      - dev
 
   db-user:
     image: postgres:17.5-alpine3.22
@@ -268,6 +300,9 @@ services:
     volumes:
       - db-user-data:/var/lib/postgresql/data
     restart: no
+    profiles:
+      - ''
+      - dev
 
   user-service:
     container_name: user-service
@@ -305,6 +340,8 @@ services:
       db-user:
         condition: service_healthy
     restart: no
+    profiles:
+      - dev
 
   notification-service:
     container_name: notification-service
@@ -337,6 +374,8 @@ services:
       eureka-server:
         condition: service_healthy
     restart: no
+    profiles:
+      - dev
 
   api-gateway:
     container_name: api-gateway
@@ -373,6 +412,8 @@ services:
       notification-service:
         condition: service_healthy
     restart: no
+    profiles:
+      - dev
 
   nginx:
     container_name: nginx
@@ -387,6 +428,8 @@ services:
       api-gateway:
         condition: service_healthy
     restart: no
+    profiles:
+      - dev
 
 volumes:
   db-quiz-data:

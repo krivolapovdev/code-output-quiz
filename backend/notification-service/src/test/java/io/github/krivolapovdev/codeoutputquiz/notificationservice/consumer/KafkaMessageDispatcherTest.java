@@ -51,11 +51,10 @@ class KafkaMessageDispatcherTest {
 
     StepVerifier.create(kafkaMessageDispatcher.dispatch(topic, kafkaMessage))
         .expectErrorSatisfies(
-            exception -> {
-              assertThat(exception)
-                  .isInstanceOf(IllegalStateException.class)
-                  .hasMessage("No handler for topic: " + topic);
-            })
+            exception ->
+                assertThat(exception)
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessage("No handler for topic: " + topic))
         .verify();
   }
 

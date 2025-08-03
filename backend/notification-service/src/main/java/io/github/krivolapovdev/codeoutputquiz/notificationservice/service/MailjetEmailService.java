@@ -1,10 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.notificationservice.service;
 
 import com.mailjet.client.MailjetClient;
-import com.mailjet.client.transactional.SendContact;
-import com.mailjet.client.transactional.SendEmailsRequest;
-import com.mailjet.client.transactional.TransactionalEmail;
-import io.github.krivolapovdev.codeoutputquiz.notificationservice.config.MailjetEmailProperties;
+import io.github.krivolapovdev.codeoutputquiz.notificationservice.factory.SendEmailsRequestFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -16,7 +13,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 class MailjetEmailService implements EmailService {
   private final MailjetClient mailjetClient;
-  private final MailjetEmailProperties mailjetEmailProperties;
+  private final SendEmailsRequestFactory sendEmailsRequestFactory;
 
   @Override
   public Mono<Void> sendEmail(
@@ -25,23 +22,11 @@ class MailjetEmailService implements EmailService {
 
     return Mono.fromFuture(
             () ->
-                createSendEmailRequest(recipientEmail, subject, htmlContent)
+                sendEmailsRequestFactory
+                    .create(recipientEmail, subject, htmlContent)
                     .sendAsyncWith(mailjetClient))
         .doOnSuccess(response -> log.info("Email successfully sent to {}", recipientEmail))
         .doOnError(error -> log.error("Failed to send email to {}", recipientEmail, error))
         .then();
-  }
-
-  private SendEmailsRequest createSendEmailRequest(
-      @NonNull String recipientEmail, @NonNull String subject, @NonNull String htmlContent) {
-    TransactionalEmail message =
-        TransactionalEmail.builder()
-            .from(new SendContact(mailjetEmailProperties.getSenderEmail()))
-            .to(new SendContact(recipientEmail))
-            .subject(subject)
-            .htmlPart(htmlContent)
-            .build();
-
-    return SendEmailsRequest.builder().message(message).build();
   }
 }

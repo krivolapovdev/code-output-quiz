@@ -12,7 +12,7 @@ import org.springframework.kafka.core.reactive.ReactiveKafkaConsumerTemplate;
 import reactor.kafka.receiver.ReceiverOptions;
 
 @Configuration
-public class KafkaConfig {
+class KafkaConfig {
   @Bean
   public ReceiverOptions<String, String> receiverOptions(KafkaProperties kafkaProperties) {
     return ReceiverOptions.<String, String>create(kafkaProperties.buildConsumerProperties())

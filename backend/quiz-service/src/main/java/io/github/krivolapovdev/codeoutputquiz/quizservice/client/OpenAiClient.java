@@ -24,6 +24,7 @@ class OpenAiClient implements AiClient {
         .map(result -> result.getOutput().getText())
         .reduce(new StringBuilder(), StringBuilder::append)
         .map(StringBuilder::toString)
+        .filter(s -> !s.isEmpty())
         .doOnSuccess(text -> log.info("Successfully received AI response: {}", text))
         .switchIfEmpty(Mono.error(new IllegalStateException("AI response was empty")))
         .doOnError(error -> log.warn("Failed to get AI response: {}", error.getMessage(), error));

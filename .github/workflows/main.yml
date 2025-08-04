@@ -24,13 +24,17 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
+      - name: Make gradlew executable
+        working-directory: backend
+        run: chmod +x gradlew
+
       - name: Install backend dependencies
         working-directory: backend
-        run: ./gradlew dependencies
+        run: ./gradlew dependencies --no-daemon
 
       - name: Run backend tests
         working-directory: backend
-        run: ./gradlew test
+        run: ./gradlew test --no-daemon
 
   build:
     needs: test

@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: test
+  cloud:
+    config:
+      enabled: false
+      fail-fast: false
+management:
+  tracing:
+    enabled: false
+logging:
+  config: classpath:logback-test.xml

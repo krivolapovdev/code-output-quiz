@@ -25,6 +25,7 @@ public class SecurityConfig {
         .securityContextRepository(NoOpServerSecurityContextRepository.getInstance()) // Stateless
         .addFilterAt(
             new JwtTokenAuthenticationFilter(tokenProvider), SecurityWebFiltersOrder.AUTHENTICATION)
+        .authorizeExchange(exchangeSpec -> exchangeSpec.anyExchange().permitAll())
         .httpBasic(HttpBasicSpec::disable)
         .formLogin(FormLoginSpec::disable)
         .build();

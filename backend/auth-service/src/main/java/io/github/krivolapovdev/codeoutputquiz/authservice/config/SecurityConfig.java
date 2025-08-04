@@ -30,6 +30,7 @@ public class SecurityConfig {
         .addFilterAt(
             new JwtTokenAuthenticationFilter(jwtTokenProvider),
             SecurityWebFiltersOrder.AUTHENTICATION)
+        .authorizeExchange(exchangeSpec -> exchangeSpec.anyExchange().permitAll())
         .httpBasic(HttpBasicSpec::disable)
         .formLogin(FormLoginSpec::disable)
         .build();

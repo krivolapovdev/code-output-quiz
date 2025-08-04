@@ -5,22 +5,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class QuizPromptBuilderTest {
-  private QuizPromptBuilder builder;
-
-  @BeforeEach
-  void setUp() {
-    builder = new QuizPromptBuilder();
-  }
+  @InjectMocks private QuizPromptBuilder quizPromptBuilder;
 
   @Test
   void shouldGeneratePromptWithCorrectFormatAndValues() {
     QuizRequest request = new QuizRequest(ProgrammingLanguage.JAVA, DifficultyLevel.BEGINNER);
 
-    String prompt = builder.buildQuizPrompt(request);
+    String prompt = quizPromptBuilder.buildQuizPrompt(request);
 
     assertNotNull(prompt);
     assertTrue(prompt.contains("Generate a code multiple-choice question"));
@@ -35,7 +33,7 @@ class QuizPromptBuilderTest {
   void shouldUseCorrectLanguageAndLevelInPrompt() {
     QuizRequest request = new QuizRequest(ProgrammingLanguage.PYTHON, DifficultyLevel.ADVANCED);
 
-    String prompt = builder.buildQuizPrompt(request);
+    String prompt = quizPromptBuilder.buildQuizPrompt(request);
 
     assertTrue(prompt.contains("\"python\" programming language"), "Language not in prompt");
 
@@ -46,7 +44,7 @@ class QuizPromptBuilderTest {
   @Test
   void shouldContainAllRequiredSections() {
     QuizRequest request = new QuizRequest(ProgrammingLanguage.JAVA, DifficultyLevel.BEGINNER);
-    String prompt = builder.buildQuizPrompt(request);
+    String prompt = quizPromptBuilder.buildQuizPrompt(request);
 
     assertTrue(prompt.contains("**Code**:"), "Missing **Code** section");
     assertTrue(prompt.contains("```java"), "Missing ```java block");
@@ -62,7 +60,7 @@ class QuizPromptBuilderTest {
   @Test
   void shouldPromptEndWithoutTrailingWhitespace() {
     QuizRequest request = new QuizRequest(ProgrammingLanguage.JAVA, DifficultyLevel.BEGINNER);
-    String prompt = builder.buildQuizPrompt(request);
+    String prompt = quizPromptBuilder.buildQuizPrompt(request);
 
     assertEquals(prompt.trim(), prompt, "Prompt has leading/trailing whitespace");
   }
@@ -72,7 +70,7 @@ class QuizPromptBuilderTest {
     for (ProgrammingLanguage lang : ProgrammingLanguage.values()) {
       for (DifficultyLevel level : DifficultyLevel.values()) {
         QuizRequest request = new QuizRequest(lang, level);
-        String prompt = builder.buildQuizPrompt(request);
+        String prompt = quizPromptBuilder.buildQuizPrompt(request);
 
         assertTrue(
             prompt.contains("\"%s\" programming language".formatted(lang.name().toLowerCase())),
@@ -90,7 +88,7 @@ class QuizPromptBuilderTest {
   @Test
   void shouldPromptHaveCorrectSectionOrder() {
     QuizRequest request = new QuizRequest(ProgrammingLanguage.JAVA, DifficultyLevel.INTERMEDIATE);
-    String prompt = builder.buildQuizPrompt(request);
+    String prompt = quizPromptBuilder.buildQuizPrompt(request);
 
     int codeIndex = prompt.indexOf("**Code**:");
     int optionsIndex = prompt.indexOf("**Options**:");

@@ -1,6 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.parser;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.AnswerChoice;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;

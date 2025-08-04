@@ -5,10 +5,11 @@ import io.github.krivolapovdev.codeoutputquiz.quizservice.config.jwt.AuthDetails
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.exception.QuizNotFoundException;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.mapper.AnswerChoicesJsonMapper;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.mapper.QuizMapper;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.repository.QuizViewRepository;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.response.QuizResponse;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.view.QuizView;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +25,14 @@ import reactor.core.publisher.Mono;
 public class QuizService {
   private final QuizViewRepository quizViewRepository;
   private final QuizMapper quizMapper;
+  private final AnswerChoicesJsonMapper answerChoicesJsonMapper;
 
-  public Mono<QuizResponse> getRandomQuiz(QuizRequest quizRequest) {
+  public Mono<QuizResponse> getRandomQuiz(
+      @NonNull ProgrammingLanguage programmingLanguage, @NonNull DifficultyLevel difficultyLevel) {
     log.info(
-        "Requesting random quiz for language: {}, level: {}",
-        quizRequest.programmingLanguage(),
-        quizRequest.difficultyLevel());
+        "Requesting random quiz for language: {}, level: {}", programmingLanguage, difficultyLevel);
     return quizViewRepository
-        .findRandomQuizView(quizRequest.programmingLanguage(), quizRequest.difficultyLevel())
+        .findRandomQuizView(programmingLanguage, difficultyLevel)
         .doOnNext(quiz -> log.info("Random quiz fetched from DB: {}", quiz))
         .map(quizMapper::toResponse);
   }
@@ -63,5 +64,22 @@ public class QuizService {
         .doOnNext(quiz -> log.info("Found unsolved quiz {} for user {}", quiz.getId(), userId))
         .map(quizMapper::toResponse)
         .switchIfEmpty(Mono.error(new QuizNotFoundException("Quiz not found for user: " + userId)));
+  }
+
+  public Mono<QuizView> saveQuizWithChoices(@NonNull QuizView quizView) {
+    log.info("Saving quiz with choices: {}", quizView);
+
+    return quizViewRepository
+        .insertQuizWithChoices(
+            quizView.getCode(),
+            quizView.getProgrammingLanguage().name(),
+            quizView.getDifficultyLevel().name(),
+            quizView.getCorrectAnswer().name(),
+            quizView.getExplanation(),
+            answerChoicesJsonMapper.toJson(quizView.getAnswerChoices()))
+        .doOnSuccess(ignored -> log.info("Successfully saved quiz: {}", quizView.getCode()))
+        .doOnError(error -> log.error("Failed to save quiz: {}", quizView.getCode(), error))
+        .onErrorResume(error -> Mono.empty())
+        .thenReturn(quizView);
   }
 }

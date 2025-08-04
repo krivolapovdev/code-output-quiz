@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.data.r2dbc.repository.Modifying;
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
@@ -29,8 +30,8 @@ public interface QuizViewRepository extends ReactiveCrudRepository<QuizView, UUI
             1
           """)
   Mono<QuizView> findRandomQuizView(
-      @Param("programmingLanguage") ProgrammingLanguage programmingLanguage,
-      @Param("difficultyLevel") DifficultyLevel difficultyLevel);
+      @NonNull @Param("programmingLanguage") ProgrammingLanguage programmingLanguage,
+      @NonNull @Param("difficultyLevel") DifficultyLevel difficultyLevel);
 
   @Modifying
   @Query(
@@ -46,12 +47,12 @@ public interface QuizViewRepository extends ReactiveCrudRepository<QuizView, UUI
               )
           """)
   Mono<Void> insertQuizWithChoices(
-      @Param("code") String code,
-      @Param("lang") String lang,
-      @Param("level") String level,
-      @Param("correctAnswer") String correctAnswer,
-      @Param("explanation") String explanation,
-      @Param("answerChoicesJson") String answerChoicesJson);
+      @NonNull @Param("code") String code,
+      @NonNull @Param("lang") String lang,
+      @NonNull @Param("level") String level,
+      @NonNull @Param("correctAnswer") String correctAnswer,
+      @NonNull @Param("explanation") String explanation,
+      @NonNull @Param("answerChoicesJson") String answerChoicesJson);
 
   @Query(
       """
@@ -77,7 +78,7 @@ public interface QuizViewRepository extends ReactiveCrudRepository<QuizView, UUI
               1
           """)
   Mono<QuizView> findUserUnsolvedQuiz(
-      @Param("programmingLanguage") ProgrammingLanguage programmingLanguage,
-      @Param("difficultyLevel") DifficultyLevel difficultyLevel,
-      @Param("userId") UUID userId);
+      @NonNull @Param("programmingLanguage") ProgrammingLanguage programmingLanguage,
+      @NonNull @Param("difficultyLevel") DifficultyLevel difficultyLevel,
+      @NonNull @Param("userId") UUID userId);
 }

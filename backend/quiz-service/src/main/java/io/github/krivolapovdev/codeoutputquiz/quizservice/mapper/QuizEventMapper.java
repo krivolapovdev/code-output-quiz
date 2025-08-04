@@ -2,22 +2,21 @@ package io.github.krivolapovdev.codeoutputquiz.quizservice.mapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.view.AnswerChoiceData;
-import java.util.List;
+import io.github.krivolapovdev.codeoutputquiz.quizservice.event.QuizSolvedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AnswerChoicesJsonMapper {
+public class QuizEventMapper {
   private final ObjectMapper objectMapper;
 
-  public @NonNull String toJson(@NonNull List<AnswerChoiceData> choices) {
+  public @NonNull QuizSolvedEvent toQuizSolvedEvent(@NonNull String json) {
     try {
-      return objectMapper.writeValueAsString(choices);
+      return objectMapper.readValue(json, QuizSolvedEvent.class);
     } catch (JsonProcessingException e) {
-      throw new IllegalStateException("Failed to serialize answer choices to JSON", e);
+      throw new IllegalStateException("Failed to deserialize QuizSolvedEvent", e);
     }
   }
 }

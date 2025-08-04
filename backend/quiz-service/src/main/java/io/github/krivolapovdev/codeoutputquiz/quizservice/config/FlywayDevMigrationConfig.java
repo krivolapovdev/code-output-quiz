@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Profile("dev")
-public class FlywayDevMigrationConfig {
+class FlywayDevMigrationConfig {
   @Bean
   public FlywayMigrationStrategy flywayCleanMigrationStrategy() {
     return flyway -> {

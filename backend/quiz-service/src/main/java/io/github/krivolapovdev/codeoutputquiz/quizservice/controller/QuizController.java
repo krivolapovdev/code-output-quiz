@@ -2,7 +2,6 @@ package io.github.krivolapovdev.codeoutputquiz.quizservice.controller;
 
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.response.QuizResponse;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.service.QuizService;
 import java.util.UUID;
@@ -22,12 +21,16 @@ import reactor.core.publisher.Mono;
 public class QuizController {
   private final QuizService quizService;
 
+  @GetMapping("/{id}")
+  public Mono<QuizResponse> getQuizById(@PathVariable UUID id) {
+    return quizService.getQuizById(id);
+  }
+
   @GetMapping("/random")
   public Mono<QuizResponse> getRandomQuiz(
       @RequestParam(defaultValue = "JAVA") ProgrammingLanguage programmingLanguage,
       @RequestParam(defaultValue = "BEGINNER") DifficultyLevel difficultyLevel) {
-    QuizRequest request = new QuizRequest(programmingLanguage, difficultyLevel);
-    return quizService.getRandomQuiz(request);
+    return quizService.getRandomQuiz(programmingLanguage, difficultyLevel);
   }
 
   @GetMapping("/unsolved")
@@ -37,10 +40,5 @@ public class QuizController {
       @RequestParam(defaultValue = "BEGINNER") DifficultyLevel difficultyLevel,
       Authentication authentication) {
     return quizService.getUserUnsolvedQuiz(programmingLanguage, difficultyLevel, authentication);
-  }
-
-  @GetMapping("/{id}")
-  public Mono<QuizResponse> getQuizById(@PathVariable UUID id) {
-    return quizService.getQuizById(id);
   }
 }

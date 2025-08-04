@@ -6,12 +6,13 @@ import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLangu
 import io.github.krivolapovdev.codeoutputquiz.quizservice.view.AnswerChoiceData;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.lang.NonNull;
 
 public record QuizResponse(
-    UUID id,
-    String code,
-    AnswerChoice correctAnswer,
-    String explanation,
-    ProgrammingLanguage programmingLanguage,
-    DifficultyLevel difficultyLevel,
-    List<AnswerChoiceData> answerChoices) {}
+    @NonNull UUID id,
+    @NonNull String code,
+    @NonNull AnswerChoice correctAnswer,
+    @NonNull String explanation,
+    @NonNull ProgrammingLanguage programmingLanguage,
+    @NonNull DifficultyLevel difficultyLevel,
+    @NonNull List<AnswerChoiceData> answerChoices) {}

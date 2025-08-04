@@ -10,7 +10,7 @@ import org.springframework.data.r2dbc.convert.R2dbcCustomConversions;
 import org.springframework.data.r2dbc.dialect.DialectResolver;
 
 @Configuration
-public class DatabaseConfig {
+class DatabaseConfig {
   @Bean
   public R2dbcCustomConversions r2dbcCustomConversions(
       ConnectionFactory connectionFactory, ObjectMapper objectMapper) {

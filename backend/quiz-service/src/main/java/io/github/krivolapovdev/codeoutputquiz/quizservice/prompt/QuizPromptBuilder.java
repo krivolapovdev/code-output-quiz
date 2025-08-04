@@ -3,12 +3,13 @@ package io.github.krivolapovdev.codeoutputquiz.quizservice.prompt;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.request.QuizRequest;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 public class QuizPromptBuilder {
-  public String buildQuizPrompt(QuizRequest request) {
+  public String buildQuizPrompt(@NonNull QuizRequest request) {
     log.info("Building prompt for {}", request);
 
     String language = request.programmingLanguage().name().toLowerCase();

@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
+import org.springframework.lang.NonNull;
 
 @ReadingConverter
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ public class AnswerChoiceDataReadConverter implements Converter<Json, List<Answe
   private final ObjectMapper objectMapper;
 
   @Override
-  public List<AnswerChoiceData> convert(Json source) {
+  public List<AnswerChoiceData> convert(@NonNull Json source) {
     try {
       return objectMapper.readValue(source.asString(), new TypeReference<>() {});
     } catch (JsonProcessingException e) {

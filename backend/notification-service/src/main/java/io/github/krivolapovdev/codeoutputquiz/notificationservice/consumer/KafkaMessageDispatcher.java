@@ -26,6 +26,7 @@ class KafkaMessageDispatcher {
     return handler
         .handleEvent(kafkaMessage)
         .doOnSuccess(v -> log.info("Successfully handled message from topic '{}'", topic))
-        .doOnError(e -> log.error("Failed to handle message from topic '{}'", topic, e));
+        .doOnError(e -> log.error("Failed to handle message from topic '{}'", topic, e))
+        .onErrorResume(e -> Mono.empty());
   }
 }

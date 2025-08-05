@@ -1,16 +1,13 @@
-package io.github.krivolapovdev.codeoutputquiz.authservice.security.jwt;
+package io.github.krivolapovdev.codeoutputquiz.common.jwt;
 
 import static java.util.stream.Collectors.joining;
 
-import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.AuthDetails;
-import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.JwtProperties;
-import io.github.krivolapovdev.codeoutputquiz.authservice.enums.TokenType;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import jakarta.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Base64;
@@ -20,14 +17,13 @@ import java.util.UUID;
 import javax.crypto.SecretKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Component;
 
-@Component
 @Slf4j
 @RequiredArgsConstructor
 public class JwtTokenProvider {
@@ -41,11 +37,11 @@ public class JwtTokenProvider {
 
   @PostConstruct
   public void init() {
-    var secret = Base64.getEncoder().encodeToString(this.jwtProperties.getSecretKey().getBytes());
+    var secret = Base64.getEncoder().encodeToString(jwtProperties.getSecretKey().getBytes());
     this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
   }
 
-  public Authentication getAuthentication(String token) {
+  public @NonNull Authentication getAuthentication(@NonNull String token) {
     Claims claims = parseTokenClaims(token);
 
     Object authoritiesClaim = claims.get(AUTHORITIES_KEY);
@@ -68,15 +64,7 @@ public class JwtTokenProvider {
     return authenticationToken;
   }
 
-  public String createAccessToken(Authentication auth, UUID userId) {
-    return createToken(auth, TokenType.ACCESS, userId);
-  }
-
-  public String createRefreshToken(Authentication auth, UUID userId) {
-    return createToken(auth, TokenType.REFRESH, userId);
-  }
-
-  public void validateTokenType(@NotNull String token, @NotNull TokenType expectedType) {
+  public void validateTokenType(@NonNull String token, @NonNull TokenType expectedType) {
     Claims claims = parseTokenClaims(token);
     String actual = (String) claims.get(TOKEN_TYPE_KEY);
 
@@ -86,11 +74,18 @@ public class JwtTokenProvider {
     }
   }
 
-  private Claims parseTokenClaims(String token) {
+  public @NonNull UUID extractUserIdFromToken(@NonNull String token) {
+    Claims claims =
+        Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
+
+    return UUID.fromString(claims.get(USER_ID_KEY, String.class));
+  }
+
+  private @NonNull Claims parseTokenClaims(@NonNull String token) {
     return Jwts.parser().verifyWith(this.secretKey).build().parseSignedClaims(token).getPayload();
   }
 
-  private String createToken(Authentication authentication, TokenType tokenType, UUID userId) {
+  public @NonNull String createToken(TokenType tokenType, Authentication authentication, UUID userId) {
     String email = authentication.getName();
     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
     String joinedAuthorities =

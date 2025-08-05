@@ -1,4 +1,4 @@
-package io.github.krivolapovdev.codeoutputquiz.quizservice.handler;
+package io.github.krivolapovdev.codeoutputquiz.common.kafka;
 
 import org.springframework.lang.NonNull;
 import reactor.core.publisher.Mono;

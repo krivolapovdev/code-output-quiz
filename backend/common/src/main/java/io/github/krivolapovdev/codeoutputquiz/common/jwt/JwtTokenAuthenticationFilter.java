@@ -1,7 +1,6 @@
-package io.github.krivolapovdev.codeoutputquiz.quizservice.config.jwt;
+package io.github.krivolapovdev.codeoutputquiz.common.jwt;
 
-import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.TokenType;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.security.jwt.JwtTokenProvider;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.TokenType;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpCookie;

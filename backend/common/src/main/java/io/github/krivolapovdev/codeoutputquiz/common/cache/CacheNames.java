@@ -1,4 +1,4 @@
-package io.github.krivolapovdev.codeoutputquiz.quizservice.config.cache;
+package io.github.krivolapovdev.codeoutputquiz.common.cache;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

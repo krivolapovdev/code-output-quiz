@@ -1,9 +1,11 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.security.auth;
 
-import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.AuthDetails;
 import io.github.krivolapovdev.codeoutputquiz.authservice.repository.UserRepository;
+import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,12 +19,12 @@ import reactor.core.publisher.Mono;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class CustomReactiveAuthenticationManager implements ReactiveAuthenticationManager {
+class CustomReactiveAuthenticationManager implements ReactiveAuthenticationManager {
   private final PasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
 
   @Override
-  public Mono<Authentication> authenticate(Authentication authentication) {
+  public Mono<Authentication> authenticate(@NonNull Authentication authentication) {
     log.info("Authenticating user: {}", authentication.getName());
 
     String email = authentication.getName();

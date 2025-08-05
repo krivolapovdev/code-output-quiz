@@ -6,7 +6,6 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +26,6 @@ public class AuthController {
   @PostMapping("/login")
   public Mono<ResponseEntity<AuthResponse>> login(@Valid @RequestBody AuthRequest authRequest) {
     return authService.login(authRequest);
-  }
-
-  @PostMapping("/refresh")
-  public Mono<ResponseEntity<AuthResponse>> refreshToken(
-      @CookieValue("refreshToken") String refreshToken) {
-    return authService.refreshToken(refreshToken);
   }
 
   @PostMapping("/logout")

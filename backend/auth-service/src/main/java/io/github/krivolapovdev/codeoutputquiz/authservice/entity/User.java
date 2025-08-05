@@ -1,12 +1,13 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.entity;
 
-import io.github.krivolapovdev.codeoutputquiz.authservice.enums.UserRole;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.UserRole;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.lang.NonNull;
 
 @Table("users")
 @Data
@@ -28,8 +29,12 @@ public class User {
   @Column("updated_at")
   private OffsetDateTime updatedAt;
 
-  public User(String email, String password) {
+  public User(@NonNull String email, @NonNull String password) {
     this.email = email;
     this.password = password;
+  }
+
+  public @NonNull String getEmail() {
+    return email.toLowerCase();
   }
 }

@@ -1,7 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.config;
 
-import io.github.krivolapovdev.codeoutputquiz.authservice.config.jwt.JwtTokenAuthenticationFilter;
-import io.github.krivolapovdev.codeoutputquiz.authservice.security.jwt.JwtTokenProvider;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.JwtTokenAuthenticationFilter;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -18,7 +18,7 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-public class SecurityConfig {
+class SecurityConfig {
   @Bean
   public SecurityWebFilterChain securityWebFilterChain(
       ServerHttpSecurity http,

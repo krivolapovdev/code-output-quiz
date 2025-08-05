@@ -3,6 +3,7 @@ package io.github.krivolapovdev.codeoutputquiz.authservice.service;
 import io.github.krivolapovdev.codeoutputquiz.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +17,7 @@ public class CustomUserDetailsService implements ReactiveUserDetailsService {
   private final UserRepository userRepository;
 
   @Override
-  public Mono<UserDetails> findByUsername(String email) {
+  public Mono<UserDetails> findByUsername(@NonNull String email) {
     return userRepository
         .findByEmail(email.toLowerCase())
         .map(

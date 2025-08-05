@@ -1,6 +1,11 @@
 spring:
   flyway:
     clean-disabled: false
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
 management:
   endpoints:
     web:

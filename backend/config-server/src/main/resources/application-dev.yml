@@ -4,6 +4,11 @@ spring:
       server:
         native:
           search-locations: file:backend/config-server/src/main/resources/configs
+  devtools:
+    restart:
+      enabled: false
+    livereload:
+      enabled: false
 management:
   endpoints:
     web:

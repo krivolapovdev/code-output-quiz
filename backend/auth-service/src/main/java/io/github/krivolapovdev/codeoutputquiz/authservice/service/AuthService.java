@@ -1,16 +1,10 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.service;
 
 import io.github.krivolapovdev.codeoutputquiz.authservice.exception.EmailAlreadyTakenException;
-import io.github.krivolapovdev.codeoutputquiz.authservice.factory.AuthResponseFactory;
-import io.github.krivolapovdev.codeoutputquiz.authservice.factory.CookieFactory;
-import io.github.krivolapovdev.codeoutputquiz.authservice.factory.UserFactory;
+import io.github.krivolapovdev.codeoutputquiz.authservice.factory.AuthResponseEntityFactory;
 import io.github.krivolapovdev.codeoutputquiz.authservice.mapper.AuthRequestMapper;
-import io.github.krivolapovdev.codeoutputquiz.authservice.notifier.UserRegistrationNotifier;
-import io.github.krivolapovdev.codeoutputquiz.authservice.repository.UserRepository;
 import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
-import io.github.krivolapovdev.codeoutputquiz.common.cookie.CookieNames;
-import java.time.Duration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -26,20 +20,17 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
-  private final UserRepository userRepository;
-  private final UserFactory userFactory;
-  private final CookieFactory cookieFactory;
+  private final CookieService cookieService;
+  private final UserService userService;
   private final TokenService tokenService;
   private final ReactiveAuthenticationManager reactiveAuthenticationManager;
-  private final AuthResponseFactory authResponseFactory;
+  private final AuthResponseEntityFactory authResponseFactory;
   private final AuthRequestMapper authRequestMapper;
-  private final UserRegistrationNotifier userRegistrationNotifier;
 
   public Mono<ResponseEntity<AuthResponse>> register(@NonNull AuthRequest request) {
     log.info("Attempting to register user: {}", request.email());
-    return Mono.fromCallable(() -> userFactory.create(request))
-        .flatMap(userRepository::save)
-        .doOnSuccess(user -> log.info("User registered successfully: {}", user.getEmail()))
+    return userService
+        .saveUser(request)
         .map(ignored -> authRequestMapper.toAuthentication(request))
         .flatMap(reactiveAuthenticationManager::authenticate)
         .map(tokenService::generateTokens)
@@ -47,7 +38,6 @@ public class AuthService {
             tokenPair ->
                 authResponseFactory.create(
                     tokenPair.accessToken(), tokenPair.refreshToken(), HttpStatus.CREATED))
-        .flatMap(response -> userRegistrationNotifier.notify(request.email()).thenReturn(response))
         .onErrorMap(
             DuplicateKeyException.class,
             e -> new EmailAlreadyTakenException("Email already exists"));
@@ -70,9 +60,8 @@ public class AuthService {
   public Mono<ResponseEntity<Void>> logout() {
     log.info("Logging out user");
 
-    var accessCookie = cookieFactory.create(CookieNames.ACCESS_TOKEN, "", "/", Duration.ZERO);
-    var refreshCookie =
-        cookieFactory.create(CookieNames.REFRESH_TOKEN, "", "/api/v1/auth/refresh", Duration.ZERO);
+    var accessCookie = cookieService.clearAccessTokenCookie();
+    var refreshCookie = cookieService.clearRefreshTokenCookie();
 
     return Mono.just(
         ResponseEntity.noContent()

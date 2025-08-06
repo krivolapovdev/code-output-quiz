@@ -1,11 +1,10 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.service;
 
-import io.github.krivolapovdev.codeoutputquiz.authservice.factory.AuthResponseFactory;
-import io.github.krivolapovdev.codeoutputquiz.authservice.factory.TokenPairFactory;
+import io.github.krivolapovdev.codeoutputquiz.authservice.factory.AuthResponseEntityFactory;
 import io.github.krivolapovdev.codeoutputquiz.authservice.model.TokenPair;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.common.enums.TokenType;
-import io.github.krivolapovdev.codeoutputquiz.common.jwt.JwtTokenProvider;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,13 +18,15 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Slf4j
 public class TokenService {
-  private final JwtTokenProvider jwtTokenProvider;
-  private final TokenPairFactory tokenPairFactory;
-  private final AuthResponseFactory authResponseFactory;
+  private final JwtService jwtService;
+  private final AuthResponseEntityFactory authResponseEntityFactory;
 
   public @NonNull TokenPair generateTokens(@NonNull Authentication auth) {
     log.info("Generating tokens for user: {}", auth.getName());
-    return tokenPairFactory.create(auth);
+    AuthDetails details = (AuthDetails) auth.getDetails();
+    String accessToken = jwtService.createAccessToken(auth, details.userId());
+    String refreshToken = jwtService.createRefreshToken(auth, details.userId());
+    return new TokenPair(accessToken, refreshToken);
   }
 
   public Mono<ResponseEntity<AuthResponse>> refreshToken(@NonNull String oldTokenCookie) {
@@ -33,12 +34,13 @@ public class TokenService {
 
     // noinspection ReactiveStreamsTooLongSameOperatorsChain
     return Mono.just(oldTokenCookie)
-        .doOnNext(token -> jwtTokenProvider.validateTokenType(token, TokenType.REFRESH))
-        .map(jwtTokenProvider::getAuthentication)
+        .doOnNext(token -> jwtService.validateToken(token, TokenType.REFRESH))
+        .map(jwtService::parseAuthentication)
         .map(this::generateTokens)
         .map(
-            tokenPair -> authResponseFactory.create(
-                tokenPair.accessToken(), tokenPair.refreshToken(), HttpStatus.OK))
+            tokenPair ->
+                authResponseEntityFactory.create(
+                    tokenPair.accessToken(), tokenPair.refreshToken(), HttpStatus.OK))
         .doOnError(error -> log.error("Failed to refresh token", error));
   }
 }

@@ -1,8 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.factory;
 
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
-import io.github.krivolapovdev.codeoutputquiz.common.cookie.CookieNames;
-import java.time.Duration;
+import io.github.krivolapovdev.codeoutputquiz.authservice.service.CookieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,17 +12,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AuthResponseFactory {
-  private final CookieFactory cookieFactory;
+public class AuthResponseEntityFactory {
+  private final CookieService cookieService;
 
   public @NonNull ResponseEntity<AuthResponse> create(
       @NonNull String accessToken, @NonNull String refreshToken, @NonNull HttpStatus status) {
-    ResponseCookie accessCookie =
-        cookieFactory.create(CookieNames.ACCESS_TOKEN, accessToken, "/", Duration.ofMinutes(15));
 
-    ResponseCookie refreshCookie =
-        cookieFactory.create(
-            CookieNames.REFRESH_TOKEN, refreshToken, "/api/v1/auth/refresh", Duration.ofDays(7));
+    ResponseCookie accessCookie = cookieService.createAccessTokenCookie(accessToken);
+    ResponseCookie refreshCookie = cookieService.createRefreshTokenCookie(refreshToken);
 
     return ResponseEntity.status(status)
         .header(HttpHeaders.SET_COOKIE, accessCookie.toString())

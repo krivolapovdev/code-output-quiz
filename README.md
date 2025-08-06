@@ -87,6 +87,10 @@ Prerequisites:
    docker compose -f docker-compose-dev.yml up
    ```
 4. Open **http://localhost** in your browser.
+5. (Optional) Run initial script:
+   ```bash
+   ./scripts/init.sh
+   ```
 
 ## 🛠 TechStack
 

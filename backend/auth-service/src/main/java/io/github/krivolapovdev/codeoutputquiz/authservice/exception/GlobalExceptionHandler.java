@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler {
+class GlobalExceptionHandler {
   @ExceptionHandler(EmailAlreadyTakenException.class)
   @ResponseStatus(HttpStatus.CONFLICT)
   public Mono<ResponseStatusException> handleQuizNotFoundException(EmailAlreadyTakenException ex) {

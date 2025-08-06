@@ -12,6 +12,7 @@ import org.testcontainers.utility.DockerImageName;
 @Testcontainers
 public abstract class AbstractTestcontainers {
   @Container
+  @SuppressWarnings("resource")
   protected static final PostgreSQLContainer<?> postgres =
       new PostgreSQLContainer<>(DockerImageName.parse("postgres:17.5-alpine3.22"))
           .withDatabaseName("testdb")

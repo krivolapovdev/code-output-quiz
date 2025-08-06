@@ -1,6 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.security.auth;
 
-import io.github.krivolapovdev.codeoutputquiz.authservice.repository.UserRepository;
+import io.github.krivolapovdev.codeoutputquiz.authservice.service.UserService;
 import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,6 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -20,7 +19,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 class CustomReactiveAuthenticationManager implements ReactiveAuthenticationManager {
   private final PasswordEncoder passwordEncoder;
-  private final UserRepository userRepository;
+  private final UserService userService;
 
   @Override
   public Mono<Authentication> authenticate(@NonNull Authentication authentication) {
@@ -29,9 +28,8 @@ class CustomReactiveAuthenticationManager implements ReactiveAuthenticationManag
     String email = authentication.getName();
     String rawPassword = authentication.getCredentials().toString();
 
-    return userRepository
-        .findByEmail(email)
-        .switchIfEmpty(Mono.error(new UsernameNotFoundException("User not found: " + email)))
+    return userService
+        .getUserByEmail(email)
         .filter(user -> passwordEncoder.matches(rawPassword, user.getPassword()))
         .switchIfEmpty(Mono.error(new BadCredentialsException("Invalid password")))
         .map(

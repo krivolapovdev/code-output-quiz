@@ -14,8 +14,7 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 public class TestSecurityConfig {
   @Bean
   public SecurityWebFilterChain testSecurityWebFilterChain(ServerHttpSecurity http) {
-    return http
-        .csrf(ServerHttpSecurity.CsrfSpec::disable)
+    return http.csrf(ServerHttpSecurity.CsrfSpec::disable)
         .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
         .authorizeExchange(exchanges -> exchanges.anyExchange().permitAll())
         .build();

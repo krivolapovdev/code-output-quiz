@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class AuthRequestMapper {
-  public @NonNull Authentication toAuthentication(
-      @NonNull AuthRequest request) {
+  public @NonNull Authentication toAuthentication(@NonNull AuthRequest request) {
     return new UsernamePasswordAuthenticationToken(request.email(), request.password());
   }
 }

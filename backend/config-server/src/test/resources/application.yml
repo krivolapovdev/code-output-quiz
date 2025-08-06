@@ -1,6 +1,13 @@
 spring:
   profiles:
     active: test
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/krivolapovdev/code-output-quiz
+          search-paths: backend/config-server/src/main/resources/configs
+          default-label: main
 management:
   tracing:
     enabled: false

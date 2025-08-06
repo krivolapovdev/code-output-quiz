@@ -1,29 +1,18 @@
 package io.github.krivolapovdev.codeoutputquiz.configserver;
 
-import java.time.Duration;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient(timeout = "PT2M")
 class ConfigServerApplicationTests {
-  @LocalServerPort private int port;
-
-  private WebTestClient webTestClient;
-
-  @BeforeEach
-  void setUp() {
-    webTestClient =
-        WebTestClient.bindToServer()
-            .responseTimeout(Duration.ofMinutes(1))
-            .baseUrl("http://localhost:" + port)
-            .build();
-  }
+  @Autowired private WebTestClient webTestClient;
 
   @Test
   void shouldReturnConfigFromGit() {

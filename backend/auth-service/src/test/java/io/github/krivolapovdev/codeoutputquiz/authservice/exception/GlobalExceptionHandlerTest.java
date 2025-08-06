@@ -24,7 +24,9 @@ class GlobalExceptionHandlerTest {
   void shouldReturnConflictForEmailAlreadyTakenException() {
     var ex = new EmailAlreadyTakenException("Email already exists");
 
-    StepVerifier.create(globalExceptionHandler.handleQuizNotFoundException(ex))
+    globalExceptionHandler
+        .handleQuizNotFoundException(ex)
+        .as(StepVerifier::create)
         .assertNext(
             err -> {
               assertThat(err).isInstanceOf(ResponseStatusException.class);
@@ -43,7 +45,9 @@ class GlobalExceptionHandlerTest {
 
     var webExchangeBindException = new WebExchangeBindException(null, bindException);
 
-    StepVerifier.create(globalExceptionHandler.handleValidationException(webExchangeBindException))
+    globalExceptionHandler
+        .handleValidationException(webExchangeBindException)
+        .as(StepVerifier::create)
         .assertNext(
             err -> {
               assertThat(err).isInstanceOf(ResponseStatusException.class);
@@ -59,7 +63,9 @@ class GlobalExceptionHandlerTest {
   void shouldReturnForbiddenForAuthorizationDeniedException() {
     var ex = new AuthorizationDeniedException("Access denied");
 
-    StepVerifier.create(globalExceptionHandler.handleAuthorizationDeniedException(ex))
+    globalExceptionHandler
+        .handleAuthorizationDeniedException(ex)
+        .as(StepVerifier::create)
         .assertNext(
             err -> {
               assertThat(err).isInstanceOf(ResponseStatusException.class);
@@ -73,7 +79,9 @@ class GlobalExceptionHandlerTest {
   void shouldReturnUnauthorizedForJwtException() {
     var ex = new JwtException("Invalid JWT token");
 
-    StepVerifier.create(globalExceptionHandler.handleJwtException(ex))
+    globalExceptionHandler
+        .handleJwtException(ex)
+        .as(StepVerifier::create)
         .assertNext(
             err -> {
               assertThat(err).isInstanceOf(ResponseStatusException.class);
@@ -87,7 +95,9 @@ class GlobalExceptionHandlerTest {
   void shouldReturnNotFoundForUsernameNotFoundException() {
     var ex = new UsernameNotFoundException("User not found");
 
-    StepVerifier.create(globalExceptionHandler.handleUsernameNotFoundException(ex))
+    globalExceptionHandler
+        .handleUsernameNotFoundException(ex)
+        .as(StepVerifier::create)
         .assertNext(
             err -> {
               assertThat(err).isInstanceOf(ResponseStatusException.class);

@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.krivolapovdev.codeoutputquiz.common.kafka.event.UserRegistrationEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class UserRegistrationEventMapperTest {
   @Mock private ObjectMapper objectMapper;
-
   @InjectMocks private UserRegistrationEventMapper userRegistrationEventMapper;
 
   @Test
@@ -35,11 +33,7 @@ class UserRegistrationEventMapperTest {
     String result = userRegistrationEventMapper.toJson(event);
 
     assertThat(result).isEqualTo(expectedJson);
-
-    ArgumentCaptor<UserRegistrationEvent> captor =
-        ArgumentCaptor.forClass(UserRegistrationEvent.class);
-    verify(objectMapper).writeValueAsString(captor.capture());
-    assertThat(captor.getValue().recipientEmail()).isEqualTo("test@example.com");
+    verify(objectMapper).writeValueAsString(event);
   }
 
   @Test

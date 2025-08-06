@@ -1,6 +1,5 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.controller;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,7 +10,6 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.service.TokenService;
 import io.github.krivolapovdev.codeoutputquiz.common.cookie.CookieNames;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -26,7 +24,6 @@ import reactor.core.publisher.Mono;
 @Import(TestSecurityConfig.class)
 class TokenControllerTest {
   @Autowired private WebTestClient webTestClient;
-
   @MockitoBean private TokenService tokenService;
 
   @Test
@@ -44,9 +41,6 @@ class TokenControllerTest {
         .expectStatus()
         .isOk();
 
-    ArgumentCaptor<String> tokenCaptor = ArgumentCaptor.forClass(String.class);
-    verify(tokenService).refreshToken(tokenCaptor.capture());
-
-    assertThat(tokenCaptor.getValue()).isEqualTo(refreshToken);
+    verify(tokenService).refreshToken(refreshToken);
   }
 }

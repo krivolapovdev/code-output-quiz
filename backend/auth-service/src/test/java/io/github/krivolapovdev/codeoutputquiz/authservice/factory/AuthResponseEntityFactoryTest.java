@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 @ExtendWith(MockitoExtension.class)
 class AuthResponseEntityFactoryTest {
   @Mock private CookieService cookieService;
-
   @InjectMocks AuthResponseEntityFactory authResponseEntityFactory;
 
   @Test

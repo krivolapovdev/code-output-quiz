@@ -1,6 +1,5 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.notifier;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,7 +10,6 @@ import io.github.krivolapovdev.codeoutputquiz.common.kafka.TopicNames;
 import io.github.krivolapovdev.codeoutputquiz.common.kafka.event.UserRegistrationEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -29,17 +27,15 @@ class UserRegistrationNotifierTest {
     String email = "test@example.com";
     String json = "{\"email\":\"test@example.com\"}";
 
-    when(userRegistrationEventMapper.toJson(any(UserRegistrationEvent.class))).thenReturn(json);
+    var event = new UserRegistrationEvent(email);
+
+    when(userRegistrationEventMapper.toJson(event)).thenReturn(json);
     when(kafkaProducer.sendEventToTopic(TopicNames.USER_REGISTRATION, email, json))
         .thenReturn(Mono.empty());
 
-    StepVerifier.create(userRegistrationNotifier.notify(email)).verifyComplete();
+    userRegistrationNotifier.notify(email).as(StepVerifier::create).verifyComplete();
 
-    ArgumentCaptor<UserRegistrationEvent> eventCaptor =
-        ArgumentCaptor.forClass(UserRegistrationEvent.class);
-    verify(userRegistrationEventMapper).toJson(eventCaptor.capture());
-    assertThat(eventCaptor.getValue().recipientEmail()).isEqualTo(email);
-
+    verify(userRegistrationEventMapper).toJson(event);
     verify(kafkaProducer).sendEventToTopic(TopicNames.USER_REGISTRATION, email, json);
   }
 
@@ -52,7 +48,7 @@ class UserRegistrationNotifierTest {
     when(kafkaProducer.sendEventToTopic(TopicNames.USER_REGISTRATION, email, json))
         .thenReturn(Mono.error(new RuntimeException("Kafka error")));
 
-    StepVerifier.create(userRegistrationNotifier.notify(email)).verifyComplete();
+    userRegistrationNotifier.notify(email).as(StepVerifier::create).verifyComplete();
 
     verify(userRegistrationEventMapper).toJson(any());
     verify(kafkaProducer).sendEventToTopic(TopicNames.USER_REGISTRATION, email, json);

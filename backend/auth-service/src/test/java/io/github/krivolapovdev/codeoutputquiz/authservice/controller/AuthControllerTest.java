@@ -1,7 +1,5 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -10,9 +8,6 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.authservice.service.AuthService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.context.annotation.Import;
@@ -24,11 +19,9 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 @WebFluxTest(AuthController.class)
-@ExtendWith(MockitoExtension.class)
 @Import(TestSecurityConfig.class)
 class AuthControllerTest {
   @Autowired private WebTestClient webTestClient;
-
   @MockitoBean private AuthService authService;
 
   @Test
@@ -36,7 +29,7 @@ class AuthControllerTest {
     var request = new AuthRequest("test@example.com", "password");
     var response = new AuthResponse();
 
-    when(authService.register(any()))
+    when(authService.register(request))
         .thenReturn(Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(response)));
 
     webTestClient
@@ -48,12 +41,7 @@ class AuthControllerTest {
         .expectStatus()
         .isCreated();
 
-    ArgumentCaptor<AuthRequest> captor = ArgumentCaptor.forClass(AuthRequest.class);
-    verify(authService).register(captor.capture());
-
-    AuthRequest captured = captor.getValue();
-    assertThat(captured.email()).isEqualTo("test@example.com");
-    assertThat(captured.password()).isEqualTo("password");
+    verify(authService).register(request);
   }
 
   @Test
@@ -61,7 +49,7 @@ class AuthControllerTest {
     var request = new AuthRequest("test@example.com", "password");
     var response = new AuthResponse();
 
-    when(authService.login(any())).thenReturn(Mono.just(ResponseEntity.ok(response)));
+    when(authService.login(request)).thenReturn(Mono.just(ResponseEntity.ok(response)));
 
     webTestClient
         .post()
@@ -72,12 +60,7 @@ class AuthControllerTest {
         .expectStatus()
         .isOk();
 
-    ArgumentCaptor<AuthRequest> captor = ArgumentCaptor.forClass(AuthRequest.class);
-    verify(authService).login(captor.capture());
-
-    AuthRequest captured = captor.getValue();
-    assertThat(captured.email()).isEqualTo("test@example.com");
-    assertThat(captured.password()).isEqualTo("password");
+    verify(authService).login(request);
   }
 
   @Test

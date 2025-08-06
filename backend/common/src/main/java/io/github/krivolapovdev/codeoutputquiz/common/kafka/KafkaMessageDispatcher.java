@@ -1,6 +1,5 @@
-package io.github.krivolapovdev.codeoutputquiz.notificationservice.consumer;
+package io.github.krivolapovdev.codeoutputquiz.common.kafka;
 
-import io.github.krivolapovdev.codeoutputquiz.notificationservice.handler.KafkaMessageHandler;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +10,7 @@ import reactor.core.publisher.Mono;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-class KafkaMessageDispatcher {
+public class KafkaMessageDispatcher {
   private final Map<String, KafkaMessageHandler> topicHandlers;
 
   public Mono<Void> dispatch(@NonNull String topic, @NonNull String kafkaMessage) {

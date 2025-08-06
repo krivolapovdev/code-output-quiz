@@ -1,4 +1,4 @@
-package io.github.krivolapovdev.codeoutputquiz.notificationservice.consumer;
+package io.github.krivolapovdev.codeoutputquiz.common.kafka;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-class KafkaConsumer {
+public class KafkaConsumer {
   private final ReactiveKafkaConsumerTemplate<String, String> reactiveKafkaConsumerTemplate;
   private final KafkaMessageDispatcher kafkaMessageDispatcher;
 

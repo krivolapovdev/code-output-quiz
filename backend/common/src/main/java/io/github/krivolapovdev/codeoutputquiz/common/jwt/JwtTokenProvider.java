@@ -85,7 +85,8 @@ public class JwtTokenProvider {
     return Jwts.parser().verifyWith(this.secretKey).build().parseSignedClaims(token).getPayload();
   }
 
-  public @NonNull String createToken(TokenType tokenType, Authentication authentication, UUID userId) {
+  public @NonNull String createToken(
+      @NonNull TokenType tokenType, @NonNull Authentication authentication, @NonNull UUID userId) {
     String email = authentication.getName();
     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
     String joinedAuthorities =

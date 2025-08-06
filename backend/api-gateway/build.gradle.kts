@@ -5,4 +5,6 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("com.github.ben-manes.caffeine:caffeine:${caffeineVersion}")
+
+    testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock")
 }

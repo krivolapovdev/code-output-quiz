@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class DefaultSendEmailsRequestFactory implements SendEmailsRequestFactory {
+class MailjetSendEmailsRequestFactory implements SendEmailsRequestFactory {
   private final MailjetEmailProperties mailjetEmailProperties;
 
   @Override

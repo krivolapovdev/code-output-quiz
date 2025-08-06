@@ -1,5 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.notificationservice.handler;
 
+import io.github.krivolapovdev.codeoutputquiz.common.kafka.KafkaMessageHandler;
+import io.github.krivolapovdev.codeoutputquiz.common.kafka.TopicNames;
 import io.github.krivolapovdev.codeoutputquiz.notificationservice.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,11 +26,11 @@ class UserRegistrationHandler implements KafkaMessageHandler {
   }
 
   @Override
-  public String topic() {
-    return "user.registration";
+  public @NonNull String topic() {
+    return TopicNames.USER_REGISTRATION;
   }
 
-  private String buildContent(@NonNull String email) {
+  private @NonNull String buildContent(@NonNull String email) {
     return """
       👋 Hello %s,
 

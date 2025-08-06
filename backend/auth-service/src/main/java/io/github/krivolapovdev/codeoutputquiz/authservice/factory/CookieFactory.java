@@ -10,7 +10,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CookieFactory {
   public @NonNull ResponseCookie create(
-      @NonNull String cookieName, @NonNull String value, @NonNull String path, @NonNull Duration maxAge) {
+      @NonNull String cookieName,
+      @NonNull String value,
+      @NonNull String path,
+      @NonNull Duration maxAge) {
     return ResponseCookie.from(cookieName, value)
         .httpOnly(true)
         .secure(true)

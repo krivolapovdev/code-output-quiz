@@ -84,11 +84,7 @@ class AuthControllerTest {
   void shouldLogoutUserAndReturnNoContent() {
     when(authService.logout()).thenReturn(Mono.just(ResponseEntity.noContent().build()));
 
-    webTestClient
-        .post()
-        .uri("/api/v1/auth/logout")
-        .exchange()
-        .expectStatus().isNoContent();
+    webTestClient.post().uri("/api/v1/auth/logout").exchange().expectStatus().isNoContent();
 
     verify(authService).logout();
   }

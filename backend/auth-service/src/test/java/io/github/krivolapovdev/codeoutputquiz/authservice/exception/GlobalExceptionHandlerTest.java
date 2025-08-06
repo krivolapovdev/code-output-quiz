@@ -16,22 +16,21 @@ import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.test.StepVerifier;
 
-
 @ExtendWith(MockitoExtension.class)
 class GlobalExceptionHandlerTest {
-  @InjectMocks
-  private GlobalExceptionHandler globalExceptionHandler;
+  @InjectMocks private GlobalExceptionHandler globalExceptionHandler;
 
   @Test
   void shouldReturnConflictForEmailAlreadyTakenException() {
     var ex = new EmailAlreadyTakenException("Email already exists");
 
     StepVerifier.create(globalExceptionHandler.handleQuizNotFoundException(ex))
-        .assertNext(err -> {
-          assertThat(err).isInstanceOf(ResponseStatusException.class);
-          assertThat(err.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
-          assertThat(err.getReason()).isEqualTo("Email already exists");
-        })
+        .assertNext(
+            err -> {
+              assertThat(err).isInstanceOf(ResponseStatusException.class);
+              assertThat(err.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
+              assertThat(err.getReason()).isEqualTo("Email already exists");
+            })
         .verifyComplete();
   }
 
@@ -45,13 +44,14 @@ class GlobalExceptionHandlerTest {
     var webExchangeBindException = new WebExchangeBindException(null, bindException);
 
     StepVerifier.create(globalExceptionHandler.handleValidationException(webExchangeBindException))
-        .assertNext(err -> {
-          assertThat(err).isInstanceOf(ResponseStatusException.class);
-          assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-          assertThat(err.getReason())
-              .contains("`email`: must not be blank")
-              .contains("`password`: must not be null");
-        })
+        .assertNext(
+            err -> {
+              assertThat(err).isInstanceOf(ResponseStatusException.class);
+              assertThat(err.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+              assertThat(err.getReason())
+                  .contains("`email`: must not be blank")
+                  .contains("`password`: must not be null");
+            })
         .verifyComplete();
   }
 
@@ -60,11 +60,12 @@ class GlobalExceptionHandlerTest {
     var ex = new AuthorizationDeniedException("Access denied");
 
     StepVerifier.create(globalExceptionHandler.handleAuthorizationDeniedException(ex))
-        .assertNext(err -> {
-          assertThat(err).isInstanceOf(ResponseStatusException.class);
-          assertThat(err.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
-          assertThat(err.getReason()).isEqualTo("Access denied");
-        })
+        .assertNext(
+            err -> {
+              assertThat(err).isInstanceOf(ResponseStatusException.class);
+              assertThat(err.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+              assertThat(err.getReason()).isEqualTo("Access denied");
+            })
         .verifyComplete();
   }
 
@@ -73,11 +74,12 @@ class GlobalExceptionHandlerTest {
     var ex = new JwtException("Invalid JWT token");
 
     StepVerifier.create(globalExceptionHandler.handleJwtException(ex))
-        .assertNext(err -> {
-          assertThat(err).isInstanceOf(ResponseStatusException.class);
-          assertThat(err.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-          assertThat(err.getReason()).isEqualTo("Invalid JWT token");
-        })
+        .assertNext(
+            err -> {
+              assertThat(err).isInstanceOf(ResponseStatusException.class);
+              assertThat(err.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+              assertThat(err.getReason()).isEqualTo("Invalid JWT token");
+            })
         .verifyComplete();
   }
 
@@ -86,11 +88,12 @@ class GlobalExceptionHandlerTest {
     var ex = new UsernameNotFoundException("User not found");
 
     StepVerifier.create(globalExceptionHandler.handleUsernameNotFoundException(ex))
-        .assertNext(err -> {
-          assertThat(err).isInstanceOf(ResponseStatusException.class);
-          assertThat(err.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-          assertThat(err.getReason()).isEqualTo("User not found");
-        })
+        .assertNext(
+            err -> {
+              assertThat(err).isInstanceOf(ResponseStatusException.class);
+              assertThat(err.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+              assertThat(err.getReason()).isEqualTo("User not found");
+            })
         .verifyComplete();
   }
 }

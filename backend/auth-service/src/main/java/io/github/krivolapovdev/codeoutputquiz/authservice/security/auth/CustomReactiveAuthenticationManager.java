@@ -1,7 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.security.auth;
 
 import io.github.krivolapovdev.codeoutputquiz.authservice.repository.UserRepository;
-import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

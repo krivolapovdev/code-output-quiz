@@ -1,4 +1,4 @@
-package io.github.krivolapovdev.codeoutputquiz.userservice.event;
+package io.github.krivolapovdev.codeoutputquiz.common.kafka.event;
 
 import java.util.UUID;
 import org.springframework.lang.NonNull;

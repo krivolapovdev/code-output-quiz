@@ -16,9 +16,23 @@ public class KafkaProducer {
   public Mono<SenderResult<Void>> sendEventToTopic(
       @NonNull String topic, @NonNull String key, @NonNull String payload) {
     log.info("Sending message to topic='{}' with key='{}'", topic, key);
-
     return Mono.fromCallable(() -> new ProducerRecord<>(topic, key, payload))
         .flatMap(reactiveKafkaProducerTemplate::send)
+        .doOnSuccess(
+            result -> log.info("Message sent successfully to topic='{}', key='{}'", topic, key))
+        .doOnError(
+            error ->
+                log.error("Failed to send message to topic='{}', key='{}'", topic, key, error));
+  }
+
+  public Mono<SenderResult<Void>> send(@NonNull ProducerRecord<String, String> producerRecord) {
+    String topic = producerRecord.topic();
+    Object key = producerRecord.key();
+
+    log.info("Sending message to topic='{}' with key='{}'", topic, key);
+
+    return reactiveKafkaProducerTemplate
+        .send(producerRecord)
         .doOnSuccess(
             result -> log.info("Message sent successfully to topic='{}', key='{}'", topic, key))
         .doOnError(

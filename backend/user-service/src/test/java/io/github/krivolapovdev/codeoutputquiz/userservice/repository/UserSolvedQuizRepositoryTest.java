@@ -2,9 +2,9 @@ package io.github.krivolapovdev.codeoutputquiz.userservice.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.github.krivolapovdev.codeoutputquiz.common.enums.AnswerChoice;
 import io.github.krivolapovdev.codeoutputquiz.userservice.AbstractTestcontainers;
 import io.github.krivolapovdev.codeoutputquiz.userservice.entity.UserSolvedQuiz;
-import io.github.krivolapovdev.codeoutputquiz.userservice.enums.AnswerChoice;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

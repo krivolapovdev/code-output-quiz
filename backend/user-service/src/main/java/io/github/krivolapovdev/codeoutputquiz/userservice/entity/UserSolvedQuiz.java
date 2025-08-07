@@ -1,6 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.entity;
 
-import io.github.krivolapovdev.codeoutputquiz.userservice.enums.AnswerChoice;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.AnswerChoice;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Data;

@@ -1,8 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.service;
 
-import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthPrincipal;
 import io.github.krivolapovdev.codeoutputquiz.userservice.response.UserResponse;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -16,9 +15,8 @@ import reactor.core.publisher.Mono;
 public class UserService {
   public Mono<UserResponse> getCurrentUser(@NonNull Authentication authentication) {
     log.info("Fetching current user: {}", authentication.getName());
-    String email = authentication.getName();
-    AuthDetails authDetails = (AuthDetails) authentication.getDetails();
-    UUID userId = authDetails.userId();
-    return Mono.just(new UserResponse(userId, email));
+    AuthPrincipal authPrincipal = (AuthPrincipal) authentication.getPrincipal();
+    UserResponse userResponse = new UserResponse(authPrincipal.id(), authPrincipal.email());
+    return Mono.just(userResponse);
   }
 }

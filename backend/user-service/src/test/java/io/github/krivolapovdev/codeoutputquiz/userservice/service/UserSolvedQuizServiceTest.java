@@ -4,10 +4,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.AnswerChoice;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.UserRole;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthPrincipal;
 import io.github.krivolapovdev.codeoutputquiz.common.kafka.event.QuizSolvedEvent;
 import io.github.krivolapovdev.codeoutputquiz.userservice.entity.UserSolvedQuiz;
-import io.github.krivolapovdev.codeoutputquiz.userservice.enums.AnswerChoice;
 import io.github.krivolapovdev.codeoutputquiz.userservice.notifier.QuizSolvedNotifier;
 import io.github.krivolapovdev.codeoutputquiz.userservice.repository.UserSolvedQuizRepository;
 import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserSolvedQuizRequest;
@@ -37,11 +38,10 @@ class UserSolvedQuizServiceTest {
     UserSolvedQuiz expectedEntity = new UserSolvedQuiz(quizId, userId, selectedAnswer);
     QuizSolvedEvent expectedEvent = new QuizSolvedEvent(userId, quizId);
 
-    AuthDetails authDetails = mock(AuthDetails.class);
-    when(authDetails.userId()).thenReturn(userId);
+    AuthPrincipal authPrincipal = new AuthPrincipal(userId, "user@example.com", UserRole.USER);
 
     Authentication authentication = mock(Authentication.class);
-    when(authentication.getDetails()).thenReturn(authDetails);
+    when(authentication.getPrincipal()).thenReturn(authPrincipal);
 
     when(userSolvedQuizRepository.addUserSolvedQuiz(expectedEntity)).thenReturn(Mono.empty());
     when(quizSolvedNotifier.sendQuizSolvedEvent(expectedEvent)).thenReturn(Mono.empty());
@@ -53,5 +53,6 @@ class UserSolvedQuizServiceTest {
 
     verify(userSolvedQuizRepository).addUserSolvedQuiz(expectedEntity);
     verify(quizSolvedNotifier).sendQuizSolvedEvent(expectedEvent);
+    verify(authentication).getPrincipal();
   }
 }

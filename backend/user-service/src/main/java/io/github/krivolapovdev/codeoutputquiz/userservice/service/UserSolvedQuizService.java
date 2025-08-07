@@ -1,6 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.service;
 
-import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthPrincipal;
 import io.github.krivolapovdev.codeoutputquiz.common.kafka.event.QuizSolvedEvent;
 import io.github.krivolapovdev.codeoutputquiz.userservice.entity.UserSolvedQuiz;
 import io.github.krivolapovdev.codeoutputquiz.userservice.notifier.QuizSolvedNotifier;
@@ -25,8 +25,8 @@ public class UserSolvedQuizService {
       @NonNull UserSolvedQuizRequest request, @NonNull Authentication authentication) {
     log.info("Received user solved quiz request: {}", request);
 
-    AuthDetails authDetails = (AuthDetails) authentication.getDetails();
-    UUID userId = authDetails.userId();
+    AuthPrincipal authPrincipal = (AuthPrincipal) authentication.getPrincipal();
+    UUID userId = authPrincipal.id();
 
     UserSolvedQuiz userSolvedQuiz =
         new UserSolvedQuiz(request.quizId(), userId, request.selectedAnswer());

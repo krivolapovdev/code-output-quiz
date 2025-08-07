@@ -5,8 +5,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.github.krivolapovdev.codeoutputquiz.common.enums.AnswerChoice;
 import io.github.krivolapovdev.codeoutputquiz.userservice.TestSecurityConfig;
-import io.github.krivolapovdev.codeoutputquiz.userservice.enums.AnswerChoice;
 import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserSolvedQuizRequest;
 import io.github.krivolapovdev.codeoutputquiz.userservice.service.UserSolvedQuizService;
 import java.util.UUID;

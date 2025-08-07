@@ -1,6 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.service;
 
-import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthPrincipal;
 import io.github.krivolapovdev.codeoutputquiz.userservice.entity.UserQuizReaction;
 import io.github.krivolapovdev.codeoutputquiz.userservice.repository.UserQuizReactionRepository;
 import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserQuizReactionRequest;
@@ -22,8 +22,8 @@ public class UserQuizReactionService {
       @NonNull UserQuizReactionRequest request, @NonNull Authentication authentication) {
     log.info("Received quiz reaction request: {}", request);
 
-    AuthDetails authDetails = (AuthDetails) authentication.getDetails();
-    UUID userId = authDetails.userId();
+    AuthPrincipal authPrincipal = (AuthPrincipal) authentication.getPrincipal();
+    UUID userId = authPrincipal.id();
     UserQuizReaction reaction = new UserQuizReaction(userId, request.quizId(), request.liked());
 
     return userQuizReactionRepository

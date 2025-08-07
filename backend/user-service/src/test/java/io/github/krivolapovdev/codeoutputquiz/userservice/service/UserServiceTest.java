@@ -1,9 +1,11 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.service;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.UserRole;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthPrincipal;
 import io.github.krivolapovdev.codeoutputquiz.userservice.response.UserResponse;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -22,17 +24,20 @@ class UserServiceTest {
     UUID userId = UUID.randomUUID();
     String email = "user@example.com";
 
-    Authentication authentication = mock(Authentication.class);
-    when(authentication.getName()).thenReturn(email);
+    AuthPrincipal authPrincipal = new AuthPrincipal(userId, email, UserRole.USER);
 
-    AuthDetails authDetails = mock(AuthDetails.class);
-    when(authDetails.userId()).thenReturn(userId);
-    when(authentication.getDetails()).thenReturn(authDetails);
+    Authentication authentication = mock(Authentication.class);
+    when(authentication.getPrincipal()).thenReturn(authPrincipal);
+    when(authentication.getName()).thenReturn(email); // опционально
+
+    UserResponse expected = new UserResponse(userId, email);
 
     userService
         .getCurrentUser(authentication)
         .as(StepVerifier::create)
-        .expectNext(new UserResponse(userId, email))
+        .expectNext(expected)
         .verifyComplete();
+
+    verify(authentication).getPrincipal();
   }
 }

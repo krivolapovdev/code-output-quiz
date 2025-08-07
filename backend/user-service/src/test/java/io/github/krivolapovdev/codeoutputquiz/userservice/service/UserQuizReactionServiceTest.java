@@ -4,7 +4,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.UserRole;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthPrincipal;
 import io.github.krivolapovdev.codeoutputquiz.userservice.entity.UserQuizReaction;
 import io.github.krivolapovdev.codeoutputquiz.userservice.repository.UserQuizReactionRepository;
 import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserQuizReactionRequest;
@@ -31,11 +32,10 @@ class UserQuizReactionServiceTest {
 
     UserQuizReactionRequest request = new UserQuizReactionRequest(quizId, liked);
 
-    AuthDetails authDetails = mock(AuthDetails.class);
-    when(authDetails.userId()).thenReturn(userId);
+    AuthPrincipal authPrincipal = new AuthPrincipal(userId, "user@example.com", UserRole.USER);
 
     Authentication authentication = mock(Authentication.class);
-    when(authentication.getDetails()).thenReturn(authDetails);
+    when(authentication.getPrincipal()).thenReturn(authPrincipal);
 
     UserQuizReaction expectedReaction = new UserQuizReaction(userId, quizId, liked);
 
@@ -48,5 +48,6 @@ class UserQuizReactionServiceTest {
         .verifyComplete();
 
     verify(userQuizReactionRepository).saveUserQuizReaction(expectedReaction);
+    verify(authentication).getPrincipal();
   }
 }

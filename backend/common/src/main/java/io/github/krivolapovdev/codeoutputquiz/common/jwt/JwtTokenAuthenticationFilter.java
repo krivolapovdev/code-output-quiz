@@ -1,5 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.common.jwt;
 
+import io.github.krivolapovdev.codeoutputquiz.common.cookie.CookieNames;
 import io.github.krivolapovdev.codeoutputquiz.common.enums.TokenType;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class JwtTokenAuthenticationFilter implements WebFilter {
       @NonNull ServerWebExchange exchange, @NonNull WebFilterChain chain) {
     return Mono.defer(
         () -> {
-          HttpCookie cookie = exchange.getRequest().getCookies().getFirst("accessToken");
+          HttpCookie cookie = exchange.getRequest().getCookies().getFirst(CookieNames.ACCESS_TOKEN);
 
           if (cookie == null) {
             return chain.filter(exchange);

@@ -2,7 +2,6 @@ package io.github.krivolapovdev.codeoutputquiz.authservice.service;
 
 import io.github.krivolapovdev.codeoutputquiz.common.enums.TokenType;
 import io.github.krivolapovdev.codeoutputquiz.common.jwt.JwtTokenProvider;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -23,11 +22,11 @@ public class JwtService {
     return jwtTokenProvider.getAuthentication(token);
   }
 
-  public @NonNull String createAccessToken(@NonNull Authentication auth, @NonNull UUID userId) {
-    return jwtTokenProvider.createToken(TokenType.ACCESS, auth, userId);
+  public @NonNull String createAccessToken(@NonNull Authentication auth) {
+    return jwtTokenProvider.createToken(TokenType.ACCESS, auth);
   }
 
-  public @NonNull String createRefreshToken(@NonNull Authentication auth, @NonNull UUID userId) {
-    return jwtTokenProvider.createToken(TokenType.REFRESH, auth, userId);
+  public @NonNull String createRefreshToken(@NonNull Authentication auth) {
+    return jwtTokenProvider.createToken(TokenType.REFRESH, auth);
   }
 }

@@ -8,7 +8,7 @@ import static org.mockito.Mockito.when;
 import io.github.krivolapovdev.codeoutputquiz.authservice.entity.User;
 import io.github.krivolapovdev.codeoutputquiz.authservice.service.UserService;
 import io.github.krivolapovdev.codeoutputquiz.common.enums.UserRole;
-import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthPrincipal;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,10 +34,11 @@ class CustomReactiveAuthenticationManagerTest {
     String rawPassword = "password";
     String hashedPassword = "hashed";
     UUID userId = UUID.randomUUID();
+    UserRole role = UserRole.USER;
 
     var user = new User(email, hashedPassword);
     user.setId(userId);
-    user.setRole(UserRole.USER);
+    user.setRole(role);
 
     var authentication = new UsernamePasswordAuthenticationToken(email, rawPassword);
 
@@ -50,13 +51,15 @@ class CustomReactiveAuthenticationManagerTest {
         .assertNext(
             auth -> {
               assertThat(auth).isInstanceOf(UsernamePasswordAuthenticationToken.class);
-              assertThat(auth.getPrincipal()).isEqualTo(email);
+
+              var principal = (AuthPrincipal) auth.getPrincipal();
+              assertThat(principal.email()).isEqualTo(email);
+              assertThat(principal.id()).isEqualTo(userId);
+              assertThat(principal.role()).isEqualTo(role);
+
               assertThat(auth.getAuthorities())
                   .extracting("authority")
-                  .containsExactly(UserRole.USER.name());
-
-              AuthDetails details = (AuthDetails) auth.getDetails();
-              assertThat(details.userId()).isEqualTo(userId);
+                  .containsExactly(role.name());
             })
         .verifyComplete();
 

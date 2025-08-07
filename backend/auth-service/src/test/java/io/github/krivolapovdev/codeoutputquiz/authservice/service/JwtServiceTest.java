@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import io.github.krivolapovdev.codeoutputquiz.common.enums.TokenType;
 import io.github.krivolapovdev.codeoutputquiz.common.jwt.JwtTokenProvider;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,29 +42,25 @@ class JwtServiceTest {
 
   @Test
   void shouldCreateAccessToken() {
-    UUID userId = UUID.randomUUID();
     String expectedToken = "access-token";
 
-    when(jwtTokenProvider.createToken(TokenType.ACCESS, authentication, userId))
-        .thenReturn(expectedToken);
+    when(jwtTokenProvider.createToken(TokenType.ACCESS, authentication)).thenReturn(expectedToken);
 
-    String result = jwtService.createAccessToken(authentication, userId);
+    String result = jwtService.createAccessToken(authentication);
 
     assertThat(result).isEqualTo(expectedToken);
-    verify(jwtTokenProvider).createToken(TokenType.ACCESS, authentication, userId);
+    verify(jwtTokenProvider).createToken(TokenType.ACCESS, authentication);
   }
 
   @Test
   void shouldCreateRefreshToken() {
-    UUID userId = UUID.randomUUID();
     String expectedToken = "refresh-token";
 
-    when(jwtTokenProvider.createToken(TokenType.REFRESH, authentication, userId))
-        .thenReturn(expectedToken);
+    when(jwtTokenProvider.createToken(TokenType.REFRESH, authentication)).thenReturn(expectedToken);
 
-    String result = jwtService.createRefreshToken(authentication, userId);
+    String result = jwtService.createRefreshToken(authentication);
 
     assertThat(result).isEqualTo(expectedToken);
-    verify(jwtTokenProvider).createToken(TokenType.REFRESH, authentication, userId);
+    verify(jwtTokenProvider).createToken(TokenType.REFRESH, authentication);
   }
 }

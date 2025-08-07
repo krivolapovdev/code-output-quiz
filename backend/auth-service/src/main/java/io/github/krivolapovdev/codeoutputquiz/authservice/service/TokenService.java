@@ -4,7 +4,6 @@ import io.github.krivolapovdev.codeoutputquiz.authservice.factory.AuthResponseEn
 import io.github.krivolapovdev.codeoutputquiz.authservice.model.TokenPair;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.common.enums.TokenType;
-import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,9 +22,8 @@ public class TokenService {
 
   public @NonNull TokenPair generateTokens(@NonNull Authentication auth) {
     log.info("Generating tokens for user: {}", auth.getName());
-    AuthDetails details = (AuthDetails) auth.getDetails();
-    String accessToken = jwtService.createAccessToken(auth, details.userId());
-    String refreshToken = jwtService.createRefreshToken(auth, details.userId());
+    String accessToken = jwtService.createAccessToken(auth);
+    String refreshToken = jwtService.createRefreshToken(auth);
     return new TokenPair(accessToken, refreshToken);
   }
 

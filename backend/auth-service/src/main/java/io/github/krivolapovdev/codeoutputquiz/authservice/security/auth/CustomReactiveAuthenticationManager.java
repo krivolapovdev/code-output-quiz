@@ -1,7 +1,7 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.security.auth;
 
 import io.github.krivolapovdev.codeoutputquiz.authservice.service.UserService;
-import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
@@ -32,18 +32,12 @@ class CustomReactiveAuthenticationManager implements ReactiveAuthenticationManag
         .getUserByEmail(email)
         .filter(user -> passwordEncoder.matches(rawPassword, user.getPassword()))
         .switchIfEmpty(Mono.error(new BadCredentialsException("Invalid password")))
+        .map(user -> new AuthPrincipal(user.getId(), user.getEmail(), user.getRole()))
         .map(
-            user -> {
-              var auth =
-                  new UsernamePasswordAuthenticationToken(
-                      user.getEmail(),
-                      null,
-                      AuthorityUtils.createAuthorityList(user.getRole().name()));
-
-              AuthDetails authDetails = new AuthDetails(user.getId());
-              auth.setDetails(authDetails);
-
-              return auth;
-            });
+            authPrincipal ->
+                new UsernamePasswordAuthenticationToken(
+                    authPrincipal,
+                    null,
+                    AuthorityUtils.createAuthorityList(authPrincipal.role().name())));
   }
 }

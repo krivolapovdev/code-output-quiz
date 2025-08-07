@@ -3,6 +3,7 @@ package io.github.krivolapovdev.codeoutputquiz.common.jwt;
 import static java.util.stream.Collectors.joining;
 
 import io.github.krivolapovdev.codeoutputquiz.common.enums.TokenType;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,14 +23,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtTokenProvider {
   private static final String AUTHORITIES_KEY = "roles";
-  private static final String USER_ID_KEY = "userId";
+  private static final String USER_ID_KEY = "id";
   private static final String TOKEN_TYPE_KEY = "tokenType";
+  private static final String USER_ROLE_KEY = "userRole";
 
   private final JwtProperties jwtProperties;
 
@@ -45,23 +46,20 @@ public class JwtTokenProvider {
     Claims claims = parseTokenClaims(token);
 
     Object authoritiesClaim = claims.get(AUTHORITIES_KEY);
-
     Collection<? extends GrantedAuthority> authorities =
         authoritiesClaim == null
             ? AuthorityUtils.NO_AUTHORITIES
             : AuthorityUtils.commaSeparatedStringToAuthorityList(authoritiesClaim.toString());
 
-    User principal = new User(claims.getSubject(), "", authorities);
-
-    var authenticationToken =
-        new UsernamePasswordAuthenticationToken(principal, token, authorities);
-
     String userIdStr = claims.get(USER_ID_KEY, String.class);
     UUID userId = UUID.fromString(userIdStr);
-    AuthDetails authDetails = new AuthDetails(userId);
-    authenticationToken.setDetails(authDetails);
 
-    return authenticationToken;
+    String userRoleStr = claims.get(USER_ROLE_KEY, String.class);
+    UserRole userRole = UserRole.valueOf(userRoleStr);
+
+    var authUser = new AuthPrincipal(userId, claims.getSubject(), userRole);
+
+    return new UsernamePasswordAuthenticationToken(authUser, token, authorities);
   }
 
   public void validateTokenType(@NonNull String token, @NonNull TokenType expectedType) {
@@ -74,30 +72,25 @@ public class JwtTokenProvider {
     }
   }
 
-  public @NonNull UUID extractUserIdFromToken(@NonNull String token) {
-    Claims claims =
-        Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
-
-    return UUID.fromString(claims.get(USER_ID_KEY, String.class));
-  }
-
   private @NonNull Claims parseTokenClaims(@NonNull String token) {
     return Jwts.parser().verifyWith(this.secretKey).build().parseSignedClaims(token).getPayload();
   }
 
   public @NonNull String createToken(
-      @NonNull TokenType tokenType, @NonNull Authentication authentication, @NonNull UUID userId) {
-    String email = authentication.getName();
+      @NonNull TokenType tokenType, @NonNull Authentication authentication) {
+    AuthPrincipal authPrincipal = (AuthPrincipal) authentication.getPrincipal();
+
     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
     String joinedAuthorities =
         authorities.stream().map(GrantedAuthority::getAuthority).collect(joining(","));
 
     Claims claims =
         Jwts.claims()
-            .subject(email)
-            .add(USER_ID_KEY, userId.toString())
+            .subject(authPrincipal.email())
+            .add(USER_ID_KEY, authPrincipal.id())
             .add(AUTHORITIES_KEY, joinedAuthorities)
             .add(TOKEN_TYPE_KEY, tokenType.name().toLowerCase())
+            .add(USER_ROLE_KEY, authPrincipal.role())
             .build();
 
     Date now = new Date();

@@ -1,5 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.response;
 
 import java.util.UUID;
+import org.springframework.lang.NonNull;
 
-public record UserResponse(UUID userId, String email) {}
+public record UserResponse(@NonNull UUID userId, @NonNull String email) {}

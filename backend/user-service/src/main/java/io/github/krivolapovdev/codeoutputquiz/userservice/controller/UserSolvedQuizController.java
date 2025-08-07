@@ -5,6 +5,7 @@ import io.github.krivolapovdev.codeoutputquiz.userservice.service.UserSolvedQuiz
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,8 @@ public class UserSolvedQuizController {
   @PostMapping("/me/solved-quizzes")
   @PreAuthorize("isAuthenticated()")
   public Mono<Void> addUserSolvedQuiz(
-      @Valid @RequestBody UserSolvedQuizRequest userSolvedQuizRequest) {
-    return userSolvedQuizService.addUserSolvedQuiz(userSolvedQuizRequest);
+      @Valid @RequestBody UserSolvedQuizRequest userSolvedQuizRequest,
+      Authentication authentication) {
+    return userSolvedQuizService.addUserSolvedQuiz(userSolvedQuizRequest, authentication);
   }
 }

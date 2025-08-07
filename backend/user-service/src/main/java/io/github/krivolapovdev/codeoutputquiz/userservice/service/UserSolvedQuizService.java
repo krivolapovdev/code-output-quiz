@@ -1,15 +1,17 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.service;
 
-import io.github.krivolapovdev.codeoutputquiz.userservice.event.QuizSolvedEvent;
-import io.github.krivolapovdev.codeoutputquiz.userservice.producer.QuizSolvedProducer;
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.common.kafka.event.QuizSolvedEvent;
+import io.github.krivolapovdev.codeoutputquiz.userservice.entity.UserSolvedQuiz;
+import io.github.krivolapovdev.codeoutputquiz.userservice.notifier.QuizSolvedNotifier;
 import io.github.krivolapovdev.codeoutputquiz.userservice.repository.UserSolvedQuizRepository;
 import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserSolvedQuizRequest;
-import io.github.krivolapovdev.codeoutputquiz.userservice.security.jwt.JwtTokenProvider;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -17,32 +19,24 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserSolvedQuizService {
   private final UserSolvedQuizRepository userSolvedQuizRepository;
-  private final QuizSolvedProducer quizSolvedProducer;
-  private final JwtTokenProvider jwtTokenProvider;
+  private final QuizSolvedNotifier quizSolvedNotifier;
 
-  public Flux<String> getUserSolvedQuizzes() {
-    return ReactiveSecurityContextHolder.getContext()
-        .map(ctx -> (String) ctx.getAuthentication().getCredentials())
-        .map(jwtTokenProvider::extractUserIdFromToken)
-        .doOnNext(userId -> log.info("Fetching solved quizzes for userId: {}", userId))
-        .flatMapMany(userSolvedQuizRepository::findAllSolvedQuizzesByUserId)
-        .map(sq -> sq.getQuizId().toString());
-  }
+  public Mono<Void> addUserSolvedQuiz(
+      @NonNull UserSolvedQuizRequest request, @NonNull Authentication authentication) {
+    log.info("Received user solved quiz request: {}", request);
 
-  public Mono<Void> addUserSolvedQuiz(UserSolvedQuizRequest request) {
-    return ReactiveSecurityContextHolder.getContext()
-        .map(ctx -> (String) ctx.getAuthentication().getCredentials())
-        .map(jwtTokenProvider::extractUserIdFromToken)
-        .doOnNext(
-            userId ->
-                log.info("Adding solved quiz for userId: {}, quizId: {}", userId, request.quizId()))
-        .flatMap(
-            userId ->
-                userSolvedQuizRepository
-                    .addUserSolvedQuiz(userId, request.quizId(), request.selectedAnswer())
-                    .then(
-                        quizSolvedProducer.sendQuizSolvedEvent(
-                            new QuizSolvedEvent(userId, request.quizId()))))
+    AuthDetails authDetails = (AuthDetails) authentication.getDetails();
+    UUID userId = authDetails.userId();
+
+    UserSolvedQuiz userSolvedQuiz =
+        new UserSolvedQuiz(request.quizId(), userId, request.selectedAnswer());
+
+    return userSolvedQuizRepository
+        .addUserSolvedQuiz(userSolvedQuiz)
+        .doOnSuccess(ignored -> log.info("User solved quiz saved successfully"))
+        .doOnError(error -> log.error("Failed to save user solved quiz", error))
+        .thenReturn(new QuizSolvedEvent(userId, request.quizId()))
+        .flatMap(quizSolvedNotifier::sendQuizSolvedEvent)
         .then();
   }
 }

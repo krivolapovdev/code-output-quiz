@@ -5,6 +5,7 @@ import io.github.krivolapovdev.codeoutputquiz.userservice.service.UserQuizReacti
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,8 @@ public class UserQuizReactionController {
 
   @PostMapping("/me/quiz-reactions")
   @PreAuthorize("isAuthenticated()")
-  public Mono<Void> reactToQuiz(@Valid @RequestBody UserQuizReactionRequest request) {
-    return userQuizReactionService.reactToQuiz(request);
+  public Mono<Void> reactToQuiz(
+      @Valid @RequestBody UserQuizReactionRequest request, Authentication authentication) {
+    return userQuizReactionService.reactToQuiz(request, authentication);
   }
 }

@@ -1,12 +1,14 @@
 package io.github.krivolapovdev.codeoutputquiz.userservice.service;
 
+import io.github.krivolapovdev.codeoutputquiz.common.jwt.AuthDetails;
+import io.github.krivolapovdev.codeoutputquiz.userservice.entity.UserQuizReaction;
 import io.github.krivolapovdev.codeoutputquiz.userservice.repository.UserQuizReactionRepository;
 import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserQuizReactionRequest;
-import io.github.krivolapovdev.codeoutputquiz.userservice.security.jwt.JwtTokenProvider;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -15,25 +17,18 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class UserQuizReactionService {
   private final UserQuizReactionRepository userQuizReactionRepository;
-  private final JwtTokenProvider jwtTokenProvider;
 
-  public Mono<Void> reactToQuiz(@NonNull UserQuizReactionRequest request) {
-    log.info(
-        "Received quiz reaction request: quizId={}, liked={}", request.quizId(), request.liked());
+  public Mono<Void> reactToQuiz(
+      @NonNull UserQuizReactionRequest request, @NonNull Authentication authentication) {
+    log.info("Received quiz reaction request: {}", request);
 
-    return ReactiveSecurityContextHolder.getContext()
-        .map(ctx -> (String) ctx.getAuthentication().getCredentials())
-        .map(jwtTokenProvider::extractUserIdFromToken)
-        .doOnNext(
-            userId ->
-                log.info(
-                    "Saving quiz reaction for userId={}, quizId={}, liked={}",
-                    userId,
-                    request.quizId(),
-                    request.liked()))
-        .flatMap(
-            userId ->
-                userQuizReactionRepository.saveUserQuizReaction(
-                    userId, request.quizId(), request.liked()));
+    AuthDetails authDetails = (AuthDetails) authentication.getDetails();
+    UUID userId = authDetails.userId();
+    UserQuizReaction reaction = new UserQuizReaction(userId, request.quizId(), request.liked());
+
+    return userQuizReactionRepository
+        .saveUserQuizReaction(reaction)
+        .doOnSuccess(ignored -> log.info("Quiz reaction saved successfully"))
+        .doOnError(ignored -> log.error("Failed to save quiz reaction"));
   }
 }

@@ -31,4 +31,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jjwtVersion}")
 
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
+
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
 }

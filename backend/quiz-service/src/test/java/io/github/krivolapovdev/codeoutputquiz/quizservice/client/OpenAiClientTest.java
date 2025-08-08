@@ -1,7 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,7 +8,6 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,7 +23,6 @@ import reactor.test.StepVerifier;
 @ExtendWith(MockitoExtension.class)
 class OpenAiClientTest {
   @Mock private ChatClient chatClient;
-
   @InjectMocks private OpenAiClient openAiClient;
 
   @Test
@@ -34,8 +31,7 @@ class OpenAiClientTest {
     String aiText = "Java is a programming language.";
     AssistantMessage assistantMessage = new AssistantMessage(aiText);
     Generation generation = new Generation(assistantMessage);
-    List<Generation> generationList = List.of(generation);
-    ChatResponse response = new ChatResponse(generationList);
+    ChatResponse response = new ChatResponse(List.of(generation));
     Flux<ChatResponse> fluxResponse = Flux.just(response);
 
     ChatClientRequestSpec mockChatClientRequestSpec = mock(ChatClientRequestSpec.class);
@@ -46,11 +42,9 @@ class OpenAiClientTest {
     when(mockChatClientRequestSpec.stream()).thenReturn(mockStreamResponseSpec);
     when(mockStreamResponseSpec.chatResponse()).thenReturn(fluxResponse);
 
-    StepVerifier.create(openAiClient.sendPrompt(prompt)).expectNext(aiText).verifyComplete();
+    openAiClient.sendPrompt(prompt).as(StepVerifier::create).expectNext(aiText).verifyComplete();
 
-    ArgumentCaptor<String> promptCaptor = ArgumentCaptor.forClass(String.class);
-    verify(mockChatClientRequestSpec).user(promptCaptor.capture());
-    assertThat(promptCaptor.getValue()).isEqualTo(prompt);
+    verify(mockChatClientRequestSpec).user(prompt);
   }
 
   @Test
@@ -61,21 +55,20 @@ class OpenAiClientTest {
     StreamResponseSpec mockStreamSpec = mock(StreamResponseSpec.class);
 
     when(chatClient.prompt()).thenReturn(mockRequestSpec);
-    when(mockRequestSpec.user(anyString())).thenReturn(mockRequestSpec);
+    when(mockRequestSpec.user(prompt)).thenReturn(mockRequestSpec);
     when(mockRequestSpec.stream()).thenReturn(mockStreamSpec);
     when(mockStreamSpec.chatResponse()).thenReturn(Flux.empty());
 
-    StepVerifier.create(openAiClient.sendPrompt(prompt))
+    openAiClient
+        .sendPrompt(prompt)
+        .as(StepVerifier::create)
         .expectErrorSatisfies(
-            error -> {
-              assertThat(error)
-                  .isInstanceOf(IllegalStateException.class)
-                  .hasMessage("AI response was empty");
-            })
+            error ->
+                assertThat(error)
+                    .isInstanceOf(IllegalStateException.class)
+                    .hasMessage("AI response was empty"))
         .verify();
 
-    ArgumentCaptor<String> promptCaptor = ArgumentCaptor.forClass(String.class);
-    verify(mockRequestSpec).user(promptCaptor.capture());
-    assertThat(promptCaptor.getValue()).isEqualTo(prompt);
+    verify(mockRequestSpec).user(prompt);
   }
 }

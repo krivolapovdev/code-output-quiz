@@ -3,22 +3,20 @@ package io.github.krivolapovdev.codeoutputquiz.quizservice.parser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.AnswerChoice;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.AnswerChoice;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.view.AnswerChoiceData;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.view.QuizView;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 class TextQuizParserTest {
-  private TextQuizParser parser;
-
-  @BeforeEach
-  void setUp() {
-    parser = new TextQuizParser();
-  }
+  @InjectMocks private TextQuizParser parser;
 
   @Test
   void shouldParseQuizWithCodeBlockCorrectly() {

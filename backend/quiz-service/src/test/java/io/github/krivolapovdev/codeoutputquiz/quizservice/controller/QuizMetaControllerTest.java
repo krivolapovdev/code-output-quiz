@@ -3,10 +3,8 @@ package io.github.krivolapovdev.codeoutputquiz.quizservice.controller;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.github.krivolapovdev.codeoutputquiz.quizservice.config.SecurityConfig;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.response.ProgrammingLanguageResponse;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.security.jwt.JwtTokenProvider;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.service.QuizMetaService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -21,12 +19,9 @@ import reactor.core.publisher.Mono;
 
 @WebFluxTest(controllers = QuizMetaController.class)
 @ExtendWith(MockitoExtension.class)
-@Import(SecurityConfig.class)
+@Import(TestSecurityConfig.class)
 class QuizMetaControllerTest {
   @Autowired private WebTestClient webTestClient;
-
-  @MockitoBean private JwtTokenProvider jwtTokenProvider;
-
   @MockitoBean private QuizMetaService quizMetaService;
 
   @Test

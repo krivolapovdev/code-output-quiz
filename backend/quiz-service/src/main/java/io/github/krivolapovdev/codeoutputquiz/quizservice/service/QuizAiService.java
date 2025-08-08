@@ -31,7 +31,6 @@ public class QuizAiService {
                 textQuizParser.parse(
                     text, request.programmingLanguage(), request.difficultyLevel()))
         .doOnError(
-            error -> log.warn("Failed to generate quiz for {}: {}", request, error.getMessage()))
-        .onErrorResume(error -> Mono.empty());
+            error -> log.warn("Failed to generate quiz for {}: {}", request, error.getMessage()));
   }
 }

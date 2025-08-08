@@ -2,7 +2,7 @@ package io.github.krivolapovdev.codeoutputquiz.quizservice.mapper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.event.QuizSolvedEvent;
+import io.github.krivolapovdev.codeoutputquiz.common.kafka.event.QuizSolvedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;

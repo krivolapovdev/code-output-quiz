@@ -1,4 +1,4 @@
-package io.github.krivolapovdev.codeoutputquiz.quizservice.config.cache;
+package io.github.krivolapovdev.codeoutputquiz.quizservice.config;
 
 import java.time.Duration;
 import org.springframework.cache.annotation.EnableCaching;

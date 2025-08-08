@@ -1,6 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.quizservice.parser;
 
-import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.AnswerChoice;
+import io.github.krivolapovdev.codeoutputquiz.common.enums.AnswerChoice;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.view.AnswerChoiceData;

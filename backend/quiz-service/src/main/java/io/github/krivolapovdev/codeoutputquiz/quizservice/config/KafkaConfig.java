@@ -1,6 +1,9 @@
-package io.github.krivolapovdev.codeoutputquiz.quizservice.config.kafka;
+package io.github.krivolapovdev.codeoutputquiz.quizservice.config;
 
-import io.github.krivolapovdev.codeoutputquiz.quizservice.handler.KafkaMessageHandler;
+import io.github.krivolapovdev.codeoutputquiz.common.kafka.KafkaConsumer;
+import io.github.krivolapovdev.codeoutputquiz.common.kafka.KafkaMessageDispatcher;
+import io.github.krivolapovdev.codeoutputquiz.common.kafka.KafkaMessageHandler;
+import io.github.krivolapovdev.codeoutputquiz.common.kafka.TopicNames;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +19,7 @@ class KafkaConfig {
   @Bean
   public ReceiverOptions<String, String> receiverOptions(KafkaProperties kafkaProperties) {
     return ReceiverOptions.<String, String>create(kafkaProperties.buildConsumerProperties())
-        .subscription(Collections.singletonList(TopicNames.QUIZ_SOLVED));
+        .subscription(Collections.singletonList(TopicNames.USER_REGISTRATION));
   }
 
   @Bean
@@ -29,5 +32,18 @@ class KafkaConfig {
   public Map<String, KafkaMessageHandler> topicHandlers(List<KafkaMessageHandler> handlers) {
     return handlers.stream()
         .collect(Collectors.toMap(KafkaMessageHandler::topic, handler -> handler));
+  }
+
+  @Bean
+  public KafkaMessageDispatcher kafkaMessageDispatcher(
+      Map<String, KafkaMessageHandler> topicHandlers) {
+    return new KafkaMessageDispatcher(topicHandlers);
+  }
+
+  @Bean
+  public KafkaConsumer kafkaConsumer(
+      ReactiveKafkaConsumerTemplate<String, String> reactiveKafkaConsumerTemplate,
+      KafkaMessageDispatcher kafkaMessageDispatcher) {
+    return new KafkaConsumer(reactiveKafkaConsumerTemplate, kafkaMessageDispatcher);
   }
 }

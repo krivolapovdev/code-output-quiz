@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
+import reactor.util.retry.Retry;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +28,9 @@ class QuizGeneratorScheduler {
 
   @PreDestroy
   public void stop() {
-    if (subscription != null) subscription.dispose();
+    if (subscription != null) {
+      subscription.dispose();
+    }
   }
 
   void start(@NonNull Duration initialDelay, @NonNull Duration perQuizDelay) {
@@ -43,6 +46,13 @@ class QuizGeneratorScheduler {
                                     e -> log.warn("Quiz generation failed, continuing schedule", e))
                                 .onErrorResume(e -> Mono.empty()))
                     .repeat())
-            .subscribe();
+            .retryWhen(
+                Retry.indefinitely()
+                    .doBeforeRetry(
+                        e ->
+                            log.warn(
+                                "Resubscribing scheduler after upstream failure", e.failure())))
+            .doOnSubscribe(s -> log.info("Scheduler started"))
+            .subscribe(v -> {}, e -> log.error("Scheduler stream crashed...", e));
   }
 }

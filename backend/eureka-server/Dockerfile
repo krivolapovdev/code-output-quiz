@@ -5,9 +5,13 @@ WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts gradle ./
 
+COPY common/build.gradle.kts ./common/build.gradle.kts
+
 COPY eureka-server/build.gradle.kts ./eureka-server/build.gradle.kts
 
 RUN gradle --no-daemon :eureka-server:dependencies
+
+COPY common/src ./common/src
 
 COPY eureka-server/src ./eureka-server/src
 

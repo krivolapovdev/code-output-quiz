@@ -5,9 +5,13 @@ WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts gradle ./
 
+COPY common/build.gradle.kts ./common/build.gradle.kts
+
 COPY quiz-service/build.gradle.kts ./quiz-service/build.gradle.kts
 
 RUN gradle --no-daemon :quiz-service:dependencies
+
+COPY common/src ./common/src
 
 COPY quiz-service/src ./quiz-service/src
 

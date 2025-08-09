@@ -5,9 +5,13 @@ WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts gradle ./
 
+COPY common/build.gradle.kts ./common/build.gradle.kts
+
 COPY user-service/build.gradle.kts ./user-service/build.gradle.kts
 
 RUN gradle --no-daemon :user-service:dependencies
+
+COPY common/src ./common/src
 
 COPY user-service/src ./user-service/src
 

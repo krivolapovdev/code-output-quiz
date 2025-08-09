@@ -5,9 +5,13 @@ WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts gradle ./
 
+COPY common/build.gradle.kts ./common/build.gradle.kts
+
 COPY notification-service/build.gradle.kts ./notification-service/build.gradle.kts
 
 RUN gradle --no-daemon :notification-service:dependencies
+
+COPY common/src ./common/src
 
 COPY notification-service/src ./notification-service/src
 

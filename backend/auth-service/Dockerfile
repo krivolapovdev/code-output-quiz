@@ -5,9 +5,13 @@ WORKDIR /app
 
 COPY build.gradle.kts settings.gradle.kts gradle ./
 
+COPY common/build.gradle.kts ./common/build.gradle.kts
+
 COPY auth-service/build.gradle.kts ./auth-service/build.gradle.kts
 
 RUN gradle --no-daemon :auth-service:dependencies
+
+COPY common/src ./common/src
 
 COPY auth-service/src ./auth-service/src
 

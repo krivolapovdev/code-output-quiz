@@ -1,5 +1,9 @@
 package io.github.krivolapovdev.codeoutputquiz.common.jwt;
 
+import static io.github.krivolapovdev.codeoutputquiz.common.jwt.JwtClaims.AUTHORITIES_KEY;
+import static io.github.krivolapovdev.codeoutputquiz.common.jwt.JwtClaims.TOKEN_TYPE_KEY;
+import static io.github.krivolapovdev.codeoutputquiz.common.jwt.JwtClaims.USER_ID_KEY;
+import static io.github.krivolapovdev.codeoutputquiz.common.jwt.JwtClaims.USER_ROLE_KEY;
 import static java.util.stream.Collectors.joining;
 
 import io.github.krivolapovdev.codeoutputquiz.common.enums.TokenType;
@@ -27,11 +31,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtTokenProvider {
-  private static final String AUTHORITIES_KEY = "roles";
-  private static final String USER_ID_KEY = "id";
-  private static final String TOKEN_TYPE_KEY = "tokenType";
-  private static final String USER_ROLE_KEY = "userRole";
-
   private final JwtProperties jwtProperties;
 
   private SecretKey secretKey;

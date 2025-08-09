@@ -3,7 +3,6 @@ package io.github.krivolapovdev.codeoutputquiz.authservice.controller;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.github.krivolapovdev.codeoutputquiz.authservice.TestSecurityConfig;
 import io.github.krivolapovdev.codeoutputquiz.authservice.request.AuthRequest;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.authservice.service.AuthService;

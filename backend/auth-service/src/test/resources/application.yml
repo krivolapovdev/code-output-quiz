@@ -5,6 +5,8 @@ spring:
     config:
       enabled: false
       fail-fast: false
+  flyway:
+    enabled: true
 management:
   tracing:
     enabled: false

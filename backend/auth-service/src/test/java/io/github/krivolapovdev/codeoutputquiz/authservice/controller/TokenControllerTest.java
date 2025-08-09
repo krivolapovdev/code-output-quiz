@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.github.krivolapovdev.codeoutputquiz.authservice.TestSecurityConfig;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.authservice.service.TokenService;
 import io.github.krivolapovdev.codeoutputquiz.common.cookie.CookieNames;

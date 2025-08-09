@@ -1,27 +1,21 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import io.github.krivolapovdev.codeoutputquiz.authservice.AbstractTestcontainers;
 import io.github.krivolapovdev.codeoutputquiz.authservice.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
+import org.springframework.context.annotation.Import;
 import reactor.test.StepVerifier;
 
 @DataR2dbcTest
-class UserRepositoryTest extends AbstractTestcontainers {
+@Import(TestcontainersConfig.class)
+class UserRepositoryTest {
   @Autowired private UserRepository userRepository;
 
   @BeforeEach
   void setUp() {
     userRepository.deleteAll().block();
-  }
-
-  @Test
-  void shouldReturnTrueWhenPostgresIsRunning() {
-    assertThat(postgres.isRunning()).isTrue();
   }
 
   @Test

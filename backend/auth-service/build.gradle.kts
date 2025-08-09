@@ -27,4 +27,8 @@ dependencies {
 
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.testcontainers:r2dbc")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
 }

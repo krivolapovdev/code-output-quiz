@@ -3,7 +3,6 @@ package io.github.krivolapovdev.codeoutputquiz.quizservice.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.krivolapovdev.codeoutputquiz.common.enums.AnswerChoice;
-import io.github.krivolapovdev.codeoutputquiz.quizservice.AbstractTestcontainers;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.DifficultyLevel;
 import io.github.krivolapovdev.codeoutputquiz.quizservice.enums.ProgrammingLanguage;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,8 +14,8 @@ import org.springframework.r2dbc.core.DatabaseClient;
 import reactor.test.StepVerifier;
 
 @DataR2dbcTest
-@Import(TestDatabaseConfig.class)
-class QuizViewRepositoryTest extends AbstractTestcontainers {
+@Import({TestDatabaseConfig.class, TestcontainersConfig.class})
+class QuizViewRepositoryTest {
   @Autowired private QuizViewRepository quizViewRepository;
   @Autowired private DatabaseClient databaseClient;
 
@@ -24,11 +23,6 @@ class QuizViewRepositoryTest extends AbstractTestcontainers {
   void setUp() {
     databaseClient.sql("DELETE FROM solved_quizzes").then().block();
     databaseClient.sql("DELETE FROM quizzes").then().block();
-  }
-
-  @Test
-  void shouldReturnTrueWhenPostgresIsRunning() {
-    assertThat(postgres.isRunning()).isTrue();
   }
 
   @Test

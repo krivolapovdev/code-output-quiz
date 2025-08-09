@@ -26,5 +26,5 @@ echo "📦 Installing frontend dependencies..."
 echo "✅ Frontend dependencies installed successfully."
 
 echo "⚙️ Installing backend dependencies..."
-(cd backend && ./gradlew clean build)
-echo "✅ Backend build completed."
+(cd backend && ./gradlew clean assemble)
+echo "✅ Backend assemble completed."

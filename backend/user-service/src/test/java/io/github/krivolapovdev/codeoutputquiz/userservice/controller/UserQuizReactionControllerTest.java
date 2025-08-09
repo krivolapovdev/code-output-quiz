@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.github.krivolapovdev.codeoutputquiz.userservice.TestSecurityConfig;
 import io.github.krivolapovdev.codeoutputquiz.userservice.request.UserQuizReactionRequest;
 import io.github.krivolapovdev.codeoutputquiz.userservice.service.UserQuizReactionService;
 import java.util.UUID;

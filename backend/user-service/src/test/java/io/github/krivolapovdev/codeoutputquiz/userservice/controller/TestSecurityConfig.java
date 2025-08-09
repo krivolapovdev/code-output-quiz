@@ -1,4 +1,4 @@
-package io.github.krivolapovdev.codeoutputquiz.userservice;
+package io.github.krivolapovdev.codeoutputquiz.userservice.controller;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

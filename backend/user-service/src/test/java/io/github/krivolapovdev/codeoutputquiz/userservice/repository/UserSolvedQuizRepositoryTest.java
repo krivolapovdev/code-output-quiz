@@ -3,17 +3,18 @@ package io.github.krivolapovdev.codeoutputquiz.userservice.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.github.krivolapovdev.codeoutputquiz.common.enums.AnswerChoice;
-import io.github.krivolapovdev.codeoutputquiz.userservice.AbstractTestcontainers;
 import io.github.krivolapovdev.codeoutputquiz.userservice.entity.UserSolvedQuiz;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
+import org.springframework.context.annotation.Import;
 import reactor.test.StepVerifier;
 
 @DataR2dbcTest
-class UserSolvedQuizRepositoryTest extends AbstractTestcontainers {
+@Import(TestcontainersConfig.class)
+class UserSolvedQuizRepositoryTest {
   @Autowired private UserSolvedQuizRepository userSolvedQuizRepository;
 
   @BeforeEach

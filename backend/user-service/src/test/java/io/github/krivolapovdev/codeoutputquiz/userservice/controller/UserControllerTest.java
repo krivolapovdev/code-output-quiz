@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import io.github.krivolapovdev.codeoutputquiz.userservice.TestSecurityConfig;
 import io.github.krivolapovdev.codeoutputquiz.userservice.response.UserResponse;
 import io.github.krivolapovdev.codeoutputquiz.userservice.service.UserService;
 import java.util.UUID;

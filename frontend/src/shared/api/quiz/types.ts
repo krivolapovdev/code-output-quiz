@@ -1,7 +1,7 @@
 export type QuizResponse = {
   id: string;
   code: string;
-  correctAnswer: string;
+  correctAnswer: AnswerChoiceData["choice"];
   explanation: string;
   programmingLanguage: string;
   difficultyLevel: string;

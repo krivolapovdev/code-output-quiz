@@ -16,7 +16,6 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Slf4j
 public class QuizGeneratorService {
-
   private final QuizAiService quizAiService;
   private final QuizService quizService;
 
@@ -44,8 +43,7 @@ public class QuizGeneratorService {
                           log.warn("Failed to generate/save for {} — skipping.", request, e);
                           return Mono.empty();
                         })
-                    .then()
-                    .delayElement(perQuizDelay))
+                    .then(Mono.delay(perQuizDelay)))
         .then();
   }
 }

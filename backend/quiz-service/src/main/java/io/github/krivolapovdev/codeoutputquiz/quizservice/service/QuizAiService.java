@@ -30,6 +30,7 @@ public class QuizAiService {
             text ->
                 textQuizParser.parse(
                     text, request.programmingLanguage(), request.difficultyLevel()))
+        .doOnSuccess(quizView -> log.info("Successfully generated quiz for {}", request))
         .doOnError(
             error -> log.warn("Failed to generate quiz for {}: {}", request, error.getMessage()));
   }

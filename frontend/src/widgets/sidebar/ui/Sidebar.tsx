@@ -4,7 +4,7 @@ import { SidebarNavSection } from "./SidebarNavSection";
 
 export const Sidebar = () => {
   return (
-    <div className="flex w-16 flex-col justify-between border-e border-gray-100 bg-white z-10">
+    <div className="fixed inset-y-0 left-0 w-16 flex flex-col justify-between border-e border-gray-100 bg-white z-10">
       <div>
         <SidebarLogo />
         <SidebarNavSection />

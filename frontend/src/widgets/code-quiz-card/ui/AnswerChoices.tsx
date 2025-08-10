@@ -23,7 +23,7 @@ export const AnswerChoices = ({
   showFeedback
 }: Props) => {
   return (
-    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="py-6 grid grid-cols-1 md:grid-cols-2 gap-4">
       {answerChoiceData.map((data, index) => {
         const label = data.choice;
         const isCorrect = label === correctAnswer;

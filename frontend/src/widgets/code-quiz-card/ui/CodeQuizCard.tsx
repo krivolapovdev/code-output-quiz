@@ -41,16 +41,18 @@ export const CodeQuizCard = () => {
   };
 
   return (
-    <div className="m-8 flex w-full flex-col rounded-lg border border-[#e6f4ff]">
+    <div className="pt-8 px-8 flex w-full h-full flex-col rounded-lg border border-[#e6f4ff]">
       <div className="mb-4 flex justify-end gap-x-4">
         <SelectProgrammingLanguage />
         <SelectDifficultyLevel />
       </div>
 
-      <CodeBlock
-        code={quiz.code}
-        language={prismLanguageResolver.resolve(quiz.programmingLanguage)}
-      />
+      <div className="flex-1 flex flex-col">
+        <CodeBlock
+          code={quiz.code}
+          language={prismLanguageResolver.resolve(quiz.programmingLanguage)}
+        />
+      </div>
 
       <AnswerChoicesWithEffect
         answerChoices={quiz.answerChoices}

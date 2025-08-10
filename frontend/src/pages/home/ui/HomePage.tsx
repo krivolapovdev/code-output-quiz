@@ -3,9 +3,11 @@ import { Sidebar } from "@/widgets/sidebar";
 
 export const HomePage = () => {
   return (
-    <div className="flex">
+    <div className="h-screen">
       <Sidebar />
-      <CodeOutputQuiz />
+      <div className="ml-16 h-full">
+        <CodeOutputQuiz />
+      </div>
     </div>
   );
 };

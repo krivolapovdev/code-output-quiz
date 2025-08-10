@@ -7,7 +7,7 @@
    [![Pull Requests](https://img.shields.io/github/issues-pr-raw/krivolapovdev/code-output-quiz.svg)](https://github.com/krivolapovdev/code-output-quiz/pulls)
    [![Open Issues](https://img.shields.io/github/issues-raw/krivolapovdev/code-output-quiz.svg)](https://github.com/krivolapovdev/code-output-quiz/issues)
    [![Last Commit](https://img.shields.io/github/last-commit/krivolapovdev/code-output-quiz.svg)](https://github.com/krivolapovdev/code-output-quiz/graphs/commit-activity)
-   [![CI/CD](https://github.com/krivolapovdev/code-output-quiz/actions/workflows/main.yml/badge.svg)](https://github.com/krivolapovdev/code-output-quiz/actions)
+   [![CI/CD](https://github.com/krivolapovdev/code-output-quiz/actions/workflows/cd.yml/badge.svg)](https://github.com/krivolapovdev/code-output-quiz/actions)
 
    <p>Made with ❤️</p>
 </div>

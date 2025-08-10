@@ -4,6 +4,8 @@ spring:
   kafka:
     consumer:
       group-id: notification-service
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration
 mailjet:
   publicKey: ${MAILJET_PUBLIC_KEY}
   privateKey: ${MAILJET_PRIVATE_KEY}

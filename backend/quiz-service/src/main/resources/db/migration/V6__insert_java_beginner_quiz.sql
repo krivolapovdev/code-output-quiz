@@ -1,8 +1,7 @@
 SELECT insert_quiz_with_choices(
                $code$int x = 5;
-               int y = 2;
-               System.out.println(x / y);
-               $code$,
+int y = 2;
+System.out.println(x / y);$code$,
                'JAVA',
                'BEGINNER',
                'B',

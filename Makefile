@@ -1,6 +1,6 @@
-up:
+staging:
 	docker buildx bake -f docker-bake.hcl --load
-	docker compose -f docker-compose.yml up --force-recreate
+	docker compose -f docker-compose-staging.yml up --force-recreate
 
 dev:
 	docker buildx bake prometheus loki grafana -f docker-bake.hcl --load

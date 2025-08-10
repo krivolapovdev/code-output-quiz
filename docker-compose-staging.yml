@@ -6,28 +6,30 @@ x-common-variables: &common-variables
   SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
   SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: kafka:29092
   SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: kafka:29092
-  SPRING_PROFILES_ACTIVE: prod
 
 services:
   prometheus:
-    image: krivolapovdev/prometheus:latest
     container_name: prometheus
-    expose:
-      - 9090
-    restart: unless-stopped
+    build:
+      context: ./infrastructure/docker/prometheus
+    ports:
+      - "9090:9090"
+    restart: no
 
   loki:
-    image: krivolapovdev/loki:latest
     container_name: loki
-    expose:
-      - 3100
-    restart: unless-stopped
+    build:
+      context: ./infrastructure/docker/loki
+    ports:
+      - "3100:3100"
+    restart: no
 
   grafana:
-    image: krivolapovdev/grafana:latest
     container_name: grafana
-    expose:
-      - 3000
+    build:
+      context: ./infrastructure/docker/grafana
+    ports:
+      - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
@@ -37,20 +39,22 @@ services:
         condition: service_started
       loki:
         condition: service_started
-    restart: unless-stopped
+    restart: no
 
   zipkin:
     image: openzipkin/zipkin:3.5.1
     container_name: zipkin
-    expose:
-      - 9411
-    restart: unless-stopped
+    ports:
+      - "9411:9411"
+    restart: no
 
   config-server:
-    image: krivolapovdev/config-server:latest
     container_name: config-server
-    expose:
-      - 8888
+    build:
+      context: ./backend
+      dockerfile: ./config-server/Dockerfile
+    ports:
+      - "8888:8888"
     environment:
       <<: *common-variables
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-jwt-ultra-secure-and-ultra-long-secret}
@@ -66,13 +70,15 @@ services:
         condition: service_started
       zipkin:
         condition: service_started
-    restart: unless-stopped
+    restart: no
 
   eureka-server:
-    image: krivolapovdev/eureka-server:latest
     container_name: eureka-server
-    expose:
-      - 8761
+    build:
+      context: ./backend
+      dockerfile: ./eureka-server/Dockerfile
+    ports:
+      - "8761:8761"
     environment:
       <<: *common-variables
     healthcheck:
@@ -89,13 +95,13 @@ services:
         condition: service_started
       config-server:
         condition: service_healthy
-    restart: unless-stopped
+    restart: no
 
   db-quiz:
     image: postgres:17.5-alpine3.22
     container_name: db-quiz
-    expose:
-      - 5432
+    ports:
+      - "5432:5432"
     environment:
       - TZ=Asia/Almaty
       - PGTZ=Asia/Almaty
@@ -110,52 +116,51 @@ services:
       retries: 20
     volumes:
       - db-quiz-data:/var/lib/postgresql/data
-    restart: unless-stopped
+    restart: no
 
   redis:
     image: redis:8.0.2-alpine3.21
     container_name: redis
-    expose:
-      - 6379
+    ports:
+      - "6379:6379"
     command: [ "redis-server", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru" ]
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 20
-    volumes:
-      - redis-data:/data
-    restart: unless-stopped
+    restart: no
 
   kafka:
     image: bitnami/kafka:4.0.0
     container_name: kafka
-    expose:
-      - 29092
+    ports:
+      - "9092:9092"
     environment:
       - KAFKA_CFG_NODE_ID=1
       - KAFKA_CFG_PROCESS_ROLES=controller,broker
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
-      - KAFKA_CFG_LISTENERS=INTERNAL://:29092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:29092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=INTERNAL://:29092,CLIENT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:29092,CLIENT://localhost:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,CLIENT:PLAINTEXT,CONTROLLER:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
-      - KAFKA_CFG_LOG_RETENTION_HOURS=720
+      - KAFKA_CFG_LOG_RETENTION_HOURS=168
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
     healthcheck:
       test: [ "CMD-SHELL", "/opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --list >/dev/null 2>&1 || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 20
-    volumes:
-      - kafka-data:/bitnami/kafka
-    restart: unless-stopped
+    restart: no
 
   quiz-service:
-    image: krivolapovdev/quiz-service:latest
     container_name: quiz-service
-    expose:
-      - 8084
+    build:
+      context: ./backend
+      dockerfile: ./quiz-service/Dockerfile
+    ports:
+      - "8084:8084"
     environment:
       <<: *common-variables
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
@@ -189,13 +194,13 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    restart: unless-stopped
+    restart: no
 
   db-auth:
     image: postgres:17.5-alpine3.22
     container_name: db-auth
-    expose:
-      - 5432
+    ports:
+      - "5433:5432"
     environment:
       - TZ=Asia/Almaty
       - PGTZ=Asia/Almaty
@@ -210,13 +215,15 @@ services:
       retries: 20
     volumes:
       - db-auth-data:/var/lib/postgresql/data
-    restart: unless-stopped
+    restart: no
 
   auth-service:
-    image: krivolapovdev/auth-service:latest
     container_name: auth-service
-    expose:
-      - 8081
+    build:
+      context: ./backend
+      dockerfile: ./auth-service/Dockerfile
+    ports:
+      - "8081:8081"
     environment:
       <<: *common-variables
       SPRING_R2DBC_URL: r2dbc:postgresql://db-auth:5432/auth_db
@@ -245,13 +252,13 @@ services:
         condition: service_healthy
       db-auth:
         condition: service_healthy
-    restart: unless-stopped
+    restart: no
 
   db-user:
     image: postgres:17.5-alpine3.22
     container_name: db-user
-    expose:
-      - 5432
+    ports:
+      - "5434:5432"
     environment:
       - TZ=Asia/Almaty
       - PGTZ=Asia/Almaty
@@ -266,13 +273,15 @@ services:
       retries: 20
     volumes:
       - db-user-data:/var/lib/postgresql/data
-    restart: unless-stopped
+    restart: no
 
   user-service:
-    image: krivolapovdev/user-service:latest
     container_name: user-service
-    expose:
-      - 8082
+    build:
+      context: ./backend
+      dockerfile: ./user-service/Dockerfile
+    ports:
+      - "8082:8082"
     environment:
       <<: *common-variables
       SPRING_R2DBC_URL: r2dbc:postgresql://db-user:5432/user_db
@@ -301,13 +310,15 @@ services:
         condition: service_healthy
       db-user:
         condition: service_healthy
-    restart: unless-stopped
+    restart: no
 
   notification-service:
-    image: krivolapovdev/notification-service:latest
     container_name: notification-service
-    expose:
-      - 8083
+    build:
+      context: ./backend
+      dockerfile: ./notification-service/Dockerfile
+    ports:
+      - "8083:8083"
     environment:
       <<: *common-variables
       MAILJET_PUBLIC_KEY: ${MAILJET_PUBLIC_KEY}
@@ -331,15 +342,18 @@ services:
         condition: service_healthy
       eureka-server:
         condition: service_healthy
-    restart: unless-stopped
+    restart: no
 
   api-gateway:
-    image: krivolapovdev/api-gateway:latest
     container_name: api-gateway
-    expose:
-      - 8765
+    build:
+      context: ./backend
+      dockerfile: ./api-gateway/Dockerfile
+    ports:
+      - "8765:8765"
     environment:
       <<: *common-variables
+      SPRING_PROFILES_ACTIVE: dev
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]
       interval: 10s
@@ -364,29 +378,23 @@ services:
         condition: service_healthy
       notification-service:
         condition: service_healthy
-    restart: unless-stopped
-#
-#  nginx:
-#    image: krivolapovdev/nginx:latest
-#    container_name: nginx
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    volumes:
-#      - certbot-ssl:/etc/letsencrypt
-#      - certbot-www:/var/www/certbot
-#    depends_on:
-#      api-gateway:
-#        condition: service_healthy
-#    restart: unless-stopped
+    restart: no
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:8765
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    restart: no
 
 volumes:
   db-quiz-data:
   db-auth-data:
   db-user-data:
-  redis-data:
-  kafka-data:
-#  certbot-ssl:
-#    external: true
-#  certbot-www:
-#    external: true

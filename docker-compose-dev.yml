@@ -1,11 +1,3 @@
-x-common-variables: &common-variables
-  CONFIG_SERVER: http://config-server:8888
-  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
-  LOKI_URL: http://loki:3100/loki/api/v1/push
-  MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
-  SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: kafka:9092
-  SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: kafka:9092
-
 services:
   prometheus:
     container_name: prometheus
@@ -14,9 +6,6 @@ services:
     ports:
       - "9090:9090"
     restart: no
-    profiles:
-      - ''
-      - dev
 
   loki:
     container_name: loki
@@ -25,9 +14,6 @@ services:
     ports:
       - "3100:3100"
     restart: no
-    profiles:
-      - ''
-      - dev
 
   grafana:
     container_name: grafana
@@ -45,9 +31,6 @@ services:
       loki:
         condition: service_started
     restart: no
-    profiles:
-      - ''
-      - dev
 
   zipkin:
     image: openzipkin/zipkin:3.5.1
@@ -55,62 +38,6 @@ services:
     ports:
       - "9411:9411"
     restart: no
-    profiles:
-      - ''
-      - dev
-
-  config-server:
-    container_name: config-server
-    build:
-      context: ./backend
-      dockerfile: ./config-server/Dockerfile
-    ports:
-      - "8888:8888"
-    environment:
-      <<: *common-variables
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-jwt-ultra-secure-and-ultra-long-secret}
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8888/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      loki:
-        condition: service_started
-      prometheus:
-        condition: service_started
-      zipkin:
-        condition: service_started
-    restart: no
-    profiles:
-      - dev
-
-  eureka-server:
-    container_name: eureka-server
-    build:
-      context: ./backend
-      dockerfile: ./eureka-server/Dockerfile
-    ports:
-      - "8761:8761"
-    environment:
-      <<: *common-variables
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      loki:
-        condition: service_started
-      prometheus:
-        condition: service_started
-      zipkin:
-        condition: service_started
-      config-server:
-        condition: service_healthy
-    restart: no
-    profiles:
-      - dev
 
   db-quiz:
     image: postgres:17.5-alpine3.22
@@ -128,13 +55,8 @@ services:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
-      retries: 10
-    volumes:
-      - db-quiz-data:/var/lib/postgresql/data
+      retries: 20
     restart: no
-    profiles:
-      - ''
-      - dev
 
   redis:
     image: redis:8.0.2-alpine3.21
@@ -146,11 +68,8 @@ services:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 20
     restart: no
-    profiles:
-      - ''
-      - dev
 
   kafka:
     image: bitnami/kafka:4.0.0
@@ -168,54 +87,12 @@ services:
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=INTERNAL
       - KAFKA_CFG_LOG_RETENTION_HOURS=168
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
-    restart: no
-    profiles:
-      - ''
-      - dev
-
-  quiz-service:
-    container_name: quiz-service
-    build:
-      context: ./backend
-      dockerfile: ./quiz-service/Dockerfile
-    ports:
-      - "8084:8084"
-    environment:
-      <<: *common-variables
-      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
-      SPRING_R2DBC_URL: r2dbc:postgresql://db-quiz:5432/quiz_db
-      SPRING_R2DBC_USERNAME: ${POSTGRES_USER:-postgres}
-      SPRING_R2DBC_PASSWORD: ${POSTGRES_PASSWORD:-root}
-      SPRING_FLYWAY_URL: jdbc:postgresql://db-quiz:5432/quiz_db
-      SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
-      SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
-      SPRING_DATA_REDIS_HOST: redis
-      SPRING_DATA_REDIS_PORT: 6379
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8084/actuator/health" ]
+      test: [ "CMD-SHELL", "/opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:29092 --list >/dev/null 2>&1 || exit 1" ]
       interval: 10s
       timeout: 5s
-      retries: 10
-    depends_on:
-      loki:
-        condition: service_started
-      prometheus:
-        condition: service_started
-      zipkin:
-        condition: service_started
-      kafka:
-        condition: service_started
-      config-server:
-        condition: service_healthy
-      eureka-server:
-        condition: service_healthy
-      db-quiz:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
+      retries: 20
     restart: no
-    profiles:
-      - dev
 
   db-auth:
     image: postgres:17.5-alpine3.22
@@ -233,52 +110,8 @@ services:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
-      retries: 10
-    volumes:
-      - db-auth-data:/var/lib/postgresql/data
+      retries: 20
     restart: no
-    profiles:
-      - ''
-      - dev
-
-  auth-service:
-    container_name: auth-service
-    build:
-      context: ./backend
-      dockerfile: ./auth-service/Dockerfile
-    ports:
-      - "8081:8081"
-    environment:
-      <<: *common-variables
-      SPRING_R2DBC_URL: r2dbc:postgresql://db-auth:5432/auth_db
-      SPRING_R2DBC_USERNAME: ${POSTGRES_USER:-postgres}
-      SPRING_R2DBC_PASSWORD: ${POSTGRES_PASSWORD:-root}
-      SPRING_FLYWAY_URL: jdbc:postgresql://db-auth:5432/auth_db
-      SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
-      SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8081/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      loki:
-        condition: service_started
-      prometheus:
-        condition: service_started
-      zipkin:
-        condition: service_started
-      kafka:
-        condition: service_started
-      config-server:
-        condition: service_healthy
-      eureka-server:
-        condition: service_healthy
-      db-auth:
-        condition: service_healthy
-    restart: no
-    profiles:
-      - dev
 
   db-user:
     image: postgres:17.5-alpine3.22
@@ -296,142 +129,5 @@ services:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
       interval: 10s
       timeout: 5s
-      retries: 10
-    volumes:
-      - db-user-data:/var/lib/postgresql/data
+      retries: 20
     restart: no
-    profiles:
-      - ''
-      - dev
-
-  user-service:
-    container_name: user-service
-    build:
-      context: ./backend
-      dockerfile: ./user-service/Dockerfile
-    ports:
-      - "8082:8082"
-    environment:
-      <<: *common-variables
-      SPRING_R2DBC_URL: r2dbc:postgresql://db-user:5432/user_db
-      SPRING_R2DBC_USERNAME: ${POSTGRES_USER:-postgres}
-      SPRING_R2DBC_PASSWORD: ${POSTGRES_PASSWORD:-root}
-      SPRING_FLYWAY_URL: jdbc:postgresql://db-user:5432/user_db
-      SPRING_FLYWAY_USER: ${POSTGRES_USER:-postgres}
-      SPRING_FLYWAY_PASSWORD: ${POSTGRES_PASSWORD:-root}
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8082/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      loki:
-        condition: service_started
-      prometheus:
-        condition: service_started
-      zipkin:
-        condition: service_started
-      kafka:
-        condition: service_started
-      config-server:
-        condition: service_healthy
-      eureka-server:
-        condition: service_healthy
-      db-user:
-        condition: service_healthy
-    restart: no
-    profiles:
-      - dev
-
-  notification-service:
-    container_name: notification-service
-    build:
-      context: ./backend
-      dockerfile: ./notification-service/Dockerfile
-    ports:
-      - "8083:8083"
-    environment:
-      <<: *common-variables
-      MAILJET_PUBLIC_KEY: ${MAILJET_PUBLIC_KEY}
-      MAILJET_PRIVATE_KEY: ${MAILJET_PRIVATE_KEY}
-      MAILJET_SENDER_EMAIL: ${MAILJET_SENDER_EMAIL}
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8083/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      loki:
-        condition: service_started
-      prometheus:
-        condition: service_started
-      zipkin:
-        condition: service_started
-      kafka:
-        condition: service_started
-      config-server:
-        condition: service_healthy
-      eureka-server:
-        condition: service_healthy
-    restart: no
-    profiles:
-      - dev
-
-  api-gateway:
-    container_name: api-gateway
-    build:
-      context: ./backend
-      dockerfile: ./api-gateway/Dockerfile
-    ports:
-      - "8765:8765"
-    environment:
-      <<: *common-variables
-      SPRING_PROFILES_ACTIVE: dev
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    depends_on:
-      loki:
-        condition: service_started
-      prometheus:
-        condition: service_started
-      zipkin:
-        condition: service_started
-      config-server:
-        condition: service_healthy
-      eureka-server:
-        condition: service_healthy
-      quiz-service:
-        condition: service_healthy
-      user-service:
-        condition: service_healthy
-      auth-service:
-        condition: service_healthy
-      notification-service:
-        condition: service_healthy
-    restart: no
-    profiles:
-      - dev
-
-  nginx:
-    container_name: nginx
-    build:
-      context: ./frontend
-      args:
-        VITE_API_URL: http://localhost:8765
-    ports:
-      - "80:80"
-      - "443:443"
-    depends_on:
-      api-gateway:
-        condition: service_healthy
-    restart: no
-    profiles:
-      - dev
-
-volumes:
-  db-quiz-data:
-  db-auth-data:
-  db-user-data:

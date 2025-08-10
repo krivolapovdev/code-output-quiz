@@ -11,11 +11,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:${springdocVersion}")
     implementation("io.jsonwebtoken:jjwt-api:${jjwtVersion}")
     implementation("org.flywaydb:flyway-core:${flywayVersion}")
-    implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
-    implementation("org.springframework.cloud:spring-cloud-stream-binder-kafka-reactive")
+    implementation("io.projectreactor.kafka:reactor-kafka")
 
     runtimeOnly("org.postgresql:postgresql:${postgresVersion}")
     runtimeOnly("org.postgresql:r2dbc-postgresql:${postgresR2dbcVersion}")

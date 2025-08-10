@@ -365,20 +365,20 @@ services:
       notification-service:
         condition: service_healthy
     restart: unless-stopped
-#
-#  nginx:
-#    image: krivolapovdev/nginx:latest
-#    container_name: nginx
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#    volumes:
-#      - certbot-ssl:/etc/letsencrypt
-#      - certbot-www:/var/www/certbot
-#    depends_on:
-#      api-gateway:
-#        condition: service_healthy
-#    restart: unless-stopped
+
+  nginx:
+    image: krivolapovdev/nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - certbot-ssl:/etc/letsencrypt
+      - certbot-www:/var/www/certbot
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   db-quiz-data:
@@ -386,7 +386,7 @@ volumes:
   db-user-data:
   redis-data:
   kafka-data:
-#  certbot-ssl:
-#    external: true
-#  certbot-www:
-#    external: true
+  certbot-ssl:
+    external: true
+  certbot-www:
+    external: true

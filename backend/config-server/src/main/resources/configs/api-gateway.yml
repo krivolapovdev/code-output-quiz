@@ -27,3 +27,5 @@ spring:
             allowedMethods: "*"
             allowedHeaders: "*"
             allowCredentials: true
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration

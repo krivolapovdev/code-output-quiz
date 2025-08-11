@@ -8,3 +8,4 @@ spring:
               - "http://localhost"
               - "http://localhost:5173"
               - "http://code-output-quiz.local"
+              - "http://www.code-output-quiz.local"

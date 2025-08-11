@@ -34,6 +34,11 @@ services:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
       - GF_USERS_ALLOW_SIGN_UP=false
+    healthcheck:
+      test: [ "CMD", "curl", "-fsS", "http://localhost:3000/api/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
     depends_on:
       prometheus:
         condition: service_started
@@ -353,7 +358,26 @@ services:
       - "8765:8765"
     environment:
       <<: *common-variables
-      SPRING_PROFILES_ACTIVE: dev
+      SPRING_APPLICATION_JSON: |
+        {
+          "spring": {
+            "cloud": {
+              "gateway": {
+                "globalcors": {
+                  "corsConfigurations": {
+                    "[/**]": {
+                      "allowedOrigins": [
+                        "http://localhost",
+                        "http://localhost:5173",
+                        "http://code-output-quiz.local"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8765/actuator/health" ]
       interval: 10s
@@ -384,12 +408,14 @@ services:
     container_name: nginx
     build:
       context: ./frontend
+      dockerfile: ./nginx/Dockerfile-dev
       args:
         VITE_API_URL: http://localhost:8765
     ports:
       - "80:80"
-      - "443:443"
     depends_on:
+      grafana:
+        condition: service_healthy
       api-gateway:
         condition: service_healthy
     restart: no

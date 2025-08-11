@@ -14,6 +14,10 @@ group "default" {
   ]
 }
 
+group "staging" {
+  targets = ["nginx-dev"]
+}
+
 variable "DOCKERHUB_USERNAME" {
   default = "krivolapovdev"
 }
@@ -92,12 +96,25 @@ target "api-gateway" {
 
 target "nginx" {
   context = "./frontend"
+  dockerfile = "./nginx/Dockerfile"
   tags = [
     "${DOCKERHUB_USERNAME}/nginx:${IMAGE_TAG}",
     "${DOCKERHUB_USERNAME}/nginx:latest"
   ]
   args = {
     VITE_API_URL = "${VITE_API_URL}"
+  }
+}
+
+target "nginx-dev" {
+  context    = "./frontend"
+  dockerfile = "./nginx/Dockerfile-dev"
+  tags = [
+    "${DOCKERHUB_USERNAME}/nginx:${IMAGE_TAG}",
+    "${DOCKERHUB_USERNAME}/nginx:staging",
+  ]
+  args = {
+    VITE_API_URL = "http://localhost:8765"
   }
 }
 

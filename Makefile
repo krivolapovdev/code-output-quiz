@@ -1,5 +1,5 @@
 staging:
-	docker buildx bake -f docker-bake.hcl --load
+	docker buildx bake -f docker-bake.hcl default staging --load
 	docker compose -f docker-compose-staging.yml up --force-recreate
 
 dev:

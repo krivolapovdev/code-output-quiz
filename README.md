@@ -39,7 +39,7 @@ Choose your programming language, set your difficulty level, and start solving!
 
 <div align="center">
     <a href="https://code-output-quiz.ru/">
-        <img src="./.github/site.gif" alt="Website Preview" width="80%" style="border-radius: 6px;">
+        <img src="./.github/site.webp" alt="Website Preview" width="80%" style="border-radius: 6px;">
     </a>
     <br />
     <a href="https://code-output-quiz.ru/" target="_blank" rel="noopener noreferrer">

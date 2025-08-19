@@ -13,7 +13,7 @@ type QuizStore = {
 
 export const useQuizStore = create<QuizStore>(set => ({
   quiz: null,
-  difficultyLevel: "BEGINNER",
+  difficultyLevel: "ADVANCED",
   programmingLanguage: "JAVA",
 
   setQuiz: quiz => set({ quiz }),

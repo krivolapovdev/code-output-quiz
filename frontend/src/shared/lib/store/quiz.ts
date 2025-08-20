@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import type { QuizResponse } from "@/shared/api";
 
 type QuizStore = {
@@ -11,12 +12,24 @@ type QuizStore = {
   setProgrammingLanguage: (lang: string) => void;
 };
 
-export const useQuizStore = create<QuizStore>(set => ({
-  quiz: null,
-  difficultyLevel: "ADVANCED",
-  programmingLanguage: "JAVA",
+export const useQuizStore = create<QuizStore>()(
+  persist(
+    set => ({
+      quiz: null,
+      difficultyLevel: "ADVANCED",
+      programmingLanguage: "JAVA",
 
-  setQuiz: quiz => set({ quiz }),
-  setDifficultyLevel: difficultyLevel => set({ difficultyLevel }),
-  setProgrammingLanguage: programmingLanguage => set({ programmingLanguage })
-}));
+      setQuiz: quiz => set({ quiz }),
+      setDifficultyLevel: difficultyLevel => set({ difficultyLevel }),
+      setProgrammingLanguage: programmingLanguage =>
+        set({ programmingLanguage })
+    }),
+    {
+      name: "quiz-store",
+      partialize: state => ({
+        programmingLanguage: state.programmingLanguage,
+        difficultyLevel: state.difficultyLevel
+      })
+    }
+  )
+);

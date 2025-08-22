@@ -24,7 +24,7 @@ public class CookieService {
 
   public @NonNull ResponseCookie createRefreshTokenCookie(@NonNull String token) {
     return cookieFactory.create(
-        CookieNames.REFRESH_TOKEN, token, "/api/v1/auth/refresh", REFRESH_TOKEN_DURATION);
+        CookieNames.REFRESH_TOKEN, token, "/api/v1/tokens/refresh", REFRESH_TOKEN_DURATION);
   }
 
   public ResponseCookie clearAccessTokenCookie() {
@@ -33,6 +33,6 @@ public class CookieService {
 
   public ResponseCookie clearRefreshTokenCookie() {
     return cookieFactory.create(
-        CookieNames.REFRESH_TOKEN, "", "/api/v1/auth/refresh", Duration.ZERO);
+        CookieNames.REFRESH_TOKEN, "", "/api/v1/tokens/refresh", Duration.ZERO);
   }
 }

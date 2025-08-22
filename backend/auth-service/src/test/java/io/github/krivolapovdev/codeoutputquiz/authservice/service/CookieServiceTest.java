@@ -40,7 +40,7 @@ class CookieServiceTest {
     ResponseCookie expectedCookie = ResponseCookie.from(CookieNames.REFRESH_TOKEN, token).build();
 
     when(cookieFactory.create(
-            CookieNames.REFRESH_TOKEN, token, "/api/v1/auth/refresh", Duration.ofDays(7)))
+            CookieNames.REFRESH_TOKEN, token, "/api/v1/tokens/refresh", Duration.ofDays(7)))
         .thenReturn(expectedCookie);
 
     ResponseCookie actualCookie = cookieService.createRefreshTokenCookie(token);
@@ -48,7 +48,7 @@ class CookieServiceTest {
     assertThat(actualCookie).isSameAs(expectedCookie);
 
     verify(cookieFactory)
-        .create(CookieNames.REFRESH_TOKEN, token, "/api/v1/auth/refresh", Duration.ofDays(7));
+        .create(CookieNames.REFRESH_TOKEN, token, "/api/v1/tokens/refresh", Duration.ofDays(7));
   }
 
   @Test
@@ -71,7 +71,8 @@ class CookieServiceTest {
     ResponseCookie expectedCookie =
         ResponseCookie.from(CookieNames.REFRESH_TOKEN, "").maxAge(Duration.ZERO).build();
 
-    when(cookieFactory.create(CookieNames.REFRESH_TOKEN, "", "/api/v1/auth/refresh", Duration.ZERO))
+    when(cookieFactory.create(
+            CookieNames.REFRESH_TOKEN, "", "/api/v1/tokens/refresh", Duration.ZERO))
         .thenReturn(expectedCookie);
 
     ResponseCookie actualCookie = cookieService.clearRefreshTokenCookie();
@@ -79,6 +80,6 @@ class CookieServiceTest {
     assertThat(actualCookie).isSameAs(expectedCookie);
 
     verify(cookieFactory)
-        .create(CookieNames.REFRESH_TOKEN, "", "/api/v1/auth/refresh", Duration.ZERO);
+        .create(CookieNames.REFRESH_TOKEN, "", "/api/v1/tokens/refresh", Duration.ZERO);
   }
 }

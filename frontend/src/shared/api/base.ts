@@ -20,7 +20,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        await api.post("/api/v1/auth/refresh", {});
+        await api.post("/api/v1/tokens/refresh", {});
         return api(originalRequest);
       } catch (refreshError) {
         useUserStore.getState().setUser(null);

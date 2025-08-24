@@ -3,6 +3,9 @@ set -euo pipefail
 
 echo "🔧 Initializing development environment..."
 
+git config --local pull.rebase true
+echo "✅ Configured Git to use rebase on pull"
+
 check_tool() {
   if ! command -v "$1" &> /dev/null; then
     echo "❌ $1 is not installed. Please install it."

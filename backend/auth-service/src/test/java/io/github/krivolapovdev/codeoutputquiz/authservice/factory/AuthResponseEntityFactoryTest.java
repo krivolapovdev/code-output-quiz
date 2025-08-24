@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.github.krivolapovdev.codeoutputquiz.authservice.model.TokenPair;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.authservice.service.CookieService;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ class AuthResponseEntityFactoryTest {
   void shouldCreateResponseEntityWithCookies() {
     String accessToken = "access-token";
     String refreshToken = "refresh-token";
+    TokenPair tokenPair = new TokenPair(accessToken, refreshToken);
     HttpStatus status = HttpStatus.CREATED;
 
     ResponseCookie accessCookie = ResponseCookie.from("AccessToken", accessToken).build();
@@ -33,8 +35,7 @@ class AuthResponseEntityFactoryTest {
     when(cookieService.createAccessTokenCookie(accessToken)).thenReturn(accessCookie);
     when(cookieService.createRefreshTokenCookie(refreshToken)).thenReturn(refreshCookie);
 
-    ResponseEntity<AuthResponse> response =
-        authResponseEntityFactory.create(accessToken, refreshToken, status);
+    ResponseEntity<AuthResponse> response = authResponseEntityFactory.create(tokenPair, status);
 
     assertThat(response.getStatusCode()).isEqualTo(status);
     assertThat(response.getHeaders().get(HttpHeaders.SET_COOKIE))

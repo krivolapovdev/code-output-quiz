@@ -56,9 +56,9 @@ public class JwtTokenProvider {
     String userRoleStr = claims.get(USER_ROLE_KEY, String.class);
     UserRole userRole = UserRole.valueOf(userRoleStr);
 
-    var authUser = new AuthPrincipal(userId, claims.getSubject(), userRole);
+    var authPrincipal = new AuthPrincipal(userId, claims.getSubject(), userRole);
 
-    return new UsernamePasswordAuthenticationToken(authUser, token, authorities);
+    return new UsernamePasswordAuthenticationToken(authPrincipal, token, authorities);
   }
 
   public void validateTokenType(@NonNull String token, @NonNull TokenType expectedType) {

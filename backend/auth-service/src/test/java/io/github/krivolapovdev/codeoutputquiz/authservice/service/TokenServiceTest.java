@@ -1,7 +1,9 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import io.github.krivolapovdev.codeoutputquiz.authservice.factory.AuthResponseEntityFactory;
 import io.github.krivolapovdev.codeoutputquiz.authservice.model.TokenPair;
@@ -47,6 +49,7 @@ class TokenServiceTest {
     String oldToken = "old-refresh-token";
     String newAccessToken = "new-access-token";
     String newRefreshToken = "new-refresh-token";
+    TokenPair tokenPair = new TokenPair(newAccessToken, newRefreshToken);
     ResponseEntity<AuthResponse> expectedResponse =
         ResponseEntity.status(HttpStatus.OK).body(new AuthResponse());
 
@@ -55,8 +58,7 @@ class TokenServiceTest {
     when(authentication.getName()).thenReturn("user@example.com");
     when(jwtService.createAccessToken(authentication)).thenReturn(newAccessToken);
     when(jwtService.createRefreshToken(authentication)).thenReturn(newRefreshToken);
-    when(authResponseEntityFactory.create(newAccessToken, newRefreshToken, HttpStatus.OK))
-        .thenReturn(expectedResponse);
+    when(authResponseEntityFactory.create(tokenPair, HttpStatus.OK)).thenReturn(expectedResponse);
 
     tokenService
         .refreshToken(oldToken)
@@ -68,6 +70,6 @@ class TokenServiceTest {
     verify(jwtService).parseAuthentication(oldToken);
     verify(jwtService).createAccessToken(authentication);
     verify(jwtService).createRefreshToken(authentication);
-    verify(authResponseEntityFactory).create(newAccessToken, newRefreshToken, HttpStatus.OK);
+    verify(authResponseEntityFactory).create(tokenPair, HttpStatus.OK);
   }
 }

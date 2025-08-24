@@ -1,5 +1,6 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.factory;
 
+import io.github.krivolapovdev.codeoutputquiz.authservice.model.TokenPair;
 import io.github.krivolapovdev.codeoutputquiz.authservice.response.AuthResponse;
 import io.github.krivolapovdev.codeoutputquiz.authservice.service.CookieService;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,10 @@ public class AuthResponseEntityFactory {
   private final CookieService cookieService;
 
   public @NonNull ResponseEntity<AuthResponse> create(
-      @NonNull String accessToken, @NonNull String refreshToken, @NonNull HttpStatus status) {
+      @NonNull TokenPair tokenPair, @NonNull HttpStatus status) {
 
-    ResponseCookie accessCookie = cookieService.createAccessTokenCookie(accessToken);
-    ResponseCookie refreshCookie = cookieService.createRefreshTokenCookie(refreshToken);
+    ResponseCookie accessCookie = cookieService.createAccessTokenCookie(tokenPair.accessToken());
+    ResponseCookie refreshCookie = cookieService.createRefreshTokenCookie(tokenPair.refreshToken());
 
     return ResponseEntity.status(status)
         .header(HttpHeaders.SET_COOKIE, accessCookie.toString())

@@ -17,6 +17,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Slf4j
 public class TokenService {
+
   private final JwtService jwtService;
   private final AuthResponseEntityFactory authResponseEntityFactory;
 
@@ -27,18 +28,15 @@ public class TokenService {
     return new TokenPair(accessToken, refreshToken);
   }
 
-  public Mono<ResponseEntity<AuthResponse>> refreshToken(@NonNull String oldTokenCookie) {
-    log.info("Refreshing token: {}", oldTokenCookie);
+  public Mono<ResponseEntity<AuthResponse>> refreshToken(@NonNull String oldRefreshTokenCookie) {
+    log.info("Refreshing token: {}", oldRefreshTokenCookie);
 
     // noinspection ReactiveStreamsTooLongSameOperatorsChain
-    return Mono.just(oldTokenCookie)
+    return Mono.just(oldRefreshTokenCookie)
         .doOnNext(token -> jwtService.validateToken(token, TokenType.REFRESH))
         .map(jwtService::parseAuthentication)
         .map(this::generateTokens)
-        .map(
-            tokenPair ->
-                authResponseEntityFactory.create(
-                    tokenPair.accessToken(), tokenPair.refreshToken(), HttpStatus.OK))
+        .map(tokenPair -> authResponseEntityFactory.create(tokenPair, HttpStatus.OK))
         .doOnError(error -> log.error("Failed to refresh token", error));
   }
 }

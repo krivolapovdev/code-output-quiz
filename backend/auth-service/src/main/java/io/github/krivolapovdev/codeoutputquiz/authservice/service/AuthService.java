@@ -20,6 +20,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
+
   private final CookieService cookieService;
   private final UserService userService;
   private final TokenService tokenService;
@@ -34,10 +35,7 @@ public class AuthService {
         .map(ignored -> authRequestMapper.toAuthentication(request))
         .flatMap(reactiveAuthenticationManager::authenticate)
         .map(tokenService::generateTokens)
-        .map(
-            tokenPair ->
-                authResponseFactory.create(
-                    tokenPair.accessToken(), tokenPair.refreshToken(), HttpStatus.CREATED))
+        .map(tokenPair -> authResponseFactory.create(tokenPair, HttpStatus.CREATED))
         .onErrorMap(
             DuplicateKeyException.class,
             e -> new EmailAlreadyTakenException("Email already exists"));
@@ -50,10 +48,7 @@ public class AuthService {
     return reactiveAuthenticationManager
         .authenticate(token)
         .map(tokenService::generateTokens)
-        .map(
-            tokenPair ->
-                authResponseFactory.create(
-                    tokenPair.accessToken(), tokenPair.refreshToken(), HttpStatus.OK))
+        .map(tokenPair -> authResponseFactory.create(tokenPair, HttpStatus.OK))
         .doOnError(error -> log.error("Login failed for user: {}", request.email(), error));
   }
 

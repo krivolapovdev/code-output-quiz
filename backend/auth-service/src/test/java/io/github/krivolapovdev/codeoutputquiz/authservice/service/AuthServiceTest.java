@@ -1,7 +1,9 @@
 package io.github.krivolapovdev.codeoutputquiz.authservice.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import io.github.krivolapovdev.codeoutputquiz.authservice.entity.User;
 import io.github.krivolapovdev.codeoutputquiz.authservice.exception.EmailAlreadyTakenException;
@@ -27,6 +29,7 @@ import reactor.test.StepVerifier;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
+
   @Mock private CookieService cookieService;
   @Mock private UserService userService;
   @Mock private TokenService tokenService;
@@ -51,7 +54,7 @@ class AuthServiceTest {
     when(reactiveAuthenticationManager.authenticate(authentication))
         .thenReturn(Mono.just(authentication));
     when(tokenService.generateTokens(authentication)).thenReturn(tokenPair);
-    when(authResponseFactory.create("access", "refresh", HttpStatus.CREATED)).thenReturn(expected);
+    when(authResponseFactory.create(tokenPair, HttpStatus.CREATED)).thenReturn(expected);
 
     authService
         .register(request)
@@ -63,7 +66,7 @@ class AuthServiceTest {
     verify(authRequestMapper).toAuthentication(request);
     verify(reactiveAuthenticationManager).authenticate(authentication);
     verify(tokenService).generateTokens(authentication);
-    verify(authResponseFactory).create("access", "refresh", HttpStatus.CREATED);
+    verify(authResponseFactory).create(tokenPair, HttpStatus.CREATED);
   }
 
   @Test
@@ -97,7 +100,7 @@ class AuthServiceTest {
     when(reactiveAuthenticationManager.authenticate(authentication))
         .thenReturn(Mono.just(authentication));
     when(tokenService.generateTokens(authentication)).thenReturn(tokenPair);
-    when(authResponseFactory.create("access", "refresh", HttpStatus.OK)).thenReturn(expected);
+    when(authResponseFactory.create(tokenPair, HttpStatus.OK)).thenReturn(expected);
 
     authService
         .login(request)
@@ -108,7 +111,7 @@ class AuthServiceTest {
     verify(authRequestMapper).toAuthentication(request);
     verify(reactiveAuthenticationManager).authenticate(authentication);
     verify(tokenService).generateTokens(authentication);
-    verify(authResponseFactory).create("access", "refresh", HttpStatus.OK);
+    verify(authResponseFactory).create(tokenPair, HttpStatus.OK);
   }
 
   @Test

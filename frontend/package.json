@@ -42,7 +42,7 @@
     "lefthook": "^1.11.14",
     "steiger": "^0.5.7",
     "typescript": "~5.8.3",
-    "vite": "^6.3.5",
+    "vite": "^6.3.6",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }

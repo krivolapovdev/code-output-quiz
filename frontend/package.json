@@ -18,7 +18,7 @@
     "@tailwindcss/vite": "^4.1.7",
     "@tanstack/react-query": "^5.81.5",
     "antd": "^5.26.3",
-    "axios": "^1.11.0",
+    "axios": "^1.12.0",
     "canvas-confetti": "^1.9.3",
     "jwt-decode": "^4.0.0",
     "prismjs": "^1.30.0",
